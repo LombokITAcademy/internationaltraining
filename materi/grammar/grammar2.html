@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Quiz</title>
+  <style>
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+	
+/* Gunakan border-box pada semua elemen */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/* Atur ulang lebar body agar tidak menambah lebar total */
+body {
+    padding: 20px;
+	}
+.input-container {
+    margin-bottom: 20px;
+    }
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+
+.input-container input {
+     width: 100%;
+     padding: 8px;
+     margin-bottom: 10px;
+    }
+
+.question-container {
+     margin-bottom: 20px;
+    }
+
+.question {
+    font-weight: bold;
+    }
+
+    .options {
+    display: flex;
+    flex-direction: column; /* Pastikan setiap opsi tetap dalam barisnya sendiri */
+    gap: 5px; /* Beri sedikit jarak antar opsi */
+}
+    
+/* Pastikan opsi jawaban sejajar */
+.options label {
+    display: flex;
+    align-items: center; /* Pastikan radio button sejajar dengan teks */
+    gap: 10px;
+    width: 100%;
+}
+
+..options input[type="radio"] {
+    margin: 0;
+    flex-shrink: 0; /* Pastikan ukuran radio button tidak berubah */
+}
+
+/* Pastikan opsi jawaban turun ke baris baru dengan titik sejajar */
+.option-text {
+    display: grid;
+    grid-template-columns: 25px auto; /* Kolom pertama untuk "A.", kedua untuk teks */
+}
+
+.option-text span:first-child {
+    font-weight: bold;
+    width: 25px;
+}
+
+.option-text span:last-child {
+    text-indent: -25px;
+    padding-left: 25px;
+    word-wrap: break-word;
+}
+    
+/* Passage tetap terlihat, hanya teksnya yang disembunyikan */
+.passage-container {
+    text-align: justify;
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9; /* Background tetap ada */
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    z-index: 10;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* MODIFIKASI FONT UNTUK PASSAGENYA (Ubah Sesuai Kebutuhan)*/
+.passage-text {
+    display: none;
+    font-size: 14px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+}
+
+/* Style tombol */
+.toggle-btn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    bottom: 10px;
+    z-index: 20;
+    }
+
+/* Tombol Baca & Tutup Teksnya */
+.toggle-btn button {
+     padding: 10px 15px;
+     border: none;
+     border-radius: 5px;
+     font-size: 13px;
+     cursor: pointer;
+     font-weight: bold;
+    }
+
+/* MODIFIKASI WARNA TOMBOL BACA TEKSNYA */
+.read-btn {
+    background-color: green;
+    color: white;
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL BACA TEKSNYA  */
+.read-btn:hover {
+     background-color: darkgreen;
+    }
+
+/* MODIFIKASI WARNA TOMBOL TUTUP TEKSNYA */
+.close-btn {
+     background-color: red;
+     color: white;
+     display: none; /* Disembunyikan saat awal */
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL TUTUP TEKSNYA */
+.close-btn:hover {
+    background-color: darkred;
+    }
+	
+/* MODIFIKASI FONT UNTUK PASSAGENYA */
+#passage {
+	font-family: Arial, sans-serif;
+	font-size: 13px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+	color: #333;         /* Warna teks lebih lembut untuk mata */
+	}
+
+.quiz-wrapper {
+    background: rgba(255, 255, 255, 0.85); /* Warna solid putih dengan transparansi */
+    padding: 20px 10px; /* Padding atas-bawah 20px, kiri-kanan 10px */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: calc(100% - 10px); /* Lebar penuh dikurangi padding kiri-kanan */
+    margin: 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+	}
+	
+/* MODIFIKASI FONT UNTUK SOAL QUIZNYA (Ubah Sesuai Kebutuhunan)*/
+.quiz-wrapper {
+	font-family: Arial, sans-serif;
+	font-size: 12px;     /* Ukuran font lebih kecil dan rapi */
+	line-height: 1;
+	color: #444;         /* Sedikit lebih gelap dari passage untuk kontras */
+	}
+
+/* MODIFIKASI TOMBOL NON-AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn {
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 14px;
+	cursor: not-allowed;
+	display: block;
+	margin: 20px auto;  /* Posisikan di tengah dengan margin atas-bawah */
+	}
+    
+/* MODIFIKASI TOMBOL AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn.active {
+	background-color: green;
+	cursor: pointer;
+    }
+    
+:root {
+	--bg-transparency: 0.5;  /* Transparansi background (0 - 1) */
+	--border-radius: 5px;     /* Round corner */
+	}
+
+.transparent-bg {
+    background-color: rgba(255, 255, 255, var(--bg-transparency));
+    display: flex;
+    justify-content: center; /* Pusatkan horizontal */
+    align-items: center; /* Pusatkan vertikal jika diperlukan */
+    text-align: center;
+    padding: 2px 10px; /* Persempit padding atas dan bawah */
+    border-radius: var(--border-radius);
+    margin-top: 0px;  /* Atur jarak atas */
+    margin-bottom: 0px; /* Atur jarak bawah */
+    }
+    
+.centered-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.5); /* Transparansi */
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	max-width: 500px; /* Atur lebar agar tidak terlalu besar */
+	margin: 20px auto; /* Tengah dengan jarak atas & bawah */
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+	}
+    
+#user-info {
+	padding: 0 5px; /* Padding kiri dan kanan 5px, atas-bawah 0 */
+	box-sizing: border-box;
+	}
+
+#user-info input {
+	width: 100%;
+	padding: 8px; /* Padding sama dengan input lainnya */
+	box-sizing: border-box;
+	}
+
+/* MODIFIKASI KOLOM ISIAN DATA SISWA (Ubah Sesuai Kebutuhunan)*/
+.user-info-wrapper {
+	background: rgba(255, 255, 255, 0.6); /* Background putih transparan */
+	border-radius: 10px;  /* Sudut melengkung */
+	padding: 15px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan lembut */
+	max-width: 400px;
+	margin: 0 auto 20px;  /* Tengah dan jarak bawah */
+	box-sizing: border-box;
+	}
+   </style>
+</head>
+
+<body>
+  <div class="centered-container">
+    <h1 class="transparent-bg">English Quiz</h1>
+    <h2 class="transparent-bg">By Mr. Alfan</h2>
+    <p class="transparent-bg">Fill in your details and answer the questions:</p>
+  </div>
+
+  <form id="quiz-form">
+  <div class="user-info-wrapper">
+    <div id="user-info" class="input-container">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name">
+      <label for="class">Class:</label>
+      <input type="text" id="class" placeholder="Enter your class">
+      <label for="student-id">Student Number:</label>
+      <input type="text" id="student-id" placeholder="Enter your student number">
+      <label for="school">School Name:</label>
+      <input type="text" id="school" placeholder="Enter your school name">
+    </div>
+  </div>
+    
+<!-- Container for Passage & Quiz: Present Perfect Tense in English -->
+<div id="container-grammar4" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-grammar4">
+        <h4 class="transparent-bg">Grammar 4: Present Perfect Tense in English</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('grammar4', true)">Read Text (for questions 1-10)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('grammar4', false)" style="display: none;">Close Text (for questions 1-10)</button>
+        </div>
+        <p id="passage-grammar4" class="passage-text" style="display: none;">
+            The **Present Perfect Tense** is used to describe actions that happened at an **unspecified time** in the past or have **a connection to the present**.  
+            It is formed using **have/has + past participle** of the verb.  
+            Example: "She **has visited** Paris." / "They **have finished** their homework."  
+            We use **"just"**, **"already"**, and **"yet"** to indicate time.  
+            Example: "I **have just eaten** lunch." / "Has she finished her work **yet**?"  
+            The negative form is made using **haven't/hasn't** + past participle.  
+            Example: "He **hasn't seen** that movie."
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 4 NYA -->
+    <div id="quiz-grammar4" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Present Perfect Tense in English</h3><br>
+
+        <!-- Question 1 -->
+        <div class="question-container">
+            <div class="question">1. Which sentence is in Present Perfect Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A. They finished their homework yesterday."> A. They finished their homework yesterday.</label>
+                <label><input type="radio" name="q1" value="B. She has already eaten lunch."> B. She has already eaten lunch.</label>
+                <label><input type="radio" name="q1" value="C. He will travel to Japan next year."> C. He will travel to Japan next year.</label>
+                <label><input type="radio" name="q1" value="D. I am reading a book."> D. I am reading a book.</label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-container">
+            <div class="question">2. What is the correct form for "She ___ (see) that movie before"?</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A. sees"> A. sees</label>
+                <label><input type="radio" name="q2" value="B. is seeing"> B. is seeing</label>
+                <label><input type="radio" name="q2" value="C. has seen"> C. has seen</label>
+                <label><input type="radio" name="q2" value="D. saw"> D. saw</label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-container">
+            <div class="question">3. What is the auxiliary verb used in Present Perfect Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A. Do/Does"> A. Do/Does</label>
+                <label><input type="radio" name="q3" value="B. Am/Is/Are"> B. Am/Is/Are</label>
+                <label><input type="radio" name="q3" value="C. Have/Has"> C. Have/Has</label>
+                <label><input type="radio" name="q3" value="D. Was/Were"> D. Was/Were</label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-container">
+            <div class="question">4. What is the correct negative form of "He has finished his homework"?</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A. He don't finished his homework."> A. He don't finished his homework.</label>
+                <label><input type="radio" name="q4" value="B. He hasn't finished his homework."> B. He hasn't finished his homework.</label>
+                <label><input type="radio" name="q4" value="C. He not has finished his homework."> C. He not has finished his homework.</label>
+                <label><input type="radio" name="q4" value="D. He didn't finished his homework."> D. He didn't finished his homework.</label>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-container">
+            <div class="question">5. Which time expression is commonly used with Present Perfect?</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A. Yesterday"> A. Yesterday</label>
+                <label><input type="radio" name="q5" value="B. Two years ago"> B. Two years ago</label>
+                <label><input type="radio" name="q5" value="C. Just"> C. Just</label>
+                <label><input type="radio" name="q5" value="D. Tomorrow"> D. Tomorrow</label>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-container">
+            <div class="question">6. What is the correct question form of "They have traveled to Italy"?</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="A. Do they traveled to Italy?"> A. Do they traveled to Italy?</label>
+                <label><input type="radio" name="q6" value="B. Have they traveled to Italy?"> B. Have they traveled to Italy?</label>
+                <label><input type="radio" name="q6" value="C. Did they traveled to Italy?"> C. Did they traveled to Italy?</label>
+                <label><input type="radio" name="q6" value="D. Has they traveled to Italy?"> D. Has they traveled to Italy?</label>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-container">
+            <div class="question">7. Which sentence is incorrect?</div>
+            <div class="options">
+                <label><input type="radio" name="q7" value="A. I have never been to Canada."> A. I have never been to Canada.</label>
+                <label><input type="radio" name="q7" value="B. He has just left."> B. He has just left.</label>
+                <label><input type="radio" name="q7" value="C. She have gone to school."> C. She have gone to school.</label>
+                <label><input type="radio" name="q7" value="D. They haven't finished yet."> D. They haven't finished yet.</label>
+            </div>
+        </div>
+		
+		<!-- Question 8 -->
+        <div class="question-container">
+            <div class="question">8. What is the correct Present Perfect form of "She (live) here for five years"?</div>
+            <div class="options">
+                <label><input type="radio" name="q8" value="A. She has lived here for five years."> A. She has lived here for five years.</label>
+                <label><input type="radio" name="q8" value="B. She lives here for five years."> B. She lives here for five years.</label>
+                <label><input type="radio" name="q8" value="C. She have lived here for five years."> C. She have lived here for five years.</label>
+                <label><input type="radio" name="q8" value="D. She is living here for five years."> D. She is living here for five years.</label>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-container">
+            <div class="question">9. Which sentence correctly uses "yet" in Present Perfect?</div>
+            <div class="options">
+                <label><input type="radio" name="q9" value="A. Have you finished your work yet?"> A. Have you finished your work yet?</label>
+                <label><input type="radio" name="q9" value="B. He is yet finishing his homework."> B. He is yet finishing his homework.</label>
+                <label><input type="radio" name="q9" value="C. She yet goes to school."> C. She yet goes to school.</label>
+                <label><input type="radio" name="q9" value="D. They yet have finished eating."> D. They yet have finished eating.</label>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-container">
+            <div class="question">10. What is the correct negative form of "I have seen that movie"?</div>
+            <div class="options">
+                <label><input type="radio" name="q10" value="A. I not have seen that movie."> A. I not have seen that movie.</label>
+                <label><input type="radio" name="q10" value="B. I haven't seen that movie."> B. I haven't seen that movie.</label>
+                <label><input type="radio" name="q10" value="C. I doesn't see that movie."> C. I doesn't see that movie.</label>
+                <label><input type="radio" name="q10" value="D. I didn't saw that movie."> D. I didn't saw that movie.</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container for Passage & Quiz: Present Perfect Continuous Tense in English -->
+<div id="container-grammar5" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-grammar5">
+        <h4 class="transparent-bg">Grammar 5: Present Perfect Continuous Tense in English</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('grammar5', true)">Read Text (for questions 1-10)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('grammar5', false)" style="display: none;">Close Text (for questions 1-10)</button>
+        </div>
+        <p id="passage-grammar5" class="passage-text" style="display: none;">
+            The **Present Perfect Continuous Tense** is used to describe an action that started in the past and is **still continuing** or **has recently stopped**.  
+            It is formed using **have/has + been + verb-ing**.  
+            Example: "She **has been studying** for three hours." / "They **have been working** since morning."  
+            We often use **"for"** (duration) and **"since"** (starting point) in this tense.  
+            Example: "He **has been living** here **since** 2010."  
+            The negative form is made using **haven't/hasn't been + verb-ing**.  
+            Example: "She **hasn't been sleeping** well lately."
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 5 NYA -->
+    <div id="quiz-grammar5" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Present Perfect Continuous Tense in English</h3><br>
+
+        <!-- Question 11 -->
+        <div class="question-container">
+            <div class="question">11. Which sentence is in Present Perfect Continuous Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q11" value="A. They worked all night."> A. They worked all night.</label>
+                <label><input type="radio" name="q11" value="B. She has been studying for two hours."> B. She has been studying for two hours.</label>
+                <label><input type="radio" name="q11" value="C. He studies English every day."> C. He studies English every day.</label>
+                <label><input type="radio" name="q11" value="D. We were playing soccer."> D. We were playing soccer.</label>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-container">
+            <div class="question">12. What is the correct form for "I ___ (work) here since 2018"?</div>
+            <div class="options">
+                <label><input type="radio" name="q12" value="A. am working"> A. am working</label>
+                <label><input type="radio" name="q12" value="B. have been working"> B. have been working</label>
+                <label><input type="radio" name="q12" value="C. has been working"> C. has been working</label>
+                <label><input type="radio" name="q12" value="D. work"> D. work</label>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-container">
+            <div class="question">13. What auxiliary verbs are used in Present Perfect Continuous Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q13" value="A. Do/Does"> A. Do/Does</label>
+                <label><input type="radio" name="q13" value="B. Am/Is/Are"> B. Am/Is/Are</label>
+                <label><input type="radio" name="q13" value="C. Have/Has + Been"> C. Have/Has + Been</label>
+                <label><input type="radio" name="q13" value="D. Was/Were"> D. Was/Were</label>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-container">
+            <div class="question">14. What is the negative form of "She has been cooking dinner"?</div>
+            <div class="options">
+                <label><input type="radio" name="q14" value="A. She hasn't been cooking dinner."> A. She hasn't been cooking dinner.</label>
+                <label><input type="radio" name="q14" value="B. She doesn't been cooking dinner."> B. She doesn't been cooking dinner.</label>
+                <label><input type="radio" name="q14" value="C. She not has been cooking dinner."> C. She not has been cooking dinner.</label>
+                <label><input type="radio" name="q14" value="D. She didn't been cooking dinner."> D. She didn't been cooking dinner.</label>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-container">
+            <div class="question">15. Which time expression is commonly used with Present Perfect Continuous?</div>
+            <div class="options">
+                <label><input type="radio" name="q15" value="A. Yesterday"> A. Yesterday</label>
+                <label><input type="radio" name="q15" value="B. For two hours"> B. For two hours</label>
+                <label><input type="radio" name="q15" value="C. Next week"> C. Next week</label>
+                <label><input type="radio" name="q15" value="D. Last night"> D. Last night</label>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-container">
+            <div class="question">16. What is the correct question form of "They have been playing football"?</div>
+            <div class="options">
+                <label><input type="radio" name="q16" value="A. Do they been playing football?"> A. Do they been playing football?</label>
+                <label><input type="radio" name="q16" value="B. Have they been playing football?"> B. Have they been playing football?</label>
+                <label><input type="radio" name="q16" value="C. Did they been playing football?"> C. Did they been playing football?</label>
+                <label><input type="radio" name="q16" value="D. Has they been playing football?"> D. Has they been playing football?</label>
+            </div>
+        </div>
+		
+		<!-- Question 17 -->
+        <div class="question-container">
+            <div class="question">17. Which sentence correctly uses Present Perfect Continuous?</div>
+            <div class="options">
+                <label><input type="radio" name="q17" value="A. She is studying for three hours."> A. She is studying for three hours.</label>
+                <label><input type="radio" name="q17" value="B. He has been working here since 2015."> B. He has been working here since 2015.</label>
+                <label><input type="radio" name="q17" value="C. They have gone to school."> C. They have gone to school.</label>
+                <label><input type="radio" name="q17" value="D. I was watching TV last night."> D. I was watching TV last night.</label>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-container">
+            <div class="question">18. What is the correct Present Perfect Continuous form of "She (wait) for the bus for 30 minutes"?</div>
+            <div class="options">
+                <label><input type="radio" name="q18" value="A. She waits for the bus for 30 minutes."> A. She waits for the bus for 30 minutes.</label>
+                <label><input type="radio" name="q18" value="B. She has been waiting for the bus for 30 minutes."> B. She has been waiting for the bus for 30 minutes.</label>
+                <label><input type="radio" name="q18" value="C. She have been waiting for the bus for 30 minutes."> C. She have been waiting for the bus for 30 minutes.</label>
+                <label><input type="radio" name="q18" value="D. She waited for the bus for 30 minutes."> D. She waited for the bus for 30 minutes.</label>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-container">
+            <div class="question">19. What is the correct negative form of "He has been learning Spanish"?</div>
+            <div class="options">
+                <label><input type="radio" name="q19" value="A. He not has been learning Spanish."> A. He not has been learning Spanish.</label>
+                <label><input type="radio" name="q19" value="B. He hasn't been learning Spanish."> B. He hasn't been learning Spanish.</label>
+                <label><input type="radio" name="q19" value="C. He doesn't been learning Spanish."> C. He doesn't been learning Spanish.</label>
+                <label><input type="radio" name="q19" value="D. He didn't been learning Spanish."> D. He didn't been learning Spanish.</label>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question-container">
+            <div class="question">20. Which time expression is commonly used with Present Perfect Continuous?</div>
+            <div class="options">
+                <label><input type="radio" name="q20" value="A. Since last Monday"> A. Since last Monday</label>
+                <label><input type="radio" name="q20" value="B. Yesterday evening"> B. Yesterday evening</label>
+                <label><input type="radio" name="q20" value="C. Next weekend"> C. Next weekend</label>
+                <label><input type="radio" name="q20" value="D. Last year"> D. Last year</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container for Passage & Quiz: Past Tense in English -->
+<div id="container-grammar6" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-grammar6">
+        <h4 class="transparent-bg">Grammar 6: Past Tense in English</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('grammar6', true)">Read Text (for questions 1-10)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('grammar6', false)" style="display: none;">Close Text (for questions 1-10)</button>
+        </div>
+        <p id="passage-grammar6" class="passage-text" style="display: none;">
+            The **Past Tense** is used to describe actions that happened **in the past**.  
+            The **Simple Past Tense** is formed by adding **-ed** to regular verbs or using **irregular verb forms**.  
+            Example: "She **visited** her grandmother last weekend." / "They **went** to the park yesterday."  
+            The **Past Continuous Tense** is used for actions that were happening at a specific time in the past.  
+            It is formed using **was/were + verb-ing**.  
+            Example: "I **was watching** TV when you called."  
+            The negative form uses **did not (didn't) + base verb**.  
+            Example: "He **did not eat** breakfast this morning."
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 6 NYA -->
+    <div id="quiz-grammar6" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Past Tense in English</h3><br>
+
+        <!-- Question 21 -->
+        <div class="question-container">
+            <div class="question">21. Which sentence is in Past Simple Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q21" value="A. She goes to school."> A. She goes to school.</label>
+                <label><input type="radio" name="q21" value="B. They watched a movie last night."> B. They watched a movie last night.</label>
+                <label><input type="radio" name="q21" value="C. He is sleeping now."> C. He is sleeping now.</label>
+                <label><input type="radio" name="q21" value="D. We will travel tomorrow."> D. We will travel tomorrow.</label>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question-container">
+            <div class="question">22. What is the past form of "go"?</div>
+            <div class="options">
+                <label><input type="radio" name="q22" value="A. Goed"> A. Goed</label>
+                <label><input type="radio" name="q22" value="B. Going"> B. Going</label>
+                <label><input type="radio" name="q22" value="C. Went"> C. Went</label>
+                <label><input type="radio" name="q22" value="D. Goes"> D. Goes</label>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question-container">
+            <div class="question">23. How do you form the negative of Past Simple Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q23" value="A. Didn't + base verb"> A. Didn't + base verb</label>
+                <label><input type="radio" name="q23" value="B. Doesn't + verb"> B. Doesn't + verb</label>
+                <label><input type="radio" name="q23" value="C. Wasn't + verb"> C. Wasn't + verb</label>
+                <label><input type="radio" name="q23" value="D. Don't + verb"> D. Don't + verb</label>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question-container">
+            <div class="question">24. What is the correct sentence in Past Continuous Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q24" value="A. She is cooking dinner now."> A. She is cooking dinner now.</label>
+                <label><input type="radio" name="q24" value="B. He was watching TV when I arrived."> B. He was watching TV when I arrived.</label>
+                <label><input type="radio" name="q24" value="C. They watch movies on Fridays."> C. They watch movies on Fridays.</label>
+                <label><input type="radio" name="q24" value="D. We will go to the beach."> D. We will go to the beach.</label>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question-container">
+            <div class="question">25. What is the past form of "eat"?</div>
+            <div class="options">
+                <label><input type="radio" name="q25" value="A. Eats"> A. Eats</label>
+                <label><input type="radio" name="q25" value="B. Ate"> B. Ate</label>
+                <label><input type="radio" name="q25" value="C. Eaten"> C. Eaten</label>
+                <label><input type="radio" name="q25" value="D. Eating"> D. Eating</label>
+            </div>
+        </div>
+
+        <!-- Question 26 -->
+        <div class="question-container">
+            <div class="question">26. Which sentence is incorrect?</div>
+            <div class="options">
+                <label><input type="radio" name="q26" value="A. He didn’t go to school yesterday."> A. He didn’t go to school yesterday.</label>
+                <label><input type="radio" name="q26" value="B. She was sleeping when I called her."> B. She was sleeping when I called her.</label>
+                <label><input type="radio" name="q26" value="C. They didn't went to the party."> C. They didn't went to the party.</label>
+                <label><input type="radio" name="q26" value="D. We visited our grandparents last summer."> D. We visited our grandparents last summer.</label>
+            </div>
+        </div>
+		
+		<!-- Question 27 -->
+        <div class="question-container">
+            <div class="question">27. What is the correct past form of "He (write) a letter last night"?</div>
+            <div class="options">
+                <label><input type="radio" name="q27" value="A. He writed a letter last night."> A. He writed a letter last night.</label>
+                <label><input type="radio" name="q27" value="B. He writes a letter last night."> B. He writes a letter last night.</label>
+                <label><input type="radio" name="q27" value="C. He wrote a letter last night."> C. He wrote a letter last night.</label>
+                <label><input type="radio" name="q27" value="D. He writing a letter last night."> D. He writing a letter last night.</label>
+            </div>
+        </div>
+
+        <!-- Question 28 -->
+        <div class="question-container">
+            <div class="question">28. What is the correct negative form of "She went to the market"?</div>
+            <div class="options">
+                <label><input type="radio" name="q28" value="A. She didn’t went to the market."> A. She didn’t went to the market.</label>
+                <label><input type="radio" name="q28" value="B. She doesn’t go to the market."> B. She doesn’t go to the market.</label>
+                <label><input type="radio" name="q28" value="C. She didn’t go to the market."> C. She didn’t go to the market.</label>
+                <label><input type="radio" name="q28" value="D. She not go to the market."> D. She not go to the market.</label>
+            </div>
+        </div>
+
+        <!-- Question 29 -->
+        <div class="question-container">
+            <div class="question">29. Which sentence is in Past Continuous Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q29" value="A. I was cooking when he arrived."> A. I was cooking when he arrived.</label>
+                <label><input type="radio" name="q29" value="B. She cooks every day."> B. She cooks every day.</label>
+                <label><input type="radio" name="q29" value="C. They will go to the party."> C. They will go to the party.</label>
+                <label><input type="radio" name="q29" value="D. He studies hard for his exam."> D. He studies hard for his exam.</label>
+            </div>
+        </div>
+
+        <!-- Question 30 -->
+        <div class="question-container">
+            <div class="question">30. Which time expression is commonly used with Past Simple Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q30" value="A. Next year"> A. Next year</label>
+                <label><input type="radio" name="q30" value="B. At the moment"> B. At the moment</label>
+                <label><input type="radio" name="q30" value="C. Yesterday"> C. Yesterday</label>
+                <label><input type="radio" name="q30" value="D. Since 2010"> D. Since 2010</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+		<!-- Submit Button -->
+    <button id="submit-btn" type="button" onclick="submitQuiz()" disabled>Submit Answers</button>
+  </form>
+
+  <script>
+   function togglePassage(passage, show) {
+    const container = document.getElementById(`container-${passage}`);
+    const passageText = document.getElementById(`passage-${passage}`);
+    const quizSection = document.getElementById(`quiz-${passage}`);
+    const readBtn = document.querySelector(`#passage-container-${passage} .read-btn`);
+    const closeBtn = document.querySelector(`#passage-container-${passage} .close-btn`);
+
+    if (show) {
+        passageText.style.display = "block";  // Tampilkan teks passage
+        quizSection.style.display = "block";  // Tampilkan soal
+        readBtn.style.display = "none";       // Sembunyikan tombol Read Text
+        closeBtn.style.display = "inline-block"; // Tampilkan tombol Close Text
+
+// Pastikan passage tetap sticky saat dibuka
+        document.getElementById(`passage-container-${passage}`).style.position = "sticky";
+        document.getElementById(`passage-container-${passage}`).style.top = "0";
+    } else {
+        passageText.style.display = "none";  // Sembunyikan teks passage
+        quizSection.style.display = "none";  // Sembunyikan soal
+        readBtn.style.display = "inline-block";  // Munculkan kembali tombol Read Text
+        closeBtn.style.display = "none";    // Sembunyikan tombol Close Text
+
+// Kembalikan ke posisi normal
+        document.getElementById(`passage-container-${passage}`).style.position = "relative";
+    }
+}
+
+// MODIFIKASI BAGIAN VALIDASI FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+  function validateForm() {
+  const totalQuestions = 30;
+  const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+
+  const name = document.getElementById("name").value.trim();
+  const classValue = document.getElementById("class").value.trim();
+  const studentId = document.getElementById("student-id").value.trim();
+  const school = document.getElementById("school").value.trim();
+  const submitBtn = document.getElementById("submit-btn");
+
+  if (answeredQuestions === totalQuestions && name && classValue && studentId && school) {
+    submitBtn.removeAttribute("disabled");  // Aktifkan tombol
+    submitBtn.classList.add("active");      // Tambahkan warna hijau
+  } else {
+    submitBtn.setAttribute("disabled", "true");  // Nonaktifkan tombol
+    submitBtn.classList.remove("active");        // Kembalikan warna ke merah
+  }
+}
+
+// Tambahkan event listener ke form
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+   function submitQuiz() {
+    if (document.getElementById("submit-btn").hasAttribute("disabled")) return;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+    const userAnswers = {};
+    for (let i = 1; i <= 30; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        userAnswers[`q${i}`] = selected ? selected.value : "Not answered";
+    }
+
+    const name = document.getElementById("name").value.trim();
+    const classValue = document.getElementById("class").value.trim();
+    const studentId = document.getElementById("student-id").value.trim();
+    const school = document.getElementById("school").value.trim();
+
+    let message = `Name: ${name}\nClass: ${classValue}\nStudent Number: ${studentId}\nSchool: ${school}\n\n`;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL PER-PASSAGENYA YANG DIGUNAKAN 
+    message += `📘 *resent Perfect Tense in English*\n`;
+    for (let i = 1; i <= 10; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 1
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎵 *Present Perfect Continuous Tense in English*\n`;
+    for (let i = 11; i <= 20; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 2
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎨 *Past Tense in English*\n`;
+    for (let i = 21; i <= 30; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 3
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+// GUNAKAN NOMOR WHATSAPP MASING-MASING NANTINYA YANG AKAN MENERIMA OUTPUT DARI FORMULIR INI
+    const phoneNumber = "6287803582510";
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+}
+    
+/* 
+  Developer Lombok IT Mengucapkan Selamat, Anda Kini Telah Memiliki Aplikasi Buatan Sendiri.
+  Dengan semangat inovasi dan teknologi, Developer Lombok IT berkomitmen
+  untuk terus mempermudah proses pembelajaran melalui pengembangan aplikasi 
+  yang efisien dan berkualitas. Kepada para peserta pelatihan internasional 
+  Koding Aplikasi Pembelajaran, ini adalah langkah besar menuju masa depan yang lebih cerdas!
+  Mari bersama mengubah tantangan menjadi solusi dan mewujudkan pembelajaran yang lebih mudah, 
+  efektif, dan inovatif. 
+  Bersama Kita Pasti Bisa Jadikan Semua Lebih Mudah.
+  Developer Lombok IT "Jadikan Semua Lebih Mudah!"  
+
+  Abdul Kadir Bagis, M.Pd - CEO LOMBOK IT  
+*/
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Quiz</title>
+  <style>
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+	
+/* Gunakan border-box pada semua elemen */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/* Atur ulang lebar body agar tidak menambah lebar total */
+body {
+    padding: 20px;
+	}
+.input-container {
+    margin-bottom: 20px;
+    }
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+
+.input-container input {
+     width: 100%;
+     padding: 8px;
+     margin-bottom: 10px;
+    }
+
+.question-container {
+     margin-bottom: 20px;
+    }
+
+.question {
+    font-weight: bold;
+    }
+
+    .options {
+    display: flex;
+    flex-direction: column; /* Pastikan setiap opsi tetap dalam barisnya sendiri */
+    gap: 5px; /* Beri sedikit jarak antar opsi */
+}
+    
+/* Pastikan opsi jawaban sejajar */
+.options label {
+    display: flex;
+    align-items: center; /* Pastikan radio button sejajar dengan teks */
+    gap: 10px;
+    width: 100%;
+}
+
+..options input[type="radio"] {
+    margin: 0;
+    flex-shrink: 0; /* Pastikan ukuran radio button tidak berubah */
+}
+
+/* Pastikan opsi jawaban turun ke baris baru dengan titik sejajar */
+.option-text {
+    display: grid;
+    grid-template-columns: 25px auto; /* Kolom pertama untuk "A.", kedua untuk teks */
+}
+
+.option-text span:first-child {
+    font-weight: bold;
+    width: 25px;
+}
+
+.option-text span:last-child {
+    text-indent: -25px;
+    padding-left: 25px;
+    word-wrap: break-word;
+}
+    
+/* Passage tetap terlihat, hanya teksnya yang disembunyikan */
+.passage-container {
+    text-align: justify;
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9; /* Background tetap ada */
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    z-index: 10;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* MODIFIKASI FONT UNTUK PASSAGENYA (Ubah Sesuai Kebutuhan)*/
+.passage-text {
+    display: none;
+    font-size: 14px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+}
+
+/* Style tombol */
+.toggle-btn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    bottom: 10px;
+    z-index: 20;
+    }
+
+/* Tombol Baca & Tutup Teksnya */
+.toggle-btn button {
+     padding: 10px 15px;
+     border: none;
+     border-radius: 5px;
+     font-size: 13px;
+     cursor: pointer;
+     font-weight: bold;
+    }
+
+/* MODIFIKASI WARNA TOMBOL BACA TEKSNYA */
+.read-btn {
+    background-color: green;
+    color: white;
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL BACA TEKSNYA  */
+.read-btn:hover {
+     background-color: darkgreen;
+    }
+
+/* MODIFIKASI WARNA TOMBOL TUTUP TEKSNYA */
+.close-btn {
+     background-color: red;
+     color: white;
+     display: none; /* Disembunyikan saat awal */
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL TUTUP TEKSNYA */
+.close-btn:hover {
+    background-color: darkred;
+    }
+	
+/* MODIFIKASI FONT UNTUK PASSAGENYA */
+#passage {
+	font-family: Arial, sans-serif;
+	font-size: 13px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+	color: #333;         /* Warna teks lebih lembut untuk mata */
+	}
+
+.quiz-wrapper {
+    background: rgba(255, 255, 255, 0.85); /* Warna solid putih dengan transparansi */
+    padding: 20px 10px; /* Padding atas-bawah 20px, kiri-kanan 10px */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: calc(100% - 10px); /* Lebar penuh dikurangi padding kiri-kanan */
+    margin: 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+	}
+	
+/* MODIFIKASI FONT UNTUK SOAL QUIZNYA (Ubah Sesuai Kebutuhunan)*/
+.quiz-wrapper {
+	font-family: Arial, sans-serif;
+	font-size: 12px;     /* Ukuran font lebih kecil dan rapi */
+	line-height: 1;
+	color: #444;         /* Sedikit lebih gelap dari passage untuk kontras */
+	}
+
+/* MODIFIKASI TOMBOL NON-AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn {
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 14px;
+	cursor: not-allowed;
+	display: block;
+	margin: 20px auto;  /* Posisikan di tengah dengan margin atas-bawah */
+	}
+    
+/* MODIFIKASI TOMBOL AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn.active {
+	background-color: green;
+	cursor: pointer;
+    }
+    
+:root {
+	--bg-transparency: 0.5;  /* Transparansi background (0 - 1) */
+	--border-radius: 5px;     /* Round corner */
+	}
+
+.transparent-bg {
+    background-color: rgba(255, 255, 255, var(--bg-transparency));
+    display: flex;
+    justify-content: center; /* Pusatkan horizontal */
+    align-items: center; /* Pusatkan vertikal jika diperlukan */
+    text-align: center;
+    padding: 2px 10px; /* Persempit padding atas dan bawah */
+    border-radius: var(--border-radius);
+    margin-top: 0px;  /* Atur jarak atas */
+    margin-bottom: 0px; /* Atur jarak bawah */
+    }
+    
+.centered-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.5); /* Transparansi */
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	max-width: 500px; /* Atur lebar agar tidak terlalu besar */
+	margin: 20px auto; /* Tengah dengan jarak atas & bawah */
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+	}
+    
+#user-info {
+	padding: 0 5px; /* Padding kiri dan kanan 5px, atas-bawah 0 */
+	box-sizing: border-box;
+	}
+
+#user-info input {
+	width: 100%;
+	padding: 8px; /* Padding sama dengan input lainnya */
+	box-sizing: border-box;
+	}
+
+/* MODIFIKASI KOLOM ISIAN DATA SISWA (Ubah Sesuai Kebutuhunan)*/
+.user-info-wrapper {
+	background: rgba(255, 255, 255, 0.6); /* Background putih transparan */
+	border-radius: 10px;  /* Sudut melengkung */
+	padding: 15px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan lembut */
+	max-width: 400px;
+	margin: 0 auto 20px;  /* Tengah dan jarak bawah */
+	box-sizing: border-box;
+	}
+   </style>
+</head>
+
+<body>
+  <div class="centered-container">
+    <h1 class="transparent-bg">English Quiz</h1>
+    <h2 class="transparent-bg">By Mr. Alfan</h2>
+    <p class="transparent-bg">Fill in your details and answer the questions:</p>
+  </div>
+
+  <form id="quiz-form">
+  <div class="user-info-wrapper">
+    <div id="user-info" class="input-container">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name">
+      <label for="class">Class:</label>
+      <input type="text" id="class" placeholder="Enter your class">
+      <label for="student-id">Student Number:</label>
+      <input type="text" id="student-id" placeholder="Enter your student number">
+      <label for="school">School Name:</label>
+      <input type="text" id="school" placeholder="Enter your school name">
+    </div>
+  </div>
+
+<!-- Container for Passage & Quiz: Daniel the Astronomer -->
+<div id="container-daniel" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-daniel">
+        <h4 class="transparent-bg">Reading 1: Daniel the Astronomer</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('daniel', true)">Read Text (for questions 1-10)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('daniel', false)" style="display: none;">Close Text (for questions 1-10)</button>
+        </div>
+        <p id="passage-daniel" class="passage-text" style="display: none;">
+            Daniel loves studying the stars and planets. Every night, he looks through his telescope and learns about the universe.  
+            One day, his teacher announced a science project, and Daniel decided to present a model of the solar system.  
+            He carefully made each planet and painted them with great detail.  
+            On the day of the presentation, Daniel explained the solar system to his classmates.  
+            Everyone was amazed, and his teacher praised him for his hard work.  
+            Daniel felt proud and dreamed of becoming an astronomer one day.
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 1 NYA -->
+    <div id="quiz-daniel" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Daniel the Astronomer</h3><br>
+
+        <!-- Question 1 -->
+        <div class="question-container">
+            <div class="question">1. What does Daniel love to study?</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A. The ocean"> A. The ocean</label>
+                <label><input type="radio" name="q1" value="B. The stars and planets"> B. The stars and planets</label>
+                <label><input type="radio" name="q1" value="C. Dinosaurs"> C. Dinosaurs</label>
+                <label><input type="radio" name="q1" value="D. Ancient history"> D. Ancient history</label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-container">
+            <div class="question">2. What does Daniel use to observe the universe?</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A. A microscope"> A. A microscope</label>
+                <label><input type="radio" name="q2" value="B. A telescope"> B. A telescope</label>
+                <label><input type="radio" name="q2" value="C. A camera"> C. A camera</label>
+                <label><input type="radio" name="q2" value="D. Binoculars"> D. Binoculars</label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-container">
+            <div class="question">3. What project did Daniel’s teacher announce?</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A. A math competition"> A. A math competition</label>
+                <label><input type="radio" name="q3" value="B. A science project"> B. A science project</label>
+                <label><input type="radio" name="q3" value="C. A football match"> C. A football match</label>
+                <label><input type="radio" name="q3" value="D. A history quiz"> D. A history quiz</label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-container">
+            <div class="question">4. What did Daniel decide to create for the project?</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A. A robot"> A. A robot</label>
+                <label><input type="radio" name="q4" value="B. A volcano model"> B. A volcano model</label>
+                <label><input type="radio" name="q4" value="C. A solar system model"> C. A solar system model</label>
+                <label><input type="radio" name="q4" value="D. A rocket"> D. A rocket</label>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-container">
+            <div class="question">5. How did Daniel prepare his solar system model?</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A. He bought it from a store"> A. He bought it from a store</label>
+                <label><input type="radio" name="q5" value="B. He carefully made and painted each planet"> B. He carefully made and painted each planet</label>
+                <label><input type="radio" name="q5" value="C. He asked his friends to make it"> C. He asked his friends to make it</label>
+                <label><input type="radio" name="q5" value="D. He used pictures from the internet"> D. He used pictures from the internet</label>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-container">
+            <div class="question">6. Who did Daniel present his project to?</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="A. His classmates"> A. His classmates</label>
+                <label><input type="radio" name="q6" value="B. His parents"> B. His parents</label>
+                <label><input type="radio" name="q6" value="C. A group of scientists"> C. A group of scientists</label>
+                <label><input type="radio" name="q6" value="D. His football coach"> D. His football coach</label>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-container">
+            <div class="question">7. How did Daniel’s classmates react to his presentation?</div>
+            <div class="options">
+                <label><input type="radio" name="q7" value="A. They were amazed"> A. They were amazed</label>
+                <label><input type="radio" name="q7" value="B. They laughed at him"> B. They laughed at him</label>
+                <label><input type="radio" name="q7" value="C. They ignored it"> C. They ignored it</label>
+                <label><input type="radio" name="q7" value="D. They left the room"> D. They left the room</label>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-container">
+            <div class="question">8. What did Daniel’s teacher say about his project?</div>
+            <div class="options">
+                <label><input type="radio" name="q8" value="A. She praised his hard work"> A. She praised his hard work</label>
+                <label><input type="radio" name="q8" value="B. She told him to redo it"> B. She told him to redo it</label>
+                <label><input type="radio" name="q8" value="C. She ignored it"> C. She ignored it</label>
+                <label><input type="radio" name="q8" value="D. She said it was too simple"> D. She said it was too simple</label>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-container">
+            <div class="question">9. How did Daniel feel after the presentation?</div>
+            <div class="options">
+                <label><input type="radio" name="q9" value="A. Proud"> A. Proud</label>
+                <label><input type="radio" name="q9" value="B. Sad"> B. Sad</label>
+                <label><input type="radio" name="q9" value="C. Angry"> C. Angry</label>
+                <label><input type="radio" name="q9" value="D. Nervous"> D. Nervous</label>
+            </div>
+        </div>
+		
+		 <!-- Question 10 -->
+        <div class="question-container">
+            <div class="question">10. What is Daniel’s dream?</div>
+            <div class="options">
+                <label><input type="radio" name="q10" value="A. To be a football player"> A. To be a football player</label>
+                <label><input type="radio" name="q10" value="B. To become an astronomer"> B. To become an astronomer</label>
+                <label><input type="radio" name="q10" value="C. To be a chef"> C. To be a chef</label>
+                <label><input type="radio" name="q10" value="D. To be a pilot"> D. To be a pilot</label>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+ <!-- Container for Passage & Quiz: Mia the Dancer -->
+<div id="container-mia" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-mia">
+        <h4 class="transparent-bg">Reading 2: Mia the Dancer</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('mia', true)">Read Text (for questions 11-20)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('mia', false)" style="display: none;">Close Text (for questions 11-20)</button>
+        </div>
+        <p id="passage-mia" class="passage-text" style="display: none;">
+            Mia loves dancing. Every afternoon, she practices ballet in the studio.  
+            One day, her dance teacher announced a big performance at the city theater.  
+            Mia was excited and trained harder than ever.  
+            She learned new moves, improved her balance, and practiced with her team.  
+            On the night of the performance, she danced gracefully, and the audience applauded loudly.  
+            Mia felt happy and dreamed of becoming a professional dancer one day.
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 2 NYA -->
+    <div id="quiz-mia" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Mia the Dancer</h3><br>
+
+        <!-- Question 11 -->
+        <div class="question-container">
+            <div class="question">11. What is Mia’s hobby?</div>
+            <div class="options">
+                <label><input type="radio" name="q11" value="A. Singing"> A. Singing</label>
+                <label><input type="radio" name="q11" value="B. Dancing"> B. Dancing</label>
+                <label><input type="radio" name="q11" value="C. Cooking"> C. Cooking</label>
+                <label><input type="radio" name="q11" value="D. Painting"> D. Painting</label>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-container">
+            <div class="question">12. Where does Mia practice dancing?</div>
+            <div class="options">
+                <label><input type="radio" name="q12" value="A. In the library"> A. In the library</label>
+                <label><input type="radio" name="q12" value="B. In the park"> B. In the park</label>
+                <label><input type="radio" name="q12" value="C. In the dance studio"> C. In the dance studio</label>
+                <label><input type="radio" name="q12" value="D. At home"> D. At home</label>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-container">
+            <div class="question">13. What kind of dance does Mia practice?</div>
+            <div class="options">
+                <label><input type="radio" name="q13" value="A. Hip-hop"> A. Hip-hop</label>
+                <label><input type="radio" name="q13" value="B. Ballet"> B. Ballet</label>
+                <label><input type="radio" name="q13" value="C. Salsa"> C. Salsa</label>
+                <label><input type="radio" name="q13" value="D. Breakdancing"> D. Breakdancing</label>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-container">
+            <div class="question">14. What announcement did Mia’s dance teacher make?</div>
+            <div class="options">
+                <label><input type="radio" name="q14" value="A. A dance competition"> A. A dance competition</label>
+                <label><input type="radio" name="q14" value="B. A big performance at the city theater"> B. A big performance at the city theater</label>
+                <label><input type="radio" name="q14" value="C. A new dance routine"> C. A new dance routine</label>
+                <label><input type="radio" name="q14" value="D. A dance class trip"> D. A dance class trip</label>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-container">
+            <div class="question">15. How did Mia feel about the performance?</div>
+            <div class="options">
+                <label><input type="radio" name="q15" value="A. Nervous"> A. Nervous</label>
+                <label><input type="radio" name="q15" value="B. Excited"> B. Excited</label>
+                <label><input type="radio" name="q15" value="C. Scared"> C. Scared</label>
+                <label><input type="radio" name="q15" value="D. Uninterested"> D. Uninterested</label>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-container">
+            <div class="question">16. What did Mia do to prepare for the performance?</div>
+            <div class="options">
+                <label><input type="radio" name="q16" value="A. She practiced new moves and improved her balance"> A. She practiced new moves and improved her balance</label>
+                <label><input type="radio" name="q16" value="B. She played video games"> B. She played video games</label>
+                <label><input type="radio" name="q16" value="C. She took a break from dancing"> C. She took a break from dancing</label>
+                <label><input type="radio" name="q16" value="D. She changed her dance style"> D. She changed her dance style</label>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-container">
+            <div class="question">17. How did Mia perform on the big night?</div>
+            <div class="options">
+                <label><input type="radio" name="q17" value="A. She forgot the routine"> A. She forgot the routine</label>
+                <label><input type="radio" name="q17" value="B. She danced gracefully"> B. She danced gracefully</label>
+                <label><input type="radio" name="q17" value="C. She fell on stage"> C. She fell on stage</label>
+                <label><input type="radio" name="q17" value="D. She got nervous and ran away"> D. She got nervous and ran away</label>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-container">
+            <div class="question">18. How did the audience react to Mia’s performance?</div>
+            <div class="options">
+                <label><input type="radio" name="q18" value="A. They booed"> A. They booed</label>
+                <label><input type="radio" name="q18" value="B. They stayed silent"> B. They stayed silent</label>
+                <label><input type="radio" name="q18" value="C. They applauded loudly"> C. They applauded loudly</label>
+                <label><input type="radio" name="q18" value="D. They left early"> D. They left early</label>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-container">
+            <div class="question">19. How did Mia feel after the performance?</div>
+            <div class="options">
+                <label><input type="radio" name="q19" value="A. Happy"> A. Happy</label>
+                <label><input type="radio" name="q19" value="B. Disappointed"> B. Disappointed</label>
+                <label><input type="radio" name="q19" value="C. Angry"> C. Angry</label>
+                <label><input type="radio" name="q19" value="D. Tired"> D. Tired</label>
+            </div>
+        </div>
+		
+		<!-- Question 20 -->
+        <div class="question-container">
+            <div class="question">20. What is Mia’s dream?</div>
+            <div class="options">
+                <label><input type="radio" name="q20" value="A. To become a professional dancer"> A. To become a professional dancer</label>
+                <label><input type="radio" name="q20" value="B. To be a scientist"> B. To be a scientist</label>
+                <label><input type="radio" name="q20" value="C. To be a doctor"> C. To be a doctor</label>
+                <label><input type="radio" name="q20" value="D. To open a bakery"> D. To open a bakery</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container for Passage & Quiz: Leo the Young Scientist -->
+<div id="container-leo" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-leo">
+        <h4 class="transparent-bg">Reading 3: Leo the Young Scientist</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('leo', true)">Read Text (for questions 21-30)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('leo', false)" style="display: none;">Close Text (for questions 21-30)</button>
+        </div>
+        <p id="passage-leo" class="passage-text" style="display: none;">
+            Leo loves science. He enjoys doing experiments in his small laboratory at home.  
+            One day, his teacher announced a science fair at school. Leo was excited and decided to create a volcano model.  
+            He mixed baking soda and vinegar to make an eruption.  
+            On the day of the fair, his experiment worked perfectly, and everyone was amazed.  
+            His teacher praised his creativity, and Leo felt proud.  
+            He dreamed of becoming a great scientist in the future.
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 3 NYA -->
+    <div id="quiz-leo" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Leo the Young Scientist</h3><br>
+
+        <!-- Question 21 -->
+        <div class="question-container">
+            <div class="question">21. What is Leo’s passion?</div>
+            <div class="options">
+                <label><input type="radio" name="q21" value="A. Playing football"> A. Playing football</label>
+                <label><input type="radio" name="q21" value="B. Doing science experiments"> B. Doing science experiments</label>
+                <label><input type="radio" name="q21" value="C. Cooking"> C. Cooking</label>
+                <label><input type="radio" name="q21" value="D. Writing stories"> D. Writing stories</label>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question-container">
+            <div class="question">22. Where does Leo conduct his experiments?</div>
+            <div class="options">
+                <label><input type="radio" name="q22" value="A. In the school lab"> A. In the school lab</label>
+                <label><input type="radio" name="q22" value="B. In his small laboratory at home"> B. In his small laboratory at home</label>
+                <label><input type="radio" name="q22" value="C. In the backyard"> C. In the backyard</label>
+                <label><input type="radio" name="q22" value="D. In the library"> D. In the library</label>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question-container">
+            <div class="question">23. What event did Leo’s teacher announce?</div>
+            <div class="options">
+                <label><input type="radio" name="q23" value="A. A music competition"> A. A music competition</label>
+                <label><input type="radio" name="q23" value="B. A science fair"> B. A science fair</label>
+                <label><input type="radio" name="q23" value="C. A cooking contest"> C. A cooking contest</label>
+                <label><input type="radio" name="q23" value="D. A sports tournament"> D. A sports tournament</label>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question-container">
+            <div class="question">24. What project did Leo choose for the science fair?</div>
+            <div class="options">
+                <label><input type="radio" name="q24" value="A. A solar system model"> A. A solar system model</label>
+                <label><input type="radio" name="q24" value="B. A volcano model"> B. A volcano model</label>
+                <label><input type="radio" name="q24" value="C. A weather station"> C. A weather station</label>
+                <label><input type="radio" name="q24" value="D. A robot"> D. A robot</label>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question-container">
+            <div class="question">25. What ingredients did Leo use to create the eruption?</div>
+            <div class="options">
+                <label><input type="radio" name="q25" value="A. Water and flour"> A. Water and flour</label>
+                <label><input type="radio" name="q25" value="B. Salt and sugar"> B. Salt and sugar</label>
+                <label><input type="radio" name="q25" value="C. Baking soda and vinegar"> C. Baking soda and vinegar</label>
+                <label><input type="radio" name="q25" value="D. Milk and honey"> D. Milk and honey</label>
+            </div>
+        </div>
+
+        <!-- Question 26 -->
+        <div class="question-container">
+            <div class="question">26. How did Leo feel about the science fair?</div>
+            <div class="options">
+                <label><input type="radio" name="q26" value="A. Excited"> A. Excited</label>
+                <label><input type="radio" name="q26" value="B. Bored"> B. Bored</label>
+                <label><input type="radio" name="q26" value="C. Nervous"> C. Nervous</label>
+                <label><input type="radio" name="q26" value="D. Uninterested"> D. Uninterested</label>
+            </div>
+        </div>
+
+        <!-- Question 27 -->
+        <div class="question-container">
+            <div class="question">27. How did Leo’s experiment go on the day of the fair?</div>
+            <div class="options">
+                <label><input type="radio" name="q27" value="A. It didn’t work"> A. It didn’t work</label>
+                <label><input type="radio" name="q27" value="B. It exploded too much"> B. It exploded too much</label>
+                <label><input type="radio" name="q27" value="C. It worked perfectly"> C. It worked perfectly</label>
+                <label><input type="radio" name="q27" value="D. It was too simple"> D. It was too simple</label>
+            </div>
+        </div>
+
+        <!-- Question 28 -->
+        <div class="question-container">
+            <div class="question">28. How did people react to Leo’s experiment?</div>
+            <div class="options">
+                <label><input type="radio" name="q28" value="A. They ignored it"> A. They ignored it</label>
+                <label><input type="radio" name="q28" value="B. They were amazed"> B. They were amazed</label>
+                <label><input type="radio" name="q28" value="C. They were disappointed"> C. They were disappointed</label>
+                <label><input type="radio" name="q28" value="D. They left the room"> D. They left the room</label>
+            </div>
+        </div>
+
+        <!-- Question 29 -->
+        <div class="question-container">
+            <div class="question">29. How did Leo’s teacher respond to his project?</div>
+            <div class="options">
+                <label><input type="radio" name="q29" value="A. She praised his creativity"> A. She praised his creativity</label>
+                <label><input type="radio" name="q29" value="B. She told him to try again"> B. She told him to try again</label>
+                <label><input type="radio" name="q29" value="C. She ignored it"> C. She ignored it</label>
+                <label><input type="radio" name="q29" value="D. She said it was boring"> D. She said it was boring</label>
+            </div>
+        </div>
+
+        <!-- Question 30 -->
+        <div class="question-container">
+            <div class="question">30. What is Leo’s dream?</div>
+            <div class="options">
+                <label><input type="radio" name="q30" value="A. To be a scientist"> A. To be a scientist</label>
+                <label><input type="radio" name="q30" value="B. To be a football player"> B. To be a football player</label>
+                <label><input type="radio" name="q30" value="C. To be a chef"> C. To be a chef</label>
+                <label><input type="radio" name="q30" value="D. To be a dancer"> D. To be a dancer</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Submit Button -->
+    <button id="submit-btn" type="button" onclick="submitQuiz()">Submit Answers</button>
+  </form>
+
+ <script>
+   function togglePassage(passage, show) {
+    const container = document.getElementById(`container-${passage}`);
+    const passageText = document.getElementById(`passage-${passage}`);
+    const quizSection = document.getElementById(`quiz-${passage}`);
+    const readBtn = document.querySelector(`#passage-container-${passage} .read-btn`);
+    const closeBtn = document.querySelector(`#passage-container-${passage} .close-btn`);
+
+    if (show) {
+        passageText.style.display = "block";  // Tampilkan teks passage
+        quizSection.style.display = "block";  // Tampilkan soal
+        readBtn.style.display = "none";       // Sembunyikan tombol Read Text
+        closeBtn.style.display = "inline-block"; // Tampilkan tombol Close Text
+
+// Pastikan passage tetap sticky saat dibuka
+        document.getElementById(`passage-container-${passage}`).style.position = "sticky";
+        document.getElementById(`passage-container-${passage}`).style.top = "0";
+    } else {
+        passageText.style.display = "none";  // Sembunyikan teks passage
+        quizSection.style.display = "none";  // Sembunyikan soal
+        readBtn.style.display = "inline-block";  // Munculkan kembali tombol Read Text
+        closeBtn.style.display = "none";    // Sembunyikan tombol Close Text
+
+// Kembalikan ke posisi normal
+        document.getElementById(`passage-container-${passage}`).style.position = "relative";
+    }
+}
+
+// MODIFIKASI BAGIAN VALIDASI FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+  function validateForm() {
+  const totalQuestions = 30;
+  const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+
+  const name = document.getElementById("name").value.trim();
+  const classValue = document.getElementById("class").value.trim();
+  const studentId = document.getElementById("student-id").value.trim();
+  const school = document.getElementById("school").value.trim();
+  const submitBtn = document.getElementById("submit-btn");
+
+  if (answeredQuestions === totalQuestions && name && classValue && studentId && school) {
+    submitBtn.removeAttribute("disabled");  // Aktifkan tombol
+    submitBtn.classList.add("active");      // Tambahkan warna hijau
+  } else {
+    submitBtn.setAttribute("disabled", "true");  // Nonaktifkan tombol
+    submitBtn.classList.remove("active");        // Kembalikan warna ke merah
+  }
+}
+
+// Tambahkan event listener ke form
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+   function submitQuiz() {
+    if (document.getElementById("submit-btn").hasAttribute("disabled")) return;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+    const userAnswers = {};
+    for (let i = 1; i <= 30; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        userAnswers[`q${i}`] = selected ? selected.value : "Not answered";
+    }
+
+    const name = document.getElementById("name").value.trim();
+    const classValue = document.getElementById("class").value.trim();
+    const studentId = document.getElementById("student-id").value.trim();
+    const school = document.getElementById("school").value.trim();
+
+    let message = `Name: ${name}\nClass: ${classValue}\nStudent Number: ${studentId}\nSchool: ${school}\n\n`;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL PER-PASSAGENYA YANG DIGUNAKAN 
+    message += `📘 *Daniel the Astronomer*\n`;
+    for (let i = 1; i <= 10; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 1
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎵 *Mia the Dancer*\n`;
+    for (let i = 11; i <= 20; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 2
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎨 *Leo the Young Scientist*\n`;
+    for (let i = 21; i <= 30; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 3
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+// GUNAKAN NOMOR WHATSAPP MASING-MASING NANTINYA YANG AKAN MENERIMA OUTPUT DARI FORMULIR INI
+    const phoneNumber = "6287803582510";
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+}
+    
+/* 
+  Developer Lombok IT Mengucapkan Selamat, Anda Kini Telah Memiliki Aplikasi Buatan Sendiri.
+  Dengan semangat inovasi dan teknologi, Developer Lombok IT berkomitmen
+  untuk terus mempermudah proses pembelajaran melalui pengembangan aplikasi 
+  yang efisien dan berkualitas. Kepada para peserta pelatihan internasional 
+  Koding Aplikasi Pembelajaran, ini adalah langkah besar menuju masa depan yang lebih cerdas!
+  Mari bersama mengubah tantangan menjadi solusi dan mewujudkan pembelajaran yang lebih mudah, 
+  efektif, dan inovatif. 
+  Bersama Kita Pasti Bisa Jadikan Semua Lebih Mudah.
+  Developer Lombok IT "Jadikan Semua Lebih Mudah!"  
+
+  Abdul Kadir Bagis, M.Pd - CEO LOMBOK IT  
+*/
+
+  </script>
+</body>
+
+</html>

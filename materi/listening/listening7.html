@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Quiz</title>
+  <style>
+    body {
+       max-width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+/* Gunakan border-box pada semua elemen */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/* Atur ulang lebar body agar tidak menambah lebar total */
+body {
+  padding: 20px;
+}
+.input-container {
+  margin-bottom: 20px;
+}
+
+.input-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.question-container {
+  margin-bottom: 20px;
+}
+
+.question {
+  font-weight: bold;
+}
+
+.options label {
+  display: block;
+  margin: 5px 0;
+}
+
+/* Gaya untuk gambar agar berada di tengah */
+.passage-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px auto;
+    max-width: 100%;
+    background: transparent; /* Hapus background */
+}
+
+.passage-image {
+    max-width: 100%; /* Pastikan gambar tidak lebih besar dari container */
+    height: auto; /* Jaga proporsi gambar */
+}
+.passage-image-wrapper {
+    background: white; /* Hanya gambar passage yang memiliki background putih */
+    padding: 10px;
+    border-radius: 15px; /* Opsional, membuat sudut melengkung */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Opsional, menambahkan bayangan */
+}
+      /* Hapus background putih pada container gambar */
+.passage-wrapper {
+    background: transparent; /* Menghilangkan background */
+    padding: 0; /* Menghapus padding agar lebih menyatu */
+    border-radius: 0; /* Menghapus efek melengkung */
+    box-shadow: none; /* Menghilangkan bayangan */
+}
+
+/* Sticky Container for Image & Controls */
+.sticky-container {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0px 0;
+    text-align: center;
+}
+.passage-image {
+    width: 100%;  /* Full width */
+    height: 150px; /* Set a fixed height */
+    display: block;
+    margin: 0 auto;
+    object-fit: contain; /* Ensures the image fits well */
+    background-color: white; /* White background */
+    padding: 10px; /* Optional: Adds spacing around the image */
+    border-radius: 10px; /* Optional: Soft rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Adds shadow */
+}
+
+.quiz-wrapper {
+    background: rgba(255, 255, 255, 0.85); /* Warna solid putih dengan transparansi */
+    padding: 20px 10px; /* Padding atas-bawah 20px, kiri-kanan 10px */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: calc(100% - 10px); /* Lebar penuh dikurangi padding kiri-kanan */
+    margin: 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+}
+    /* Modifikasi Font untuk Quiz */
+.quiz-wrapper {
+    font-family: Arial, sans-serif;
+    font-size: 12px;     /* Ukuran font lebih kecil dan rapi */
+    line-height: 1;
+    color: #444;         /* Sedikit lebih gelap dari passage untuk kontras */
+}
+
+#submit-btn {
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 14px;
+	cursor: not-allowed;
+	display: block;
+	margin: 20px auto;  /* Posisikan di tengah dengan margin atas-bawah */
+	}
+
+#submit-btn.active {
+    background-color: green;  /* Warna hijau jika aktif */
+    cursor: pointer;
+}
+ :root {
+  --bg-transparency: 0.5;  /* Transparansi background (0 - 1) */
+  --border-radius: 5px;     /* Round corner */
+}		
+      
+.transparent-bg {
+    background-color: rgba(255, 255, 255, var(--bg-transparency));
+    display: flex;
+    justify-content: center; /* Pusatkan horizontal */
+    align-items: center; /* Pusatkan vertikal jika diperlukan */
+    text-align: center;
+    padding: 2px 10px; /* Persempit padding atas dan bawah */
+    border-radius: var(--border-radius);
+    margin-top: 0px;  /* Atur jarak atas */
+    margin-bottom: 0px; /* Atur jarak bawah */
+}
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 30vh;  /* Atur tinggi minimum agar tetap terlihat */
+}
+#user-info {
+    padding: 0 5px; /* Padding kiri dan kanan 5px, atas-bawah 0 */
+    box-sizing: border-box;
+}
+
+#user-info input {
+    width: 100%;
+    padding: 8px; /* Padding sama dengan input lainnya */
+    box-sizing: border-box;
+}
+.user-info-wrapper {
+    background: rgba(255, 255, 255, 0.6); /* Background putih transparan */
+    border-radius: 10px;  /* Sudut melengkung */
+    padding: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan lembut */
+    max-width: 400px;
+    margin: 0 auto 20px;  /* Tengah dan jarak bawah */
+    box-sizing: border-box;
+}
+/* Audio Control Panel - Glassmorphism Style */
+.audio-controls {
+    background: rgba(2, 0, 0, 0.4); /* Putih transparan */
+    backdrop-filter: blur(15px); /* Efek blur */
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    margin: 5px auto;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: sticky;
+    top: 10px;
+    z-index: 1001;
+}
+
+/* Buttons Style */
+.audio-button {
+    background: linear-gradient(145deg, #5a5a5a, #3b3b3b);
+    border: none;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4),
+                inset -3px -3px 6px rgba(255, 255, 255, 0.1);
+    background-size: cover;
+    background-position: center;
+}
+
+/* Play Button */
+#play-pause {
+    background-image: url('play.gif') !important;
+    background-size: cover;
+    background-position: center;
+    width: 30px;
+    height: 25px;
+    border: none;
+    border-radius: 25%;
+    cursor: pointer;
+    text-indent: -10002px; /* Sembunyikan teks */
+}
+
+/* Stop Button */
+#stop {
+    background-image: url('stop.gif') !important;
+    background-size: cover;
+    background-position: center;
+    width: 30px;
+    height: 25px;
+    border: none;
+    border-radius: 25%;
+    cursor: pointer;
+    text-indent: -9999px; /* Sembunyikan teks */
+}
+
+/* Hover Effects */
+.audio-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.4);
+}
+
+/* Active Effect */
+.audio-button:active {
+    transform: scale(0.9);
+}
+
+/* Volume Slider */
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    outline: none;
+    transition: opacity 0.2s, background 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.slider:hover {
+    opacity: 1;
+    background: rgba(0, 255, 1, 0.4);
+}
+
+/* Slider Thumb */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #0fc808;
+    border-radius: 50%;
+    box-shadow: 0px 0px 12px rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.slider::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+    background: rgba(0, 255, 1, 0.4);
+    box-shadow: 0px 0px 15px rgb(0, 0, 0);
+}
+
+/* Time Display */
+.time-container {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000000;
+    text-align: center;
+    min-width: 65px;
+}
+
+</style>
+</head>
+
+<body>
+  <div class="centered-container">
+  <h1 class="transparent-bg">English Quiz</h1>
+  <h2 class="transparent-bg">By Mr. Alfan</h2>
+  <p class="transparent-bg">Fill in your details and answer the questions:</p>
+</div>
+ 
+ <!-- Bungkus User Info dengan Background Transparan -->
+<div class="user-info-wrapper">
+    <div id="user-info" class="input-container">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter your name">
+        <label for="class">Class:</label>
+        <input type="text" id="class" placeholder="Enter your class">
+        <label for="student-id">Student Number:</label>
+        <input type="text" id="student-id" placeholder="Enter your student number">
+        <label for="school">School Name:</label>
+        <input type="text" id="school" placeholder="Enter your school name">
+    </div>
+</div>
+
+  <h4 class="transparent-bg">Listening 7: Family Camping Trip</h4>
+ 
+ <!-- Quiz Form -->
+	<form id="quiz-form">
+	  <div class="sticky-container">
+    <div class="passage-wrapper"> <!-- Wrapper baru untuk menyatukan gambar dan audio -->
+        <div class="passage-image-container">
+            <img src="listening7.gif" alt="Listening Passage" class="passage-image">
+        </div>
+
+        <!-- Custom Audio Control Pad (Sekarang dalam satu wadah dengan gambar) -->
+        <div class="audio-controls">
+            <button type="button" id="play-pause" class="audio-button">▶️</button>
+            <button type="button" id="stop" class="audio-button">⏹️</button>
+            <input type="range" id="seek-bar" class="slider" min="0" value="0" step="1">
+            <div class="time-container">
+                <span id="current-time">0:00</span> / <span id="total-time">0:00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Audio Player untuk Passage -->
+		<audio id="audioPlayer" src="listening7.mp3" preload="auto"></audio>
+      
+  <!-- Bungkus Semua Soal dengan Background Blur -->
+<div class="quiz-wrapper">
+    <!-- Question 1 -->
+    <div class="question-container">
+        <div class="question">1. Why was David excited for the weekend?</div>
+        <div class="options">
+            <label><input type="radio" name="q1" value="A. He was going on a school trip"> A. He was going on a school trip</label>
+            <label><input type="radio" name="q1" value="B. He was going camping with his family"> B. He was going camping with his family</label>
+            <label><input type="radio" name="q1" value="C. He was visiting his grandparents"> C. He was visiting his grandparents</label>
+            <label><input type="radio" name="q1" value="D. He was celebrating his birthday"> D. He was celebrating his birthday</label>
+        </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question-container">
+        <div class="question">2. Where did David and his family go camping?</div>
+        <div class="options">
+            <label><input type="radio" name="q2" value="A. Near a lake in the forest"> A. Near a lake in the forest</label>
+            <label><input type="radio" name="q2" value="B. On the beach"> B. On the beach</label>
+            <label><input type="radio" name="q2" value="C. In the mountains"> C. In the mountains</label>
+            <label><input type="radio" name="q2" value="D. In their backyard"> D. In their backyard</label>
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question-container">
+        <div class="question">3. What did David and Anna do after setting up the tent?</div>
+        <div class="options">
+            <label><input type="radio" name="q3" value="A. They took a nap"> A. They took a nap</label>
+            <label><input type="radio" name="q3" value="B. They explored the area"> B. They explored the area</label>
+            <label><input type="radio" name="q3" value="C. They went swimming"> C. They went swimming</label>
+            <label><input type="radio" name="q3" value="D. They started a fire"> D. They started a fire</label>
+        </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="question-container">
+        <div class="question">4. What did David’s family do around the campfire?</div>
+        <div class="options">
+            <label><input type="radio" name="q4" value="A. Cooked dinner and went to sleep early"> A. Cooked dinner and went to sleep early</label>
+            <label><input type="radio" name="q4" value="B. Roasted marshmallows and told stories"> B. Roasted marshmallows and told stories</label>
+            <label><input type="radio" name="q4" value="C. Played card games"> C. Played card games</label>
+            <label><input type="radio" name="q4" value="D. Watched a movie"> D. Watched a movie</label>
+        </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question-container">
+        <div class="question">5. What sound did David hear before going to sleep?</div>
+        <div class="options">
+            <label><input type="radio" name="q5" value="A. The sound of an owl"> A. The sound of an owl</label>
+            <label><input type="radio" name="q5" value="B. The sound of a bear"> B. The sound of a bear</label>
+            <label><input type="radio" name="q5" value="C. The sound of rain"> C. The sound of rain</label>
+            <label><input type="radio" name="q5" value="D. The sound of music"> D. The sound of music</label>
+        </div>
+    </div>
+
+    <!-- True/False Questions -->
+    <div class="question-container">
+        <div class="question">6. David’s family stayed in a hotel during the trip.</div>
+        <div class="options">
+            <label><input type="radio" name="q6" value="True"> True</label>
+            <label><input type="radio" name="q6" value="False"> False</label>
+        </div>
+    </div>
+
+    <div class="question-container">
+        <div class="question">7. David and his sister saw a small waterfall.</div>
+        <div class="options">
+            <label><input type="radio" name="q7" value="True"> True</label>
+            <label><input type="radio" name="q7" value="False"> False</label>
+        </div>
+    </div>
+
+    <div class="question-container">
+        <div class="question">8. The sky was cloudy at night.</div>
+        <div class="options">
+            <label><input type="radio" name="q8" value="True"> True</label>
+            <label><input type="radio" name="q8" value="False"> False</label>
+        </div>
+    </div>
+
+    <div class="question-container">
+        <div class="question">9. David’s family sat around the campfire and played board games.</div>
+        <div class="options">
+            <label><input type="radio" name="q9" value="True"> True</label>
+            <label><input type="radio" name="q9" value="False"> False</label>
+        </div>
+    </div>
+
+    <div class="question-container">
+        <div class="question">10. David enjoyed the camping trip.</div>
+        <div class="options">
+            <label><input type="radio" name="q10" value="True"> True</label>
+            <label><input type="radio" name="q10" value="False"> False</label>
+        </div>
+    </div>
+</div>
+
+    <!-- Submit Button -->
+<button id="submit-btn" type="button" onclick="submitQuiz()" disabled>Submit Answers</button>
+  </form>
+
+  <script>
+        
+ // Ambil elemen form dan tombol submit
+const form = document.getElementById("quiz-form");
+const submitBtn = document.getElementById("submit-btn");
+
+// Fungsi validasi form
+function validateForm() {
+  const totalQuestions = 10; // Ubah dari 5 menjadi 10
+  const answeredQuestions = [...form.querySelectorAll('input[type="radio"]:checked')].length;
+
+  // Mengambil nilai input pada form user info
+  const name = document.getElementById("name").value.trim();
+  const classValue = document.getElementById("class").value.trim();
+  const studentId = document.getElementById("student-id").value.trim();
+  const school = document.getElementById("school").value.trim();
+
+  // Cek apakah semua pertanyaan dan form user info sudah diisi
+  if (answeredQuestions === totalQuestions && name && classValue && studentId && school) {
+    submitBtn.classList.add("active");
+    submitBtn.removeAttribute("disabled");
+  } else {
+    submitBtn.classList.remove("active");
+    submitBtn.setAttribute("disabled", "true");
+  }
+}
+
+// Menambahkan event listener agar tombol submit berubah status sesuai validasi
+form.addEventListener("change", validateForm);
+form.addEventListener("input", validateForm);
+
+// Fungsi submit quiz
+function submitQuiz() {
+  if (!submitBtn.classList.contains("active")) return; // Cegah pengiriman jika tombol masih nonaktif
+
+  // Mengumpulkan jawaban dari form quiz
+  const userAnswers = {};
+  for (let i = 1; i <= 10; i++) {  // Ubah dari 5 menjadi 10
+    const selected = form.querySelector(`input[name="q${i}"]:checked`);
+    userAnswers[`q${i}`] = selected ? selected.value : "Not answered";
+  }
+
+  // Mengambil data form user info
+  const name = document.getElementById("name").value.trim();
+  const classValue = document.getElementById("class").value.trim();
+  const studentId = document.getElementById("student-id").value.trim();
+  const school = document.getElementById("school").value.trim();
+
+  // Format pesan yang akan dikirim ke WhatsApp
+  const topicTitle = "Listening 7: Family Camping Trip";
+  let message = `Name: ${name}\nClass: ${classValue}\nStudent Number: ${studentId}\nSchool Name: ${school}\n\nTopic: ${topicTitle}\n\nAnswers:\n`;
+  for (let i = 1; i <= 10; i++) {  // Ubah dari 5 menjadi 10
+    message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+  }
+
+  // Nomor WhatsApp tujuan
+  const phoneNumber = "6287803582510";
+  // Membuka link WhatsApp dengan isi pesan
+  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+}
+
+// Ambil elemen audio
+const audioPlayer = document.getElementById("audioPlayer");
+const playPauseButton = document.getElementById("play-pause");
+const stopButton = document.getElementById("stop");
+const seekBar = document.getElementById("seek-bar");
+const currentTimeDisplay = document.getElementById("current-time");
+const totalTimeDisplay = document.getElementById("total-time");
+
+// Fungsi untuk mengubah waktu menjadi format menit:detik
+function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
+
+// Perbarui total durasi saat audio dimuat
+audioPlayer.addEventListener("loadedmetadata", function () {
+    seekBar.max = audioPlayer.duration;
+    totalTimeDisplay.textContent = formatTime(audioPlayer.duration);
+});
+
+// Perbarui waktu berjalan dan seek bar saat audio dimainkan
+audioPlayer.addEventListener("timeupdate", function () {
+    seekBar.value = audioPlayer.currentTime;
+    currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+});
+
+// Fungsi play/pause
+playPauseButton.addEventListener("click", function () {
+    if (audioPlayer.paused) {
+        audioPlayer.play();
+        playPauseButton.textContent = "⏸️"; // Ubah ikon menjadi pause
+    } else {
+        audioPlayer.pause();
+        playPauseButton.textContent = "▶️"; // Ubah ikon menjadi play
+    }
+});
+
+// Fungsi stop
+stopButton.addEventListener("click", function () {
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+    playPauseButton.textContent = "▶️"; // Ubah ikon menjadi play
+});
+
+// Fungsi untuk mengatur seek bar
+seekBar.addEventListener("input", function () {
+    audioPlayer.currentTime = seekBar.value;
+});
+
+</script>
+</body>
+</html>

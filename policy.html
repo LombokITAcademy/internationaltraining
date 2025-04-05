@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kebijakan Privasi - My Edu-Preneurship</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: url("background/bgpolicy.jpg") no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backgrond-color: rgba(255, 255, 255, 0.6);
+            z-index: -1;
+        }
+        
+        #logo {
+            width: 100px;
+            margin: 10px auto 10px;
+            opacity: 0;
+            animation: fadeIn 1s forwards, pulse 1.5s 1s infinite;
+            /* Durasi fadeIn dipercepat */
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+            animation-delay: 1.5s;
+        }
+        
+        .header {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white; /* Warna teks putih agar kontras */
+            background: linear-gradient(
+                90deg,
+                #004ba0,  /* Biru tua */
+                #007bff  /* Biru lebih terang */
+        ); /* Gradasi biru halus */
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #e3bf00; /* Border kuning emas */
+            display: inline-block;
+            box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        
+        .accordion {
+            background: linear-gradient(
+                90deg,
+                #004ba0,  /* Biru tua */
+                #007bff  /* Biru lebih terang */
+        ); 
+            background-size: 200% 100%;
+            /* Membantu menyesuaikan gradient */
+            background-position: left center;
+            /* Memastikan posisi mengikuti teks */
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 12px;
+            transition: all 0.4s ease-in-out;
+            /* Transisi halus */
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 1px solid #e3bf00; /* Border kuning emas */
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        /* Saat tombol aktif atau diklik */
+        
+        .accordion.active {
+            background-position: right center;
+            /* Gradient mengikuti teks */
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .panel {
+            font-size: 14px;
+            padding: 15px;
+            display: none;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: justify;
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.6);
+            /* Hitam dengan transparansi 60% */
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            position: relative;
+            margin-top: 30px;
+            border-radius: 0 0 0px 0px;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+            animation-delay: 6s;
+        }
+        
+        footer p {
+            margin: 0;
+            font-weight: bold;
+        }
+        /* Animasi */
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body> <img id="logo" src="background/logo.png" alt="Logo My Edu-Preneurship" />
+    <div class="container">
+        <div class="header">KEBIJAKAN PRIVASI</div>
+        <button class="accordion" style="animation-delay: 3s">1. Pendahuluan</button>
+        <div class="panel">
+            <p> Selamat datang di My Edu-Preneurship, sebuah aplikasi pendidikan yang dirancang untuk mendukung sekolah, guru, dan siswa dalam Pelatihan Internasional Koding Android dari Lombok IT Academy. </p>
+        </div>
+        <button class="accordion" style="animation-delay: 3.5s">2. Ruang Lingkup Aplikasi</button>
+        <div class="panel">
+            <p> Aplikasi ini hanya diperuntukkan bagi sekolah peserta pelatihan dan dirancang untuk dikembangkan lebih lanjut oleh sekolah, guru, atau siswa masing-masing. </p>
+        </div>
+        <button class="accordion" style="animation-delay: 4s">3. Pengumpulan & Penggunaan Data</button>
+        <div class="panel">
+            <p> Kami tidak mengumpulkan informasi pribadi pengguna kecuali untuk keperluan seperti absensi, pengumpulan tugas, dan transaksi online yang dilakukan langsung melalui WhatsApp. </p>
+        </div>
+        <button class="accordion" style="animation-delay: 4.5s">4. Keamanan Data</button>
+        <div class="panel">
+            <p> My Edu-Preneurship tidak menyimpan informasi sensitif di server eksternal. Keamanan data sepenuhnya berada di tangan sekolah, guru, dan siswa. </p>
+        </div>
+        <button class="accordion" style="animation-delay: 5s">5. Tanggung Jawab Pengguna</button>
+        <div class="panel">
+            <p> Pengguna bertanggung jawab atas pengelolaan data dan memastikan bahwa penggunaan aplikasi tetap sesuai dengan standar etika dan pendidikan. </p>
+        </div>
+        <button class="accordion" style="animation-delay: 5.5s">6. Layanan Pihak Ketiga</button>
+        <div class="panel">
+            <p> Aplikasi ini tidak terintegrasi dengan layanan pihak ketiga selain WhatsApp. Pengguna disarankan untuk membaca kebijakan privasi WhatsApp saat melakukan transaksi. </p>
+        </div>
+        <button class="accordion" style="animation-delay: 6s">7. Perubahan Kebijakan Privasi</button>
+        <div class="panel">
+            <p> Setiap sekolah bertanggung jawab atas perubahan kebijakan privasi aplikasi yang dikembangkan dan digunakan oleh mereka. </p>
+        </div>
+        <button class="accordion" style="animation-delay: 6.5s">8. Kontak</button>
+        <div class="panel">
+            <p> Untuk pertanyaan terkait kebijakan privasi ini, pengguna dapat menghubungi sekolah masing-masing, karena Lombok IT Academy tidak mengelola data dalam aplikasi ini. </p>
+        </div>
+    </div>
+    <footer>
+        <p>© 2025 My Edu-Preneurship | Semua Hak Dilindungi.</p>
+    </footer>
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        for (let i = 0; i < acc.length; i++) {
+            setTimeout(
+                () => {
+                    acc[i].style.opacity = "1";
+                    acc[i].style.transform = "translateY(0)";
+                }, (i + 1) * 500 + 2000);
+        }
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                }
+                else {
+                    var panels = document.getElementsByClassName("panel");
+                    for (var j = 0; j < panels.length; j++) {
+                        panels[j].style.display = "none";
+                    }
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

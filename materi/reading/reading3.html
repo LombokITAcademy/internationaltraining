@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Quiz</title>
+  <style>
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+	
+/* Gunakan border-box pada semua elemen */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/* Atur ulang lebar body agar tidak menambah lebar total */
+body {
+    padding: 20px;
+	}
+.input-container {
+    margin-bottom: 20px;
+    }
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+
+.input-container input {
+     width: 100%;
+     padding: 8px;
+     margin-bottom: 10px;
+    }
+
+.question-container {
+     margin-bottom: 20px;
+    }
+
+.question {
+    font-weight: bold;
+    }
+
+    .options {
+    display: flex;
+    flex-direction: column; /* Pastikan setiap opsi tetap dalam barisnya sendiri */
+    gap: 5px; /* Beri sedikit jarak antar opsi */
+}
+    
+/* Pastikan opsi jawaban sejajar */
+.options label {
+    display: flex;
+    align-items: center; /* Pastikan radio button sejajar dengan teks */
+    gap: 10px;
+    width: 100%;
+}
+
+..options input[type="radio"] {
+    margin: 0;
+    flex-shrink: 0; /* Pastikan ukuran radio button tidak berubah */
+}
+
+/* Pastikan opsi jawaban turun ke baris baru dengan titik sejajar */
+.option-text {
+    display: grid;
+    grid-template-columns: 25px auto; /* Kolom pertama untuk "A.", kedua untuk teks */
+}
+
+.option-text span:first-child {
+    font-weight: bold;
+    width: 25px;
+}
+
+.option-text span:last-child {
+    text-indent: -25px;
+    padding-left: 25px;
+    word-wrap: break-word;
+}
+    
+/* Passage tetap terlihat, hanya teksnya yang disembunyikan */
+.passage-container {
+    text-align: justify;
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9; /* Background tetap ada */
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    z-index: 10;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* MODIFIKASI FONT UNTUK PASSAGENYA (Ubah Sesuai Kebutuhan)*/
+.passage-text {
+    display: none;
+    font-size: 14px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+}
+
+/* Style tombol */
+.toggle-btn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    bottom: 10px;
+    z-index: 20;
+    }
+
+/* Tombol Baca & Tutup Teksnya */
+.toggle-btn button {
+     padding: 10px 15px;
+     border: none;
+     border-radius: 5px;
+     font-size: 13px;
+     cursor: pointer;
+     font-weight: bold;
+    }
+
+/* MODIFIKASI WARNA TOMBOL BACA TEKSNYA */
+.read-btn {
+    background-color: green;
+    color: white;
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL BACA TEKSNYA  */
+.read-btn:hover {
+     background-color: darkgreen;
+    }
+
+/* MODIFIKASI WARNA TOMBOL TUTUP TEKSNYA */
+.close-btn {
+     background-color: red;
+     color: white;
+     display: none; /* Disembunyikan saat awal */
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL TUTUP TEKSNYA */
+.close-btn:hover {
+    background-color: darkred;
+    }
+	
+/* MODIFIKASI FONT UNTUK PASSAGENYA */
+#passage {
+	font-family: Arial, sans-serif;
+	font-size: 13px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+	color: #333;         /* Warna teks lebih lembut untuk mata */
+	}
+
+.quiz-wrapper {
+    background: rgba(255, 255, 255, 0.85); /* Warna solid putih dengan transparansi */
+    padding: 20px 10px; /* Padding atas-bawah 20px, kiri-kanan 10px */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: calc(100% - 10px); /* Lebar penuh dikurangi padding kiri-kanan */
+    margin: 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+	}
+	
+/* MODIFIKASI FONT UNTUK SOAL QUIZNYA (Ubah Sesuai Kebutuhunan)*/
+.quiz-wrapper {
+	font-family: Arial, sans-serif;
+	font-size: 12px;     /* Ukuran font lebih kecil dan rapi */
+	line-height: 1;
+	color: #444;         /* Sedikit lebih gelap dari passage untuk kontras */
+	}
+
+/* MODIFIKASI TOMBOL NON-AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn {
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 14px;
+	cursor: not-allowed;
+	display: block;
+	margin: 20px auto;  /* Posisikan di tengah dengan margin atas-bawah */
+	}
+    
+/* MODIFIKASI TOMBOL AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn.active {
+	background-color: green;
+	cursor: pointer;
+    }
+    
+:root {
+	--bg-transparency: 0.5;  /* Transparansi background (0 - 1) */
+	--border-radius: 5px;     /* Round corner */
+	}
+
+.transparent-bg {
+    background-color: rgba(255, 255, 255, var(--bg-transparency));
+    display: flex;
+    justify-content: center; /* Pusatkan horizontal */
+    align-items: center; /* Pusatkan vertikal jika diperlukan */
+    text-align: center;
+    padding: 2px 10px; /* Persempit padding atas dan bawah */
+    border-radius: var(--border-radius);
+    margin-top: 0px;  /* Atur jarak atas */
+    margin-bottom: 0px; /* Atur jarak bawah */
+    }
+    
+.centered-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.5); /* Transparansi */
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	max-width: 500px; /* Atur lebar agar tidak terlalu besar */
+	margin: 20px auto; /* Tengah dengan jarak atas & bawah */
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+	}
+    
+#user-info {
+	padding: 0 5px; /* Padding kiri dan kanan 5px, atas-bawah 0 */
+	box-sizing: border-box;
+	}
+
+#user-info input {
+	width: 100%;
+	padding: 8px; /* Padding sama dengan input lainnya */
+	box-sizing: border-box;
+	}
+
+/* MODIFIKASI KOLOM ISIAN DATA SISWA (Ubah Sesuai Kebutuhunan)*/
+.user-info-wrapper {
+	background: rgba(255, 255, 255, 0.6); /* Background putih transparan */
+	border-radius: 10px;  /* Sudut melengkung */
+	padding: 15px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan lembut */
+	max-width: 400px;
+	margin: 0 auto 20px;  /* Tengah dan jarak bawah */
+	box-sizing: border-box;
+	}
+   </style>
+</head>
+
+<body>
+  <div class="centered-container">
+    <h1 class="transparent-bg">English Quiz</h1>
+    <h2 class="transparent-bg">By Mr. Alfan</h2>
+    <p class="transparent-bg">Fill in your details and answer the questions:</p>
+  </div>
+
+  <form id="quiz-form">
+  <div class="user-info-wrapper">
+    <div id="user-info" class="input-container">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name">
+      <label for="class">Class:</label>
+      <input type="text" id="class" placeholder="Enter your class">
+      <label for="student-id">Student Number:</label>
+      <input type="text" id="student-id" placeholder="Enter your student number">
+      <label for="school">School Name:</label>
+      <input type="text" id="school" placeholder="Enter your school name">
+    </div>
+  </div>
+
+  <!-- Container for Passage & Quiz: Ben the Animal Lover -->
+<div id="container-ben" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-ben">
+        <h4 class="transparent-bg">Reading 1: Ben the Animal Lover</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('ben', true)">Read Text (for questions 1-10)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('ben', false)" style="display: none;">Close Text (for questions 1-10)</button>
+        </div>
+        <p id="passage-ben" class="passage-text" style="display: none;">
+            Ben loves animals. Every afternoon, he visits the animal shelter to help take care of the dogs and cats.  
+            One day, he saw a small injured puppy on the street. He carefully picked it up and took it to the shelter.  
+            The staff treated the puppy, and after a few weeks, it became healthy again.  
+            Ben was very happy when the puppy found a new loving home.
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 1 NYA -->
+    <div id="quiz-ben" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Ben the Animal Lover</h3><br>
+
+        <!-- Question 1 -->
+        <div class="question-container">
+            <div class="question">1. What does Ben love?</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A. Cooking"> A. Cooking</label>
+                <label><input type="radio" name="q1" value="B. Sports"> B. Sports</label>
+                <label><input type="radio" name="q1" value="C. Animals"> C. Animals</label>
+                <label><input type="radio" name="q1" value="D. Music"> D. Music</label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-container">
+            <div class="question">2. Where does Ben go every afternoon?</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A. The gym"> A. The gym</label>
+                <label><input type="radio" name="q2" value="B. The park"> B. The park</label>
+                <label><input type="radio" name="q2" value="C. The animal shelter"> C. The animal shelter</label>
+                <label><input type="radio" name="q2" value="D. The library"> D. The library</label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-container">
+            <div class="question">3. What animals does Ben take care of?</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A. Birds and fish"> A. Birds and fish</label>
+                <label><input type="radio" name="q3" value="B. Rabbits and hamsters"> B. Rabbits and hamsters</label>
+                <label><input type="radio" name="q3" value="C. Dogs and cats"> C. Dogs and cats</label>
+                <label><input type="radio" name="q3" value="D. Tigers and lions"> D. Tigers and lions</label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-container">
+            <div class="question">4. What did Ben find on the street?</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A. A lost kitten"> A. A lost kitten</label>
+                <label><input type="radio" name="q4" value="B. An injured puppy"> B. An injured puppy</label>
+                <label><input type="radio" name="q4" value="C. A sick bird"> C. A sick bird</label>
+                <label><input type="radio" name="q4" value="D. A big dog"> D. A big dog</label>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-container">
+            <div class="question">5. What did Ben do with the puppy?</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A. Left it alone"> A. Left it alone</label>
+                <label><input type="radio" name="q5" value="B. Took it home"> B. Took it home</label>
+                <label><input type="radio" name="q5" value="C. Took it to the shelter"> C. Took it to the shelter</label>
+                <label><input type="radio" name="q5" value="D. Gave it food and left"> D. Gave it food and left</label>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-container">
+            <div class="question">6. What happened to the puppy at the shelter?</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="A. It became healthy again"> A. It became healthy again</label>
+                <label><input type="radio" name="q6" value="B. It ran away"> B. It ran away</label>
+                <label><input type="radio" name="q6" value="C. It became sick"> C. It became sick</label>
+                <label><input type="radio" name="q6" value="D. It refused to eat"> D. It refused to eat</label>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-container">
+            <div class="question">7. How long did it take for the puppy to recover?</div>
+            <div class="options">
+                <label><input type="radio" name="q7" value="A. One day"> A. One day</label>
+                <label><input type="radio" name="q7" value="B. A few weeks"> B. A few weeks</label>
+                <label><input type="radio" name="q7" value="C. A year"> C. A year</label>
+                <label><input type="radio" name="q7" value="D. A month"> D. A month</label>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-container">
+            <div class="question">8. How did Ben feel when the puppy found a home?</div>
+            <div class="options">
+                <label><input type="radio" name="q8" value="A. Sad"> A. Sad</label>
+                <label><input type="radio" name="q8" value="B. Happy"> B. Happy</label>
+                <label><input type="radio" name="q8" value="C. Angry"> C. Angry</label>
+                <label><input type="radio" name="q8" value="D. Bored"> D. Bored</label>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-container">
+            <div class="question">9. What lesson can we learn from Ben’s story?</div>
+            <div class="options">
+                <label><input type="radio" name="q9" value="A. Helping animals is important"> A. Helping animals is important</label>
+                <label><input type="radio" name="q9" value="B. Animals do not need care"> B. Animals do not need care</label>
+                <label><input type="radio" name="q9" value="C. Dogs are dangerous"> C. Dogs are dangerous</label>
+                <label><input type="radio" name="q9" value="D. Shelters are useless"> D. Shelters are useless</label>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-container">
+            <div class="question">10. What will Ben most likely do in the future?</div>
+            <div class="options">
+                <label><input type="radio" name="q10" value="A. Keep helping animals"> A. Keep helping animals</label>
+                <label><input type="radio" name="q10" value="B. Stop caring for animals"> B. Stop caring for animals</label>
+                <label><input type="radio" name="q10" value="C. Leave the shelter"> C. Leave the shelter</label>
+                <label><input type="radio" name="q10" value="D. Buy a pet store"> D. Buy a pet store</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container for Passage & Quiz: Sarah the Gardener -->
+<div id="container-sarah" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-sarah">
+        <h4 class="transparent-bg">Reading 2: Sarah the Gardener</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('sarah', true)">Read Text (for questions 11-20)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('sarah', false)" style="display: none;">Close Text (for questions 11-20)</button>
+        </div>
+        <p id="passage-sarah" class="passage-text" style="display: none;">
+            Sarah loves gardening. Every morning, she waters the flowers and takes care of the plants in her backyard.  
+            One day, she decided to grow vegetables. She planted tomatoes, carrots, and lettuce.  
+            After a few weeks, her plants started to grow. Sarah was excited to see the fresh vegetables in her garden.  
+            She harvested them and made a delicious salad for her family.
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 2 NYA -->
+    <div id="quiz-sarah" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Sarah the Gardener</h3><br>
+
+        <!-- Question 11 -->
+        <div class="question-container">
+            <div class="question">11. What is Sarah’s hobby?</div>
+            <div class="options">
+                <label><input type="radio" name="q11" value="A. Cooking"> A. Cooking</label>
+                <label><input type="radio" name="q11" value="B. Gardening"> B. Gardening</label>
+                <label><input type="radio" name="q11" value="C. Painting"> C. Painting</label>
+                <label><input type="radio" name="q11" value="D. Swimming"> D. Swimming</label>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-container">
+            <div class="question">12. When does Sarah take care of her garden?</div>
+            <div class="options">
+                <label><input type="radio" name="q12" value="A. In the morning"> A. In the morning</label>
+                <label><input type="radio" name="q12" value="B. In the afternoon"> B. In the afternoon</label>
+                <label><input type="radio" name="q12" value="C. At night"> C. At night</label>
+                <label><input type="radio" name="q12" value="D. In the evening"> D. In the evening</label>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-container">
+            <div class="question">13. Where does Sarah grow her plants?</div>
+            <div class="options">
+                <label><input type="radio" name="q13" value="A. In her backyard"> A. In her backyard</label>
+                <label><input type="radio" name="q13" value="B. In a greenhouse"> B. In a greenhouse</label>
+                <label><input type="radio" name="q13" value="C. In a park"> C. In a park</label>
+                <label><input type="radio" name="q13" value="D. On the rooftop"> D. On the rooftop</label>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-container">
+            <div class="question">14. What did Sarah decide to grow?</div>
+            <div class="options">
+                <label><input type="radio" name="q14" value="A. Flowers"> A. Flowers</label>
+                <label><input type="radio" name="q14" value="B. Trees"> B. Trees</label>
+                <label><input type="radio" name="q14" value="C. Vegetables"> C. Vegetables</label>
+                <label><input type="radio" name="q14" value="D. Fruits"> D. Fruits</label>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-container">
+            <div class="question">15. Which vegetables did Sarah plant?</div>
+            <div class="options">
+                <label><input type="radio" name="q15" value="A. Potatoes, onions, and beans"> A. Potatoes, onions, and beans</label>
+                <label><input type="radio" name="q15" value="B. Tomatoes, carrots, and lettuce"> B. Tomatoes, carrots, and lettuce</label>
+                <label><input type="radio" name="q15" value="C. Broccoli, cabbage, and mushrooms"> C. Broccoli, cabbage, and mushrooms</label>
+                <label><input type="radio" name="q15" value="D. Corn, pumpkin, and chili"> D. Corn, pumpkin, and chili</label>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-container">
+            <div class="question">16. How long did it take for Sarah’s plants to grow?</div>
+            <div class="options">
+                <label><input type="radio" name="q16" value="A. A few days"> A. A few days</label>
+                <label><input type="radio" name="q16" value="B. A few weeks"> B. A few weeks</label>
+                <label><input type="radio" name="q16" value="C. A few months"> C. A few months</label>
+                <label><input type="radio" name="q16" value="D. A year"> D. A year</label>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-container">
+            <div class="question">17. How did Sarah feel when she saw her vegetables growing?</div>
+            <div class="options">
+                <label><input type="radio" name="q17" value="A. Excited"> A. Excited</label>
+                <label><input type="radio" name="q17" value="B. Sad"> B. Sad</label>
+                <label><input type="radio" name="q17" value="C. Angry"> C. Angry</label>
+                <label><input type="radio" name="q17" value="D. Nervous"> D. Nervous</label>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-container">
+            <div class="question">18. What did Sarah do with her harvested vegetables?</div>
+            <div class="options">
+                <label><input type="radio" name="q18" value="A. Sold them"> A. Sold them</label>
+                <label><input type="radio" name="q18" value="B. Made a salad"> B. Made a salad</label>
+                <label><input type="radio" name="q18" value="C. Threw them away"> C. Threw them away</label>
+                <label><input type="radio" name="q18" value="D. Gave them to her neighbors"> D. Gave them to her neighbors</label>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-container">
+            <div class="question">19. Who did Sarah make the salad for?</div>
+            <div class="options">
+                <label><input type="radio" name="q19" value="A. Her friends"> A. Her friends</label>
+                <label><input type="radio" name="q19" value="B. Her family"> B. Her family</label>
+                <label><input type="radio" name="q19" value="C. Her neighbors"> C. Her neighbors</label>
+                <label><input type="radio" name="q19" value="D. Her teacher"> D. Her teacher</label>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question-container">
+            <div class="question">20. What lesson can we learn from Sarah’s story?</div>
+            <div class="options">
+                <label><input type="radio" name="q20" value="A. Gardening is useless"> A. Gardening is useless</label>
+                <label><input type="radio" name="q20" value="B. Growing vegetables is boring"> B. Growing vegetables is boring</label>
+                <label><input type="radio" name="q20" value="C. Hard work brings good results"> C. Hard work brings good results</label>
+                <label><input type="radio" name="q20" value="D. Plants do not need water"> D. Plants do not need water</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container for Passage & Quiz: David the Explorer -->
+<div id="container-david" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-david">
+        <h4 class="transparent-bg">Reading 3: David the Explorer</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('david', true)">Read Text (for questions 21-30)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('david', false)" style="display: none;">Close Text (for questions 21-30)</button>
+        </div>
+        <p id="passage-david" class="passage-text" style="display: none;">
+            David loves exploring nature. Every weekend, he goes hiking in the mountains with his father.  
+            One day, they discovered a hidden waterfall deep in the forest. It was beautiful and surrounded by colorful birds.  
+            David took many pictures and enjoyed the fresh air.  
+            He promised to take care of nature and keep it clean for future explorers.
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 3 NYA -->
+    <div id="quiz-david" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: David the Explorer</h3><br>
+
+        <!-- Question 21 -->
+        <div class="question-container">
+            <div class="question">21. What does David love to do?</div>
+            <div class="options">
+                <label><input type="radio" name="q21" value="A. Cooking"> A. Cooking</label>
+                <label><input type="radio" name="q21" value="B. Exploring nature"> B. Exploring nature</label>
+                <label><input type="radio" name="q21" value="C. Playing video games"> C. Playing video games</label>
+                <label><input type="radio" name="q21" value="D. Reading books"> D. Reading books</label>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question-container">
+            <div class="question">22. When does David go hiking?</div>
+            <div class="options">
+                <label><input type="radio" name="q22" value="A. Every morning"> A. Every morning</label>
+                <label><input type="radio" name="q22" value="B. Every weekend"> B. Every weekend</label>
+                <label><input type="radio" name="q22" value="C. Once a month"> C. Once a month</label>
+                <label><input type="radio" name="q22" value="D. Every night"> D. Every night</label>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question-container">
+            <div class="question">23. Who goes hiking with David?</div>
+            <div class="options">
+                <label><input type="radio" name="q23" value="A. His brother"> A. His brother</label>
+                <label><input type="radio" name="q23" value="B. His father"> B. His father</label>
+                <label><input type="radio" name="q23" value="C. His teacher"> C. His teacher</label>
+                <label><input type="radio" name="q23" value="D. His cousin"> D. His cousin</label>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question-container">
+            <div class="question">24. What did David and his father discover?</div>
+            <div class="options">
+                <label><input type="radio" name="q24" value="A. A lost city"> A. A lost city</label>
+                <label><input type="radio" name="q24" value="B. A hidden waterfall"> B. A hidden waterfall</label>
+                <label><input type="radio" name="q24" value="C. A big cave"> C. A big cave</label>
+                <label><input type="radio" name="q24" value="D. A mysterious animal"> D. A mysterious animal</label>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question-container">
+            <div class="question">25. Where did they find the waterfall?</div>
+            <div class="options">
+                <label><input type="radio" name="q25" value="A. Near a river"> A. Near a river</label>
+                <label><input type="radio" name="q25" value="B. Deep in the forest"> B. Deep in the forest</label>
+                <label><input type="radio" name="q25" value="C. In a cave"> C. In a cave</label>
+                <label><input type="radio" name="q25" value="D. At the beach"> D. At the beach</label>
+            </div>
+        </div>
+
+        <!-- Question 26 -->
+        <div class="question-container">
+            <div class="question">26. What surrounded the waterfall?</div>
+            <div class="options">
+                <label><input type="radio" name="q26" value="A. Big rocks"> A. Big rocks</label>
+                <label><input type="radio" name="q26" value="B. Colorful birds"> B. Colorful birds</label>
+                <label><input type="radio" name="q26" value="C. Tall buildings"> C. Tall buildings</label>
+                <label><input type="radio" name="q26" value="D. Snow"> D. Snow</label>
+            </div>
+        </div>
+
+        <!-- Question 27 -->
+        <div class="question-container">
+            <div class="question">27. What did David do at the waterfall?</div>
+            <div class="options">
+                <label><input type="radio" name="q27" value="A. Took many pictures"> A. Took many pictures</label>
+                <label><input type="radio" name="q27" value="B. Went fishing"> B. Went fishing</label>
+                <label><input type="radio" name="q27" value="C. Swam in the water"> C. Swam in the water</label>
+                <label><input type="radio" name="q27" value="D. Built a treehouse"> D. Built a treehouse</label>
+            </div>
+        </div>
+
+        <!-- Question 28 -->
+        <div class="question-container">
+            <div class="question">28. How did David feel when he saw the waterfall?</div>
+            <div class="options">
+                <label><input type="radio" name="q28" value="A. Angry"> A. Angry</label>
+                <label><input type="radio" name="q28" value="B. Excited"> B. Excited</label>
+                <label><input type="radio" name="q28" value="C. Bored"> C. Bored</label>
+                <label><input type="radio" name="q28" value="D. Scared"> D. Scared</label>
+            </div>
+        </div>
+
+        <!-- Question 29 -->
+        <div class="question-container">
+            <div class="question">29. What did David promise?</div>
+            <div class="options">
+                <label><input type="radio" name="q29" value="A. To never go hiking again"> A. To never go hiking again</label>
+                <label><input type="radio" name="q29" value="B. To take care of nature"> B. To take care of nature</label>
+                <label><input type="radio" name="q29" value="C. To build a house in the forest"> C. To build a house in the forest</label>
+                <label><input type="radio" name="q29" value="D. To hunt animals"> D. To hunt animals</label>
+            </div>
+        </div>
+
+        <!-- Question 30 -->
+        <div class="question-container">
+            <div class="question">30. What lesson can we learn from David’s story?</div>
+            <div class="options">
+                <label><input type="radio" name="q30" value="A. Nature is dangerous"> A. Nature is dangerous</label>
+                <label><input type="radio" name="q30" value="B. Exploring helps us discover new things"> B. Exploring helps us discover new things</label>
+                <label><input type="radio" name="q30" value="C. Hiking is boring"> C. Hiking is boring</label>
+                <label><input type="radio" name="q30" value="D. Waterfalls are scary"> D. Waterfalls are scary</label>
+            </div>
+        </div>
+    </div>
+</div>
+  
+    <!-- Submit Button -->
+    <button id="submit-btn" type="button" onclick="submitQuiz()">Submit Answers</button>
+  </form>
+
+  <script>
+   function togglePassage(passage, show) {
+    const container = document.getElementById(`container-${passage}`);
+    const passageText = document.getElementById(`passage-${passage}`);
+    const quizSection = document.getElementById(`quiz-${passage}`);
+    const readBtn = document.querySelector(`#passage-container-${passage} .read-btn`);
+    const closeBtn = document.querySelector(`#passage-container-${passage} .close-btn`);
+
+    if (show) {
+        passageText.style.display = "block";  // Tampilkan teks passage
+        quizSection.style.display = "block";  // Tampilkan soal
+        readBtn.style.display = "none";       // Sembunyikan tombol Read Text
+        closeBtn.style.display = "inline-block"; // Tampilkan tombol Close Text
+
+// Pastikan passage tetap sticky saat dibuka
+        document.getElementById(`passage-container-${passage}`).style.position = "sticky";
+        document.getElementById(`passage-container-${passage}`).style.top = "0";
+    } else {
+        passageText.style.display = "none";  // Sembunyikan teks passage
+        quizSection.style.display = "none";  // Sembunyikan soal
+        readBtn.style.display = "inline-block";  // Munculkan kembali tombol Read Text
+        closeBtn.style.display = "none";    // Sembunyikan tombol Close Text
+
+// Kembalikan ke posisi normal
+        document.getElementById(`passage-container-${passage}`).style.position = "relative";
+    }
+}
+
+// MODIFIKASI BAGIAN VALIDASI FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+  function validateForm() {
+  const totalQuestions = 30;
+  const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+
+  const name = document.getElementById("name").value.trim();
+  const classValue = document.getElementById("class").value.trim();
+  const studentId = document.getElementById("student-id").value.trim();
+  const school = document.getElementById("school").value.trim();
+  const submitBtn = document.getElementById("submit-btn");
+
+  if (answeredQuestions === totalQuestions && name && classValue && studentId && school) {
+    submitBtn.removeAttribute("disabled");  // Aktifkan tombol
+    submitBtn.classList.add("active");      // Tambahkan warna hijau
+  } else {
+    submitBtn.setAttribute("disabled", "true");  // Nonaktifkan tombol
+    submitBtn.classList.remove("active");        // Kembalikan warna ke merah
+  }
+}
+
+// Tambahkan event listener ke form
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+   function submitQuiz() {
+    if (document.getElementById("submit-btn").hasAttribute("disabled")) return;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+    const userAnswers = {};
+    for (let i = 1; i <= 30; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        userAnswers[`q${i}`] = selected ? selected.value : "Not answered";
+    }
+
+    const name = document.getElementById("name").value.trim();
+    const classValue = document.getElementById("class").value.trim();
+    const studentId = document.getElementById("student-id").value.trim();
+    const school = document.getElementById("school").value.trim();
+
+    let message = `Name: ${name}\nClass: ${classValue}\nStudent Number: ${studentId}\nSchool: ${school}\n\n`;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL PER-PASSAGENYA YANG DIGUNAKAN 
+    message += `📘 *Ben the Animal Lover*\n`;
+    for (let i = 1; i <= 10; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 1
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎵 *Sarah the Gardener*\n`;
+    for (let i = 11; i <= 20; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 2
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎨 *David the Explorer*\n`;
+    for (let i = 21; i <= 30; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 3
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+// GUNAKAN NOMOR WHATSAPP MASING-MASING NANTINYA YANG AKAN MENERIMA OUTPUT DARI FORMULIR INI
+    const phoneNumber = "6287803582510";
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+}
+    
+/* 
+  Developer Lombok IT Mengucapkan Selamat, Anda Kini Telah Memiliki Aplikasi Buatan Sendiri.
+  Dengan semangat inovasi dan teknologi, Developer Lombok IT berkomitmen
+  untuk terus mempermudah proses pembelajaran melalui pengembangan aplikasi 
+  yang efisien dan berkualitas. Kepada para peserta pelatihan internasional 
+  Koding Aplikasi Pembelajaran, ini adalah langkah besar menuju masa depan yang lebih cerdas!
+  Mari bersama mengubah tantangan menjadi solusi dan mewujudkan pembelajaran yang lebih mudah, 
+  efektif, dan inovatif. 
+  Bersama Kita Pasti Bisa Jadikan Semua Lebih Mudah.
+  Developer Lombok IT "Jadikan Semua Lebih Mudah!"  
+
+  Abdul Kadir Bagis, M.Pd - CEO LOMBOK IT  
+*/
+
+  </script>
+</body>
+
+</html>

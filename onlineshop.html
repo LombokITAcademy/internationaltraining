@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Entrepreneurship</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+    /* Header Slider */
+    /* Atur header slider */
+    /* Header GIF */
+            #header-slider {
+            position: relative;
+            width: 100%;
+            height: auto;
+    /* Sesuaikan tinggi dengan proporsi GIF */
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+    /* Hilangkan elemen di luar area jika diperlukan */
+        }
+        
+        #header-slider img {
+            width: 100%;
+    /* Pastikan GIF memenuhi lebar header */
+            height: 100%;
+    /* Sesuaikan tinggi secara proporsional */
+            display: block;
+    /* Hilangkan jarak bawaan gambar */
+            object-fit: contain;
+    /* Pastikan seluruh GIF terlihat tanpa terpotong */
+        }
+		
+    /* Animasi gradasi warna bergerak seperti air mengalir */
+        
+        @keyframes flowingColors {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+		
+    /* Animasi teks pulsating */
+        
+        @keyframes pulsateText {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 0, 0, 0.8);
+            }
+            50% {
+                transform: scale(1.05);
+                /* Sedikit membesar */
+                opacity: 0.9;
+                /* Sedikit transparan */
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.9), 0 0 15px rgba(0, 255, 255, 0.8);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 0, 255, 0.8);
+            }
+        }
+		
+    /* Efek glow tambahan */
+        
+        @keyframes glowEffect {
+            0% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff7300, 0 0 15px #ffeb00;
+            }
+            50% {
+                text-shadow: 0 0 5px #00aaff, 0 0 15px #37b600, 0 0 15px #ff00ff;
+            }
+            100% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff7300, 0 0 15px #ffeb00;
+            }
+        }
+		
+    /* Gaya teks "KATEGORI PRODUK KAMI" */
+        .sticky-menu h3 {
+            font-size: 12px;
+    /* Ukuran font */
+            font-weight: bold;
+            color: white;
+            padding: 8px;
+            border-radius: 10px;
+            display: inline-block;
+            background: linear-gradient(90deg, #ff0000, #ff7300, #ffeb00, #37b600, #00aaff, #8000ff);
+            background-size: 300% 300%;
+            animation: flowingColors 8s infinite linear, pulsateText 3s infinite ease-in-out, glowEffect 4s infinite alternate;
+    /* Efek air mengalir + pulsating + glow */
+            transition: all 0.5s ease;
+        }
+		
+    /* Sticky Menu */
+        .sticky-menu {
+            position: sticky;
+            top: 0;
+            background: #f4f4f4;
+            z-index: 1000;
+            padding: 1px;
+            text-align: center;
+        }
+        
+        .sticky-menu h1 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .menu-buttons {
+            margin-top: 0px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+    /* Jarak antar tombol lebih kecil */
+            padding: 5px;
+        }
+		
+    /* Animasi gradasi air mengalir */
+        
+        @keyframes flowingWater {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+		
+    /* Gaya tombol menu */
+        .menu-buttons button {
+            position: relative;
+            padding: 10px;
+            background-color: #000000;
+    /* Warna dasar hitam */
+            color: white;
+            cursor: pointer;
+            width: 100px;
+            height: 50px;
+            text-align: center;
+            border-radius: 10px;
+            background-size: 100px 50px;
+            background-repeat: no-repeat;
+            background-position: center top 0px;
+            margin: 1px;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            overflow: hidden;
+    /* Mencegah efek air keluar dari tombol */
+        }
+    /* Efek Hover pada tombol */
+        
+        .menu-buttons button:hover {
+            background-color: #228B22 !important;
+            /* Warna hijau saat hover */
+            transform: scale(1.05);
+            /* Sedikit perbesar tombol */
+            opacity: 1;
+        }
+    /* Tambahkan efek air mengalir hanya di tombol aktif */
+        
+        .menu-buttons button.active::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #ff7300, #ffeb00, #37b600, #00aaff, #8000ff);
+            background-size: 300% 300%;
+            animation: flowingWater 5s infinite linear;
+            opacity: 0.6;
+    /* Sedikit transparan agar gambar tombol tetap terlihat */
+            border-radius: 15px;
+            z-index: 0;
+        }
+    /* Pastikan teks tetap terlihat di atas efek air mengalir */
+        
+        .menu-buttons button span {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            /* Gunakan flexbox */
+            align-items: center;
+            /* Pusatkan teks secara vertikal */
+            justify-content: center;
+            /* Pusatkan teks secara horizontal */
+            text-align: center;
+            /* Pastikan teks tetap rata tengah */
+            background: rgba(0, 0, 0, 0.44);
+            /* Tetap transparan */
+            color: white;
+            padding: 0px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+		
+    /* Tambahkan gambar spesifik untuk setiap kategori */
+        
+        .menu-buttons button:nth-child(1) {
+            background-image: url('images/Onlineshop/Background Tombol/1. Parfum Pria.jpg');
+        }
+        
+        .menu-buttons button:nth-child(2) {
+            background-image: url('images/Onlineshop/Background Tombol/2. Parfum Wanita.jpg');
+        }
+        
+        .menu-buttons button:nth-child(3) {
+            background-image: url('images/Onlineshop/Background Tombol/3. Kursus Bahasa.jpg');
+        }
+        
+        .menu-buttons button:nth-child(4) {
+            background-image: url('images/Onlineshop/Background Tombol/4. Kursus IT.jpg');
+        }
+        
+        .menu-buttons button:nth-child(5) {
+            background-image: url('images/Onlineshop/Background Tombol/5. Aplikasi Premium.jpg');
+        }
+        
+        .menu-buttons button:nth-child(6) {
+            background-image: url('images/Onlineshop/Background Tombol/6. Jasa Servis.jpg');
+        }
+		
+    /* Produk Layout */
+           .products {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: space-between;
+			
+    /* Memberi jarak antar produk */
+            margin: 0px;
+        }
+        
+        .products.active {
+            display: flex;
+        }
+        
+        .product {
+            width: calc(50% - 20px);
+    /* 50% lebar ditambah margin untuk spasi */
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: justify;
+            box-sizing: border-box;
+            font-size: 12px;
+        }
+        
+        .product img {
+            width: 100%;
+            height: auto;
+    /* Biarkan tinggi menyesuaikan proporsi gambar */
+            border-radius: 10px;
+            object-fit: contain;
+    /* Pastikan seluruh gambar terlihat tanpa terpotong */
+            background-color: #f4f4f4;
+    /* Tambahkan latar belakang jika ukuran gambar tidak pas */
+        }
+        
+        .product .slider {
+            position: relative;
+        }
+        
+        .product .slider img {
+            display: none;
+        }
+        
+        .product .slider img.active {
+            display: block;
+        }
+        
+        .product .slider .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0065ff;
+            color: rgb(255, 255, 255);
+            border: none;
+            border-radius: 25%;
+            width: 25px;
+            height: 30px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        
+        .product .slider .arrow:hover {
+            opacity: 1;
+        }
+        
+        .product .slider .left {
+            left: 1px;
+        }
+        
+        .product .slider .right {
+            right: 1px;
+        }
+        
+        .product h3 {
+            margin: 10px 0 5px;
+        }
+        
+        .product p {
+            margin: 0 0 10px;
+            color: #555;
+        }
+        
+        .product .price {
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .product button {
+            padding: 8px 12px;
+            background-color: #0065ff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .product button:hover {
+            background-color: darkgreen;
+        }
+        
+       #cart-btn {
+			position: fixed;
+			bottom: 0px;
+			right: 1px;
+			background: #ff0000;
+			height: 50px;
+			background-image: url('images/Onlineshop/Background Tombol/keranjang.jpg');
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			color: white;
+			border: none;
+			border-radius: 10px;
+			padding: 5px 25px;
+			font-size: 12px;
+			font-weight: bold;
+			cursor: pointer;
+			width: 25%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			
+    /* Efek Glow pada Teks */
+			text-shadow: 0px 0px 8px #ff0000,  
+						 0px 0px 12px #000105;
+		}
+
+    /* Warna Teks & Lingkaran Putih Di Keranjang */
+        #cart-btn span {
+            background: #ffffff;
+            color: #ff0000;
+            font-size: 12px;
+            border-radius: 50%;
+            padding: 5px;
+            margin-left: 3px;
+            /* Hilangkan margin agar teks tetap di tengah */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+		
+    /* Modal Cart */
+        #cart-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            border: 2px solid #ccc;
+            border-radius: 25px;
+            padding: 20px;
+            z-index: 2000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            /* Pusatkan teks dalam modal */
+        }
+        
+        #cart-modal h2 {
+            margin: 0 0 20px;
+            text-align: center;
+            /* Pusatkan teks heading */
+        }
+        
+        #cart-modal ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+            /* Pusatkan teks dalam daftar */
+        }
+        
+        #cart-modal ul li {
+            margin: 0px 0;
+            display: flex;
+            font-size: 12px;
+            font-weight: bold;
+            justify-content: space-between;
+            align-items: center;
+            
+            /* Pusatkan item dalam daftar */
+        }
+        
+        #cart-modal button {
+            padding: 12px 10px;
+			font-size: 12px;
+			font-weight: bold;
+			border: none;
+			border-radius: 10px;
+			cursor: pointer;
+			background: #097e00;
+			color: white;
+			margin-top: 10px;
+			transition: background 0.2s;
+		}
+		#cart-modal button:hover:not(:disabled) {
+			background: #ff0000;
+		}
+		
+    /* Tombol Lunasi Pesanan */
+		#cart-modal button#checkout-btn {
+			padding: 12px 10px;
+			font-size: 12px;
+			font-weight: bold;
+			border: none;
+			border-radius: 10px;
+			cursor: pointer;
+			background: #097e00;
+			color: white;
+			margin-top: 10px;
+			transition: background 0.2s;
+		}
+
+		#cart-modal button#checkout-btn:disabled {
+			background: #ccc;
+			cursor: not-allowed;
+		}
+
+		#cart-modal button#checkout-btn:hover:not(:disabled) {
+			background: #ff0000;
+		}
+    </style>
+</head>
+
+<body>
+    <!-- Header GIF -->
+    <div id="header-slider"> <img src="images/Onlineshop/warga.gif" alt="Header GIF" /> </div>
+    <!-- Sticky Menu -->
+    <div class="sticky-menu">
+        <h3>KATEGORI PRODUK KAMI</h3>
+        <div class="menu-buttons">
+            <button onclick="showProducts('parfum-pria')"> <b><span>Parfum<br />Pria</span></b> </button>
+            <button onclick="showProducts('parfum-wanita')"> <b><span>Parfum<br />Wanita</span></b> </button>
+            <button onclick="showProducts('kursus-bahasa')"> <b><span>Kursus<br />Bahasa</span></b> </button>
+            <button onclick="showProducts('kursus-it')"> <b><span>Kursus<br />IT</span></b> </button>
+            <button onclick="showProducts('aplikasi-premium')"> <b><span>Aplikasi<br />Premium</span></b> </button>
+            <button onclick="showProducts('jasa-servis')"> <b><span>Jasa<br />Servis</span></b> </button>
+            <button id="cart-btn" onclick="toggleCart()"><b>Keranjang</b> <span id="cart-count">0</span></button>
+        </div>
+    </div>
+    <div id="parfum-pria" class="products">
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Pria/Al-Farouk 1.jpg" class="active" /> <img src="images/Onlineshop/Parfum Pria/Al-Farouk 2.png" /> <img src="images/Onlineshop/Parfum Pria/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Al-Farouk (Oud)</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Farouk</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>. Al-Farouk ini memiliki aroma Oud (Gaharu) yang memberikan sensasi aroma luar biasa.
+                <br>
+            </p>
+            <div class="price">Rp. 25.000</div>
+            <button onclick="addToCart('Al-Farouk (Oud)', 15000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Pria/Al-Fawwaz 1.jpg" class="active" /> <img src="images/Onlineshop/Parfum Pria/Al-Fawwaz 2.png" /> <img src="images/Onlineshop/Parfum Pria/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Al-Fawwaz</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Fawwaz</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 10.000</div>
+            <button onclick="addToCart('Al-Fawwaz', 10000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Pria/Al-Gahtan 1.jpg" class="active" /> <img src="images/Onlineshop/Parfum Pria/Al-Gahtan 2.png" /> <img src="images/Onlineshop/Parfum Pria/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Al-Gahtan</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Gahtan</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 10.000</div>
+            <button onclick="addToCart('Al-Gahtan', 10000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Pria/Al-Latief 1.jpg" class="active" /> <img src="images/OnlineshopParfum Pria/Al-Latief 2.png" /> <img src="images/Onlineshop/Parfum Pria/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Al-Latief</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Latief</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 10.000</div>
+            <button onclick="addToCart('Al-Latief', 10000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Pria/Al-Maulana 1.jpg" class="active" /> <img src="images/OnlineshopParfum Pria/Al-Maulana 2.png" /> <img src="images/Onlineshop/Parfum Pria/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Al-Maulana (Oud)</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Latief</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 25.000</div>
+            <button onclick="addToCart('Al-Maulana (Oud)', 15000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Pria/As-Sulaiman 1.jpg" class="active" /> <img src="images/OnlineshopParfum Pria/As-Sulaiman 2.png" /> <img src="images/Onlineshop/Parfum Pria/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>As-Sulaiman</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Latief</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 10.000</div>
+            <button onclick="addToCart('As-Sulaiman', 10000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Pria/As-Sulthon 1.jpg" class="active" /> <img src="images/OnlineshopParfum Pria/As-Sulthon 2.png" /> <img src="images/Onlineshop/Parfum Pria/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>As-Sulthon (Oud)</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>As-Sulthon</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>. As-Sulthon ini memiliki aroma Oud (Gaharu) yang memberikan sensasi aroma luar biasa.
+                <br>
+            </p>
+            <div class="price">Rp. 25.000</div>
+            <button onclick="addToCart('As-Sulthon (Oud)', 10000)">Pesan</button>
+        </div>
+    </div>
+    <div id="parfum-wanita" class="products">
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Wanita/Al-Marwah 1.jpg" class="active" /> <img src="images/Onlineshop/Parfum Wanita/Al-Marwah 2.png" /> <img src="images/Onlineshop/Parfum Wanita/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Al-Marwah</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Marwah</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 10.000</div>
+            <button onclick="addToCart('Al-Marwah', 10000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Wanita/As-Safa 1.jpg" class="active" /> <img src="images/Onlineshop/Parfum Wanita/As-Safa 2.png" /> <img src="images/Onlineshop/Parfum Wanita/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>As-Safa</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Marwah</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 10.000</div>
+            <button onclick="addToCart('As-Safa', 10000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Wanita/At-Tammar 1.jpg" class="active" /> <img src="images/Onlineshop/Parfum Wanita/At-Tammar 2.png" /> <img src="images/Onlineshop/Parfum Wanita/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>At-Tammar</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Marwah</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 10.000</div>
+            <button onclick="addToCart('At-Tammar', 10000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Wanita/Az-Zahrah 1.jpg" class="active" /> <img src="images/Onlineshop/Parfum Wanita/Az-Zahrah 2.png" /> <img src="images/Onlineshop/Parfum Wanita/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Az-Zahrah</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Marwah</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 10.000</div>
+            <button onclick="addToCart('Az-Zahrah', 10000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Parfum Wanita/Az-Zahrain 1.jpg" class="active" /> <img src="images/Onlineshop/Parfum Wanita/Az-Zahrain 2.png" /> <img src="images/Onlineshop/Parfum Wanita/Attar.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Az-Zahrain</h4>
+            <p style="text-align:justify;">Produk ini adalah produk SPECIAL yang didatangkan dari Timur Tengah. <b>Al-Marwah</b> adalah salah satu koleksi dari total <b>12 produk "Attar At-Tilmidz"</b>.
+                <br>
+            </p>
+            <div class="price">Rp. 10.000</div>
+            <button onclick="addToCart('Az-Zahrain', 10000)">Pesan</button>
+        </div>
+    </div>
+    <div id="kursus-bahasa" class="products">
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Kursus Bahasa/Arabic Course.jpg" class="active" /> <img src="images/Onlineshop/Kursus Bahasa/Arabic Course.jpg" /> <img src="images/Onlineshop/Kursus Bahasa/Arabic Course.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Kursus Bahasa Arab</h4>
+            <p style="text-align:justify;">Kursus Bahasa Arab ini dirancang untuk membantu peserta mengembangkan keterampilan berbicara, mendengar, membaca, dan menulis dalam bahasa Arab. Dengan metode interaktif dan materi yang disesuaikan dengan kebutuhan, peserta akan lebih percaya diri dalam berkomunikasi secara efektif dalam berbagai situasi. Kursus ini cocok untuk semua tingkat, dari pemula hingga lanjutan. Gabung sekarang dan tingkatkan kemampuan Bahasa Arab Anda!</p>
+            <div class="price">Rp. 1.500.000</div>
+            <button onclick="addToCart('Kursus Bahasa Arab', 100000)">Daftar</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Kursus Bahasa/English Course.jpg" class="active" /> <img src="images/Onlineshop/Kursus Bahasa/English Course.jpg" /> <img src="images/Onlineshop/Kursus Bahasa/English Course.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Kursus Bahasa Inggris</h4>
+            <p style="text-align:justify;">Kursus Bahasa Inggris ini dirancang untuk membantu peserta mengembangkan keterampilan berbicara, mendengar, membaca, dan menulis dalam bahasa Inggris. Dengan metode interaktif dan materi yang disesuaikan dengan kebutuhan, peserta akan lebih percaya diri dalam berkomunikasi secara efektif dalam berbagai situasi. Kursus ini cocok untuk semua tingkat, dari pemula hingga lanjutan. Gabung sekarang dan tingkatkan kemampuan Bahasa Inggris Anda!</p>
+            <div class="price">Rp. 500.000</div>
+            <button onclick="addToCart('Kursus Bahasa Inggris', 100000)">Daftar</button>
+        </div>
+    </div>
+    <div id="kursus-it" class="products">
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Kursus IT/Android Course.jpg" class="active" /> <img src="images/Onlineshop/Kursus IT/Android Course.jpg" /> <img src="images/Onlineshop/Kursus IT/Android Course.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Android Coding Course</h4>
+            <p style="text-align:justify;">Kursus Android Coding ini dirancang untuk membantu peserta memahami dasar-dasar pengembangan aplikasi Android menggunakan bahasa pemrograman seperti Kotlin atau Java. Peserta akan belajar membangun aplikasi mobile dari awal, memahami UI/UX, serta mengoptimalkan performa aplikasi. Cocok bagi pemula maupun pengembang yang ingin memperdalam keahlian dalam pengembangan aplikasi Android.</p>
+            <div class="price">Rp. 1.000.000</div>
+            <button onclick="addToCart('Android Coding Course', 100000)">Daftar</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Kursus IT/Computer Course.jpg" class="active" /> <img src="images/Onlineshop/Kursus IT/Computer Course.jpg" /> <img src="images/Onlineshop/Kursus IT/Computer Course.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Windows Coding Course</h4>
+            <p style="text-align:justify;">Kursus Windows Coding ini berfokus pada pengembangan aplikasi berbasis Windows menggunakan teknologi seperti C# dengan .NET, Python, atau C++. Peserta akan mempelajari konsep pemrograman desktop, manajemen database, serta integrasi dengan sistem Windows. Kursus ini ideal bagi mereka yang ingin mengembangkan software desktop yang efisien dan profesional.</p>
+            <div class="price">Rp. 750.000</div>
+            <button onclick="addToCart('Windows Coding Course', 100000)">Daftar</button>
+        </div>
+    </div>
+    <div id="aplikasi-premium" class="products">
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Aplikasi Premium/Premium Android.jpg" class="active" /> <img src="images/Onlineshop/Aplikasi Premium/Premium Android.jpg" /> <img src="images/Onlineshop/Aplikasi Premium/Premium Android.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Android App</h4>
+            <p style="text-align:justify;">Aplikasi Premium Android dirancang untuk memberikan pengalaman terbaik dengan fitur eksklusif, tampilan elegan, dan performa tinggi. Dengan antarmuka yang intuitif dan teknologi canggih, aplikasi ini menawarkan keamanan, kenyamanan, serta fungsionalitas yang lebih unggul dibanding versi standar. Cocok untuk pengguna yang menginginkan layanan tanpa batas dan fitur premium.</p>
+            <div class="price">Rp. 25.000</div>
+            <button onclick="addToCart('Android App', 25000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Aplikasi Premium/Premium PC.jpg" class="active" /> <img src="images/Onlineshop/Aplikasi Premium/Premium PC.jpg" /> <img src="images/Onlineshop/Aplikasi Premium/Premium PC.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>PC Windows App</h4>
+            <p style="text-align:justify;">Aplikasi Premium PC menghadirkan solusi profesional dengan fitur lanjutan, performa optimal, dan integrasi penuh dengan sistem Windows atau macOS. Dibangun untuk kebutuhan produktivitas, kreativitas, dan keamanan tinggi, aplikasi ini menawarkan pengalaman kerja yang efisien dan inovatif. Ideal bagi pengguna yang mencari perangkat lunak berkualitas premium untuk kebutuhan bisnis maupun pribadi.</p>
+            <div class="price">Rp. 25.000</div>
+            <button onclick="addToCart('PC Windows App', 25000)">Pesan</button>
+        </div>
+    </div>
+    <div id="jasa-servis" class="products">
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Jasa Servis/Servis HP.jpg" class="active" /> <img src="images/Onlineshop/Jasa Servis/Servis HP.jpg" /> <img src="images/Onlineshop/Jasa Servis/Servis HP.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Servis Handphone</h4>
+            <p style="text-align:justify;">Jasa Servis Handphone menyediakan perbaikan profesional untuk berbagai jenis smartphone. Layanan mencakup perbaikan layar, baterai, kamera, software, dan komponen lainnya dengan peralatan modern dan teknisi berpengalaman. Kami memastikan perangkat Anda kembali berfungsi optimal dengan garansi kualitas terbaik.</p>
+            <div class="price">Rp. 50.000</div>
+            <button onclick="addToCart('Servis Handphone', 50000)">Pesan</button>
+        </div>
+        <div class="product">
+            <div class="slider"> <img src="images/Onlineshop/Jasa Servis/Servis PC.jpg" class="active" /> <img src="images/Onlineshop/Jasa Servis/Servis PC.jpg" /> <img src="images/Onlineshop/Jasa Servis/Servis PC.jpg" />
+                <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+            </div>
+            <h4>Service Komputer/Laptop</h4>
+            <p style="text-align:justify;">Jasa Servis Komputer menawarkan perbaikan dan perawatan komputer serta laptop, termasuk penggantian hardware, instalasi software, optimasi sistem, dan pemulihan data. Dengan dukungan teknisi ahli dan peralatan canggih, kami memastikan perangkat Anda bekerja dengan performa maksimal untuk kebutuhan pribadi maupun bisnis.</p>
+            <div class="price">Rp. 25.000</div>
+            <button onclick="addToCart('Service Komputer/Laptop', 25000)">Pesan</button>
+        </div>
+    </div>
+    <div id="cart-modal">
+        <h2>Keranjang Belanja</h2>
+        <ul id="cart-items">
+            <!-- Items will be dynamically added -->
+        </ul>
+        <div> <strong>Sub-Total: <span id="cart-total">0</span></strong> </div>
+        <button id="checkout-btn" onclick="checkout()" disabled>Lunasi Pesanan</button>
+    </div>
+    <script>
+        // Header slider
+        let headerIndex = 0;
+        const headerImages = document.querySelectorAll("#header-slider img");
+        setInterval(() => {
+            headerImages[headerIndex].classList.remove("active");
+            headerIndex = (headerIndex + 1) % headerImages.length;
+            headerImages[headerIndex].classList.add("active");
+        }, 2000);
+        // Menu buttons and product visibility
+        function showProducts(categoryId) {
+            document.querySelectorAll(".products").forEach((product) => {
+                product.classList.remove("active");
+            });
+            document.querySelector(`#${categoryId}`).classList.add("active");
+            document.querySelectorAll(".menu-buttons button").forEach((btn) => {
+                btn.classList.remove("active");
+            });
+            event.target.classList.add("active");
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const buttons = document.querySelectorAll(".menu-buttons button");
+            buttons.forEach(button => {
+                button.addEventListener("click", function () {
+                    // Hapus kelas "active" dari semua tombol
+                    buttons.forEach(btn => btn.classList.remove("active"));
+                    // Tambahkan kelas "active" ke tombol yang diklik
+                    this.classList.add("active");
+                });
+            });
+        });
+        // Cart logic
+        let cart = {};
+        const cartCountEl = document.getElementById("cart-count");
+        const cartItemsEl = document.getElementById("cart-items");
+        const cartTotalEl = document.getElementById("cart-total");
+        const cartModal = document.getElementById("cart-modal");
+
+        function addToCart(productName, price) {
+            if (!cart[productName]) {
+                cart[productName] = {
+                    price, quantity: 1
+                };
+            }
+            else {
+                cart[productName].quantity += 1;
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            let totalItems = 0;
+            let totalPrice = 0;
+            cartItemsEl.innerHTML = "";
+            for (const [name, {
+                    price, quantity
+                }] of Object.entries(cart)) {
+                totalItems += quantity;
+                totalPrice += price * quantity;
+                const itemEl = document.createElement("li");
+                itemEl.innerHTML = `
+            ${name} - Rp. ${price.toLocaleString("id-ID")} x ${quantity}
+            <button onclick="changeQuantity('${name}', 1)">+</button>
+            <button onclick="changeQuantity('${name}', -1)">-</button>
+        `;
+                cartItemsEl.appendChild(itemEl);
+            }
+            cartCountEl.textContent = totalItems;
+            cartTotalEl.textContent = `Rp. ${totalPrice.toLocaleString("id-ID")}`;
+            // Atur status tombol "Lunasi Pesanan"
+            const checkoutBtn = document.getElementById("checkout-btn");
+            if (totalItems === 0) {
+                checkoutBtn.disabled = true; // Nonaktifkan jika keranjang kosong
+            }
+            else {
+                checkoutBtn.disabled = false; // Aktifkan jika ada produk
+            }
+        }
+
+        function changeQuantity(productName, delta) {
+            if (cart[productName]) {
+                cart[productName].quantity += delta;
+                if (cart[productName].quantity <= 0) {
+                    delete cart[productName];
+                }
+                updateCartUI();
+            }
+        }
+
+        function toggleCart() {
+            cartModal.style.display = cartModal.style.display === "block" ? "none" : "block";
+        }
+
+        function checkout() {
+            if (Object.keys(cart).length === 0) {
+                alert("🚨 Keranjang belanja Anda masih kosong! Tambahkan produk terlebih dahulu.");
+                return;
+            }
+            let cartItems = '';
+            let totalAmount = 0; // Menyimpan total harga
+            let index = 1; // Menambahkan nomor urut pesanan
+            for (let productName in cart) {
+                const product = cart[productName];
+                const itemTotal = product.price * product.quantity;
+                cartItems += `${index}. *${productName}*\n   ${product.quantity} pcs   | Rp ${itemTotal.toLocaleString()}\n`;
+                totalAmount += itemTotal; // Menjumlahkan total harga
+                index++; // Menambahkan nomor urut
+            }
+            // Ambil total harga dari elemen cart-total
+            const totalText = `💰 *Total Harga:* Rp ${totalAmount.toLocaleString()}`;
+            // Salam dalam bahasa Arab (rata kanan)
+            const arabicGreeting = "📢 *السلام عليكم ورحمة الله وبركاته*\n" + "_Semoga hari Anda penuh berkah dan rezeki lancar._\n";
+            // Placeholder untuk nama dan alamat pemesan
+            const customerInfo = `🏷️ *Nama Pemesan:* _(Silakan isi)_\n📍 *Alamat Lengkap:* _(Silakan isi)_`;
+            // Pertanyaan ongkos kirim
+            const shippingQuestion = `🚚 *Apakah Semua Sudah Termasuk Ongkos Kirim?*\n✅ *Terima Kasih Sebelumnya*`;
+            // Garis pemisah
+            const separator = "━━━━━━━━━━━━━━━━━━━━━━━";
+            // Gabungkan semua pesan dengan tampilan lebih menarik
+            const message = `${arabicGreeting}\n` + // Salam Arab rata kanan
+                `${separator}\n` + `🛍️ *Pesanan Saya:*\n${cartItems}\n${separator}\n` + `${totalText}\n\n` + `📩 *Mohon info nomor rekening untuk pembayaran.*\n\n` + `📝 *Detail Pemesan:*\n${customerInfo}\n\n` + `${shippingQuestion}`;
+            // Pastikan nomor WhatsApp benar
+            const phoneNumber = "6287803582510";
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+        // Initialize products
+        function createProduct(categoryId, productName, price) {
+            const productDiv = document.createElement("div");
+            productDiv.classList.add("product");
+            productDiv.innerHTML = `
+                <div class="slider">
+                    <img src="images/Onlineshop/" class="active">
+                    <img src="images/Onlineshop/">
+                    <img src="images/Onlineshop/">
+                    <button class="arrow left" onclick="changeImage(this, -1)">&#8249;</button>
+                    <button class="arrow right" onclick="changeImage(this, 1)">&#8250;</button>
+                </div>
+                <h3>${productName}</h3>
+                <p>Deskripsi singkat produk</p>
+                <div class="price">Rp. ${price}</div>
+                <button onclick="addToCart('${productName}', ${price})">Pesan</button>
+            `;
+            document.getElementById(categoryId).appendChild(productDiv);
+        }
+
+        function changeImage(button, direction) {
+            const images = button.parentElement.querySelectorAll("img");
+            let activeIndex = Array.from(images).findIndex((img) => img.classList.contains("active"));
+            images[activeIndex].classList.remove("active");
+            activeIndex = (activeIndex + direction + images.length) % images.length;
+            images[activeIndex].classList.add("active");
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>International Training (Developer Lombok IT)</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 5px;
+            position: sticky;
+            top: 0; /* Adjust as needed to control when the menu becomes sticky */
+            background-color: white; /* Add a background color to ensure the menu is visible when sticky */
+            z-index: 1000; /* Ensure it stays on top of other content */
+        }
+
+        .button {
+            background-color: green; /* Ubah warna tombol menu menjadi hijau */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            flex: 1 1 150px; /* Ensure buttons are responsive */
+            max-width: 200px; /* Optional: limit the maximum width */
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: darkred; /* Warna saat hover untuk tombol menu */
+        }
+
+        .flip-card-container {
+            display: none; /* Initially hidden */
+            justify-content: center;
+            flex-wrap: wrap; /* Allows cards to wrap to the next line */
+            width: 100%; /* Fixed width for the card container */
+            margin-top: 20px; /* Spacing above the card container */
+        }
+
+        .flip-card {
+            background-color: transparent;
+            width: calc(50% - 20px); /* Two cards per row with margin */
+            max-width: 250px;
+            height: 275px;
+            perspective: 1000px;
+            margin: 10px; /* Margin for spacing */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+
+        .flip-card-front {
+            background-color: #bbb;
+            color: black;
+        }
+
+        .flip-card-back {
+            background-color: #006600; /* Ubah warna tombol di belakang kartu menjadi merah */
+            color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .name-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .name {
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .position {
+            font-size: 12px;
+            font-weight: normal;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgXjCEbHzgAva23QWXt_y28tSFbI88Zc5INdiKL8467yYrfm8q9Bt5i1Yo-w6kSdX8a4Mjb7mcUSguukGDIDBbWjZPN8Za4EzsELFPn50uSU5Bq0vRUNDvJbra1MNAe7WaWGhSJ96-e8l_osxVgg0lP5DNxZjzJOrIa0kHxC6-qYsznCsrhaVl_4jRIoPI/s1000/LOGO%20Lombok%20IT%20Academy.png" alt="Logo" class="logo" id="logo" style="width: 200px; height: 200px;" />
+
+<h4 style="text-align: center;">International Training<br>(Digital App Developement)</h4>
+<h3 style="text-align: center;">Pilih Menu Pelatihan:</h3>
+
+<div class="button-container">
+    <button class="button" onclick="showTraining('dosen')">Pelatihan Dosen</button>
+    <button class="button" onclick="showTraining('guru')">Pelatihan Guru</button>
+    <button class="button" onclick="showTraining('pelajar')">Pelatihan Pelajar</button>
+    <button class="button" onclick="showTraining('umum')">Pelatihan Umum</button>
+</div>
+
+<!-- Pelatihan Dosen -->
+<div id="dosen" class="flip-card-container">
+        <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Dosen/PELATIHAN DOSEN Buku & Modul Animasi.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1CARic5TGZAidFzL2PzZuVVlZFTSZ4ft0/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN DOSEN Buku & Modul Animasi')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Dosen/PELATIHAN DOSEN Edu-Preneurship.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1j-YsLEXpPSHAGvvqKXqHQtNjBDfngfU8/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('Pelatihan DOSEN Edu-Preneurship')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Dosen/PELATIHAN DOSEN Landing Page.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/128kT6hdBkdKx3RTbWtZKf4VEqMJKms1I/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN DOSEN Landing Page')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Dosen/PELATIHAN DOSEN Online Shopping.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1Ui3krwI4ujLwFV5xacALiknlvQv6ja12/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN DOSEN Online Shopping')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+	<div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Dosen/PELATIHAN DOSEN Prakarya.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1cBeWH08MYhMO_nya3T9ub2GrW73LYNb-/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN DOSEN Prakrya & Kewirausahaan')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+	<div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Dosen/PELATIHAN DOSEN Video & Animasi.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/12ZUFc2Kn9Jzswvd2jUz54n5ZYAJE7cm2/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN DOSEN Video & Animasi')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pelatihan Guru -->
+<div id="guru" class="flip-card-container">
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Guru/PELATIHAN GURU Buku & Modul Animasi.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1dGme_V9sThch_HF6OSRst2XJeMeUMeAR/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN GURU Buku & Modul Animasi')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Guru/PELATIHAN GURU Edu-Preneurship.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1HF6qE4tFrYZy3c-CLfsDT7RduZpaIeHD/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('Pelatihan GURU Edu-Preneurship')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Guru/PELATIHAN GURU Landing Page.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1SewURSw8tOKlKoMjkeP2coIE19nqeCsi/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN GURU Landing Page')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Guru/PELATIHAN GURU Online Shopping.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1F8gll9F4OUPDzd6NugqS4n4ryvUxDpOd/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN GURU Online Shopping')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+	<div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Guru/PELATIHAN GURU Prakarya.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/130CC9-dfP2xRQvkIF_W49X1-kfPmTqI4/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN GURU Prakrya & Kewirausahaan')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+	<div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Guru/PELATIHAN GURU Video & Animasi.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1UjHghH4dO4TZUMyNk1RtlNdSpyUAixh7/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN GURU Video & Animasi')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pelatihan Pelajar -->
+<div id="pelajar" class="flip-card-container">
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Pelajar/PELATIHAN SISWA Karya Tulis Non-lmiah.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1aoawmoOwS78EPsO4PgN-AIo2VjoRSvWH/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN SISWA Karya Tulis Non-lmiah')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Pelajar/PELATIHAN SISWA Prakarya.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/18RETjpv2RM6VCl6WFUWkd-bSP1HgX2aT/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN SISWA Prakarya & Kewirausahaan')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Pelajar/PELATIHAN SISWA Video & Animasi.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1X0Xu-kylANI2UtwROvvvabXEzd3RFNXC/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN SISWA Video & Animasi')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pelatihan Umum -->
+<div id="umum" class="flip-card-container">
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Umum/PELATIHAN UMUM Landing Page.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/10RFB6383t755kQYNDcDohvG0FF43_RtU/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN UMUM Landing Page')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Umum/PELATIHAN UMUM Online Shopping.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1MvrH2nZIqyQafz5ePEvPrM_64pAtH7wi/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN UMUM Online Shopping')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="images/Pelatihan Umum/PELATIHAN UMUM Undangan Digital.jpg" alt="Avatar" style="width:100%;height:100%;">
+            </div>
+            <div class="flip-card-back">
+                <p class="name-label">Nama Pemateri:</p>
+                <p class="name">Abdul Kadir Bagis, M. Pd</p>
+                <p class="position">"CEO Developer Lombok IT"</p>
+                <a href="https://drive.google.com/file/d/1ihyqRsqgvL6wgGCkWqbz3X-eBeBGJByY/view?usp=drive_link" class="button">Baca Deskripsinya</a>
+                <button class="button" onclick="joinTraining('PELATIHAN UMUM Undangan Digital')">Daftar Pelatihannya</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showTraining(category) {
+        // Hide all sections first
+        const categories = ['dosen', 'guru', 'pelajar', 'umum'];
+        categories.forEach(cat => {
+            document.getElementById(cat).style.display = 'none';
+        });
+
+        // Show the selected category
+        document.getElementById(category).style.display = 'flex'; // Change to flex to align items
+    }
+
+    function joinTraining(trainingName) {
+        const message = `Assalamualaikum. Saya ingin mendaftar pelatihan dari Developer Lombok IT (**${trainingName}**). Apa saja syaratnya?`;
+        const phoneNumber = '6287803582510'; // Ganti dengan nomor tujuan
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+        // Buka link WhatsApp
+        window.open(whatsappURL, '_blank');
+    }
+</script>
+
+</body>
+</html>

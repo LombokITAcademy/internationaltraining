@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absen Pelajaran</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: url('background/bgpresensi.jpg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        body {
+            padding-top: 220px;
+        }
+
+        /* Logo Container di Paling Atas */
+        .logo-container {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .logo-container img {
+            width: 120px;
+            height: 120px;
+        }
+        
+         /* Container Transparan untuk Teks */
+        
+        .text-container {
+            background: rgba(0, 0, 0, 0.5);
+            /* Warna hitam transparan */
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        /* Animasi Wave Teks */
+        
+        .logo h1 {
+            font-size: 32px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .text span {
+            display: inline-block;
+            font-size: 25px;
+            font-weight: bold;
+            animation: wave 2s infinite ease-in-out alternate, colorChange 3s infinite;
+            letter-spacing: 5px;
+            /* Menambahkan jarak antar huruf */
+        }
+        
+        .text-1 span {
+            color: #ff5733;
+        }
+        
+        .text-2 span {
+            color: #3399ff;
+        }
+        /* Beri animasi wave satu per satu dengan delay berbeda */
+        
+        .text span:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .text span:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        
+        .text span:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        
+        .text span:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        
+        .text span:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+        
+        .text span:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+        
+        .text span:nth-child(7) {
+            animation-delay: 0.6s;
+        }
+        
+        .text span:nth-child(8) {
+            animation-delay: 0.7s;
+        }
+        /* Animasi Wave */
+        
+        @keyframes wave {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-8px) rotate(-3deg);
+                /* Lebih dinamis dengan rotasi */
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        /* Perubahan warna otomatis */
+        
+        @keyframes colorChange {
+            0% {
+                color: #ff0000;
+            }
+            25% {
+                color: #ffffff;
+            }
+            50% {
+                color: #02891a;
+            }
+            75% {
+                color: #ffcc33;
+            }
+            100% {
+                color: #ff0000;
+            }
+        }
+
+        .text-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 10px;
+            border-radius: 26px;
+            display: inline-block;
+            margin-top: 50px;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-container h2 {
+            margin-bottom: 0px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: not-allowed;
+            background: red;
+            transition: background 0.3s;
+        }
+
+        .btn.active {
+            cursor: pointer;
+            background: green;
+        }
+
+        .message {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #alasan-container {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="logo-container">
+        <img src="background/logo.png" alt="Logo">
+    </div>
+        <div class="text-container">
+            <h2>
+                <span class="text text-1">
+                    <span>P</span><span>R</span><span>E</span><span>S</span><span>E</span><span>N</span><span>S</span><span>I</span>
+                </span>
+                &nbsp;
+                <span class="text text-2">
+                    <span>O</span><span>N</span><span>L</span><span>I</span><span>N</span><span>E</span>
+                </span>
+            </h2>
+        </div>
+
+        <div class="form-container">
+            <h3>Silakan Isi Presensinya:</h3>
+            <input type="text" id="nama" placeholder="Nama Lengkap:">
+            <input type="text" id="no_siswa" placeholder="Nomor Siswa:">
+            <input type="text" id="kelas" placeholder="Kelas:">
+            <input type="text" id="sekolah" placeholder="Nama Sekolah:">
+            <input type="text" id="no_hp" placeholder="Nomor Handphone:">
+             
+             <!-- Tambahan Input Hari, Tanggal, dan Waktu -->
+            <label for="tanggal"><b>Tanggal:</b></label>
+            <input type="date" id="tanggal" onchange="updateHari()">
+            <label for="hari"><b>Hari:</b></label>
+            <input type="text" id="hari" readonly>
+            <label for="jam"><b>Jam Pelajaran:</b></label>
+            <input type="time" id="jam">
+            <label for="status"><b>Status Kehadiran:</b></label>
+            <select id="status" onchange="toggleAlasan()">
+                <option value="Hadir">Hadir</option>
+                <option value="Berhalangan">Berhalangan</option>
+            </select>
+
+            <div id="alasan-container">
+                <input type="text" id="alasan" placeholder="Alasan Ketidakhadiran:">
+            </div>
+
+            <button id="btn" class="btn" disabled>Lengkapi Formulir Presensinya</button>
+            <p class="message"></p>
+        </div>
+  
+
+    <script>
+        const nama = document.getElementById("nama");
+        const no_siswa = document.getElementById("no_siswa");
+        const kelas = document.getElementById("kelas");
+        const sekolah = document.getElementById("sekolah");
+        const no_hp = document.getElementById("no_hp");
+        const tanggal = document.getElementById("tanggal");
+        const hari = document.getElementById("hari");
+        const jam = document.getElementById("jam");
+        const status = document.getElementById("status");
+        const alasan = document.getElementById("alasan");
+        const alasanContainer = document.getElementById("alasan-container");
+        const btn = document.getElementById("btn");
+        const message = document.querySelector(".message");
+
+         function updateHari() {
+            const date = new Date(tanggal.value);
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            hari.value = days[date.getDay()];
+            checkForm();
+        }
+        
+        function toggleAlasan() {
+            if (status.value === "Berhalangan") {
+                alasanContainer.style.display = "block";
+            } else {
+                alasanContainer.style.display = "none";
+                alasan.value = "";
+            }
+            checkForm();
+        }
+
+        function checkForm() {
+            if (nama.value && no_siswa.value && kelas.value && sekolah.value && no_hp.value && hari.value && tanggal.value && jam.value && (status.value === "Hadir" || (status.value === "Berhalangan" && alasan.value))) {
+                btn.removeAttribute("disabled");
+                btn.classList.add("active");
+                btn.textContent = "Kirim Presensinya";
+            } else {
+                btn.setAttribute("disabled", true);
+                btn.classList.remove("active");
+                btn.textContent = "Lengkapi Formulir Presensinya";
+            }
+        }
+
+        nama.addEventListener("input", checkForm);
+        no_siswa.addEventListener("input", checkForm);
+        kelas.addEventListener("input", checkForm);
+        sekolah.addEventListener("input", checkForm);
+        no_hp.addEventListener("input", checkForm);
+        tanggal.addEventListener("input", checkForm);
+        hari.addEventListener("input", checkForm);
+        jam.addEventListener("input", checkForm);
+        alasan.addEventListener("input", checkForm);
+        status.addEventListener("change", checkForm);
+
+       btn.addEventListener("click", function () {
+    if (btn.classList.contains("active")) {
+        let textMessage = ` *اَلسَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ* 
+
+_Semoga Bapak selalu dalam keadaan sehat wal afiat,_  
+*آمِيْن اللّهُمَّ آمِيْن* 🤲
+
+*Berikut Presensi Online Saya Hari Ini:*  
+
+*Nama Lengkap:* ${nama.value}  
+*Nomor Siswa:* ${no_siswa.value}  
+*Kelas:* ${kelas.value}  
+*Nama Sekolah:* ${sekolah.value}  
+*Nomor HP:* ${no_hp.value}  
+*Tanggal:* ${tanggal.value}  
+*Hari:* ${hari.value}  
+*Jam:* ${jam.value}  
+*Status Kehadiran:* ${status.value}`;
+
+        if (status.value === "Berhalangan") {
+            textMessage += `\n *Alasan:* ${alasan.value}`;
+        }
+
+        textMessage += `\n\n _Bersama Kita Pasti Bisa, Jadikan Semua Lebih Mudah_`;
+
+        const url = `https://wa.me/6287803582510?text=${encodeURIComponent(textMessage)}`;
+        message.innerHTML = `"Bersama Kita Pasti Bisa, Jadikan Semua Lebih Mudah"`;
+        setTimeout(() => {
+            window.location.href = url;
+        }, 1000);
+    }
+});
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Lombok IT</title>
+    <style>
+        /* Reset */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        /* Body Styling */
+        
+        body {
+            background: url('background/bgtentang.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+        /* Header Styling */
+        
+        .header {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            width: 120px;
+            opacity: 0;
+            animation: fadeIn 2s forwards, pulsate 2s infinite 2s;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulsate {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        /* Tombol Container */
+        
+        .buttons-container {
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 5px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 1.5s forwards;
+            width: 100%;
+            z-index: 1000;
+            /* Menjaga agar tombol tetap di atas */
+        }
+        
+        .button-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        /* Tombol Styling */
+        
+        .button {
+            flex: 1;
+            min-width: 140px;
+            max-width: 200px;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            border: none;
+            padding: 12px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            color: white;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        
+        .button.active {
+                background: linear-gradient(100deg, #2ecc71, #27ae60);
+        }
+        
+        .button:hover {
+             background: linear-gradient(45deg, Teal, blue, white);
+        }
+        
+        .button {
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+    background: linear-gradient(45deg, 
+                rgba(0, 51, 153, 0.9),  /* Biru Tua */
+                rgba(0, 170, 255, 0.9), /* Biru Langit */
+                rgba(0, 255, 255, 0.9)); /* Cyan */
+    border: none;
+    padding: 12px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s, border 0.3s;
+}
+
+/* Efek shimmering glossy */
+.button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(120deg, 
+                rgba(255, 255, 255, 0.3) 0%, 
+                rgba(255, 255, 255, 0.6) 50%, 
+                rgba(255, 255, 255, 0.3) 100%);
+    transform: skewX(-25deg);
+    transition: 0.6s;
+}
+
+/* Efek glowing dan hover */
+.button:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 20px rgba(0, 170, 255, 0.7), 
+                0px 0px 25px rgba(0, 255, 255, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Animasi shimmering berjalan saat hover */
+.button:hover::before {
+    left: 150%;
+    transition: 1s;
+}
+
+/* Efek gelombang saat diklik */
+.button:active {
+    transform: scale(0.95);
+    background: linear-gradient(45deg, 
+                rgba(0, 41, 128, 1),  
+                rgba(0, 140, 255, 1),  
+                rgba(0, 200, 255, 1));
+}
+
+/* Efek gelombang klik */
+.button:active::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    animation: ripple 0.6s ease-out;
+}
+
+/* Animasi gelombang klik */
+@keyframes ripple {
+    to {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+        /* Konten Styling */
+        
+        .content {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 25px 15px 15px;
+            background: rgba(0, 0, 0, 0.9);
+            /* Warna hitam dengan transparansi 70% */
+            color: white;
+            /* Pastikan teks tetap terlihat jelas */
+            border-radius: 10px;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            /* Tambahkan bayangan agar lebih elegan */
+        }
+        
+        .content img {
+            width: 100px;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        
+        .content img {
+            width: 150px;
+            /* Sesuaikan dengan kebutuhan */
+            height: auto;
+            /* Menjaga proporsi */
+            display: block;
+            margin: 0 auto;
+            /* Agar gambar tetap di tengah */
+        }
+        
+        .content p {
+            text-align: justify;
+            opacity: 0;
+            margin: 10px 0;
+            font-size: 14px;
+            transition: opacity 0.8s ease-in-out, transform 0.5s ease-in-out;
+            transform: translateY(10px);
+        }
+        /* Footer Styling */
+        
+        .footer {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 12px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header"> <img src="images/Lombok IT/Lombokit1.png" class="logo" alt="Logo Developer Lombok IT"> </div>
+    <!-- Tombol Container -->
+    <div class="buttons-container" id="buttonsContainer">
+        <div class="button-row">
+            <button class="button" onclick="showContent('ceo', this)">CEO</button>
+            <button class="button" onclick="showContent('academy', this)">Lombok IT Academy</button>
+        </div>
+        <div class="button-row">
+            <button class="button" onclick="showContent('sejarah', this)">Sejarah</button>
+            <button class="button" onclick="showContent('visi', this)">Visi</button>
+            <button class="button" onclick="showContent('misi', this)">Misi</button>
+        </div>
+    </div>
+    <!-- Konten -->
+    <div id="ceo" class="content"> <img src="images/Lombok IT/Ana.jpg" alt="CEO">
+        <p><b>Abdul Kadir Bagis, M.Pd</b>, lebih akrab dipanggil <b>Mr. Bagis</b> merupakan salah satu Dosen Senior di <b>IKIP Mataram</b> (sekarang dikenal sebagai <b>UNDIKMA</b>) sejak tahun 2004 hingga sekarang (2024).</p>
+        <p>Beliau lulus <b>S1</b> dari <b>FPBS (Fakultas Pendidikan Bahasa dan Seni) IKIP Mataram</b> sebagai Sarjana Pendidikan pada tahun 2004 dan langsung direkrut sebagai salah satu dosen <b>FPBS IKIP Mataram</b>. Lalu melanjutkan studi <b>S2</b> nya untuk gelar <b>Magister Pendidikan di UNS (Universitas Sebelas Maret - Surakarta)</b> pada tahun 2010 dan selesai pada tahun 2012.</p>
+        <p>Kemudian beliau mengembangkan sendiri sistem pendidikan dan bisnisnya khusus di platform Android melalui <b>Hybrid Engine System</b>. Sehingga aplikasinya tidak hanya bisa diakses melalui Android saja, tapi bisa via iPhone dan Windows juga.</p>
+        <p><b>Beliau adalah pendiri dan CEO Developer Lombok IT</b>. Dimana Developer ini menyediakan banyak jenis aplikasi secara gratis. Semua aplikasi yang dikembangkannya didasarkan pada bidangnya sendiri sebagai Dosen profesional dan juga sebagai pengusaha sukses. Semua aplikasinya berkaitan dengan: <b>Sistem Sekolah, Sistem Sosial/Komunikasi, Sistem Online Shopping/Toko Online, dan Sistem Gaming</b>.</p>
+        <p>"Mendiang Kakek Saya Selalu Mengatakan <b>Addunya Haggallah Wannuqut Haggannas (kerja keras dan tawakkal)</b>. Semoga <b>Allah Subhanahu Wa Ta'ala</b> memberikan tempat terbaik yang layak di sisi-Nya. <b>Aamin Ya Rabbal Aalamiin</b> (Abdul Kadir Bagis)". Itu adalah ungkapan yang memotivasi dirinya didalam menghadapi lika-liku kehidupan.</p>
+    </div>
+    <div id="academy" class="content"> <img src="images/Lombok IT/Lombokit2.png" alt="Lombok IT Academy">
+        <p><b>Lombok IT Academy,</b> sebagai bagian dari agenda spesial <b>Developer Lombok IT,</b> secara khusus dibuka/diadakan oleh <b>CEO Developer Lombok IT (Mr. Bagis)</b> bertujuan untuk memberikan pelatihan yang tidak hanya berbasis pada teori, tetapi juga pada pengembangan keterampilan praktis secara <b>Real Time</b> dimana kami memastikan setiap agenda-agenda kami nantinya akan langsung <b>Menghasilkan Produk Digital Dihari/Jam</b> dari masing-masing pelatihan yang dipilih oleh peserta. Program pelatihan ini dikembangkan dengan pendekatan <b>HYBRID,</b> mencakup berbagai platform dan teknologi yang saat ini sangat dibutuhkan oleh perusahaan dan industri teknologi di seluruh dunia.</p>
+
+<p>Dalam pelatihan-pelatihan yang akan diadakan <b>Lombok IT Academy</b> ini, peserta akan mendapatkan pemahaman mendalam tentang berbagai platform teknologi yang sering digunakan dalam pengembangan aplikasi yang mana semuanya termasuk sistem <b>Android, iOS, dan Windows PC.</b><br><br> <b>Lombok IT Academy</b> menyusun materi pelatihan dengan mempertimbangkan kebutuhan <b>(khususnya)</b> terkait dunia <b>Pendidikan (Pengembangan Diri, Penelitian dan Pengabdian)</b> dan kebutuhan pasar secara global. Sehingga setiap pelatihan tidak hanya relevan, tetapi juga dapat langsung diterapkan dalam pekerjaan sehari-hari terkait industri teknologi dan informasi.</p>
+
+<p>Selain itu, pelatihan ini diselenggarakan secara <b>Online (24 Jam)</b> melalui <b>channel YouTube resmi Lombok IT Academy</b>, memungkinkan peserta untuk mengikuti pelatihan kapan saja dan di mana saja <b>tanpa harus menunggu informasi tambahan</b> apapun seperti layaknya pelatihan-pelatihan lainnya <b>(yang harus menggunakan aplikasi tertentu dimana masih banyak yang tidak terbiasa menggunakannya).</b><br><br><b>Dengan Fleksibilitas ini,</b> kapan dan dimanapun peserta dapat mengakses materi pelatihan sesuai dengan kemampuan dan kecepatan belajar mereka masing-masing. Setiap sesi pelatihan akan dibagi ke dalam berbagai topik, memastikan peserta memperoleh pengetahuan yang lengkap dan terkini dalam bidang teknologi yang mereka pilih.</p>
+<p><b>Poin-Poin Berikut Dibawah Adalah Gambaran Secara Umum Bentuk/Konsep Pelatihan Yang Akan Diadakan Nantinya Melalui "Lombok IT Academy":</b></p>
+
+
+    <h3>Pelatihan Dilakukan Secara Online<br>(Hanya) Melalui Official YouTube Channel "Lombok IT Academy"</h3>
+    <p><b>Lombok IT Academy</b> memahami pentingnya akses pendidikan yang mudah dan terbuka. Oleh karena itu, semua pelatihan diselenggarakan secara online melalui channel <b>YouTube resmi Kami.</b> Dengan demikian, peserta dapat mengikuti sesi pelatihan kapan saja dan di mana saja sesuai dengan jadwal dan kebutuhan mereka. Setiap sesi pelatihan menawarkan agenda yang berbeda, memberikan variasi topik yang luas dan relevan dengan perkembangan teknologi terkini.</p>
+  
+    <h3>Pelatihan Bertaraf Internasional Gratis dengan Dwi-Bahasa</h3>
+    <p>Salah satu keunggulan utama <b>Lombok IT Academy</b> adalah komitmennya untuk menyediakan pelatihan bertaraf <b>Internasional</b> secara <b>GRATIS</b> bagi semua orang dari negara manapun. Tidak ada biaya yang dikenakan untuk mengikuti pelatihan ini, sehingga membuka kesempatan yang lebih besar bagi siapa saja yang ingin meningkatkan keterampilan teknologi mereka. Selain itu, pelatihan disajikan dalam <b>dua bahasa</b>, yaitu <b>Inggris dan Indonesia</b>, memastikan bahwa materi dapat diakses dan dipahami oleh peserta dari berbagai latar belakang bahasa.</p>
+    <p><b>Latar Belakang CEO Developer Lombok IT (sebagai pemateri inti)</b> adalah <b>Dosen Bahasa Inggris</b> dengan Pengalaman yang mumpuni baik terkait <b>ilmu bahasa dan atau teknologi dan informasi. Sehingga menjamin semua peserta nantinya ada dalam bimbingan profesional dibidangnya.</b></p>
+  
+    <h3>Target Utama:<br>Guru/Dosen dan Siswa/Mahasiswa</h3>
+    <p><b>Lombok IT Academy</b> menargetkan pelatihannya terutama untuk <b>guru, dosen, siswa, dan mahasiswa.</b> Dengan demikian, mereka dapat memberikan kontribusi yang signifikan dalam dunia pendidikan, membantu pendidik untuk memperbarui pengetahuan mereka tentang teknologi terbaru dan mendukung siswa dalam mempersiapkan diri menghadapi tantangan dunia digital. Materi pelatihan yang disusun khusus untuk kebutuhan pendidikan ini menjadikannya sebagai sumber daya yang berharga bagi komunitas akademik.</p>
+    <p><b>Untuk Guru/Dosen, Lombok IT Academy</b> memberikan kesempatan untuk memperbarui pengetahuan mereka tentang perkembangan teknologi terbaru. Ini sangat penting untuk memastikan mereka dapat mengajar dengan metode dan alat yang relevan dengan kebutuhan dunia digital yang terus berkembang. Dengan mengikuti pelatihan ini, para pendidik dapat mempersiapkan diri untuk mengajarkan materi berbasis teknologi terbaru kepada siswa atau mahasiswa mereka, memberikan kontribusi lebih besar terhadap pendidikan yang berbasis teknologi.</p>
+    <p>Salah satu tujuan utama dari pelatihan ini bagi para pendidik adalah <b>untuk merubah "MINDSET"</b> mereka, <b>Khususnya Bagi Para Dosen,</b> terkait dengan definisi penelitian yang sebenarnya yang mana sesuai dengan <b>Peraturan Operasional Beban Kerja Dosen (PO BKD)</b> yang diterapkan dalam <b>Sistem Informasi Sumberdaya Terintegrasi (SISTER)</b>.<br> Dalam konteks ini, penelitian tidak hanya terbatas pada <b>pembuatan artikel penelitian atau sebatas jurnal ilmiah</b> seperti yang lumrah dilakukan selama ini, tetapi juga mencakup <b>pengembangan teknologi sebagai bagian integral dari kegiatan penelitian</b> yang mana ini sangat mudah dilakukan dan bisa dibilang menghemat jumlah anggaran yang dikeluarkan oleh para peneliti (dosen).<br> Dengan demikian, dosen diharapkan dapat lebih aktif dalam mengembangkan inovasi teknologi yang relevan dan aplikatif, yang pada gilirannya akan meningkatkan kualitas pendidikan dan penelitian di lingkungan akademik.</p>
+
+<p>Sementara itu, untuk <b>Siswa/Mahasiswa, Lombok IT Academy</b> membuka peluang untuk mempelajari keterampilan praktis yang sangat dibutuhkan di dunia kerja. Pelatihan ini membantu mereka untuk mempersiapkan diri lebih baik menghadapi tantangan teknologi yang ada di industri. Melalui pelatihan online, peserta dapat mengakses materi kapan saja, yang memungkinkan mereka untuk belajar secara fleksibel sesuai dengan jadwal mereka. Dengan demikian, pelatihan ini tidak hanya memperkaya pengetahuan tetapi juga meningkatkan kemampuan teknis mereka, memberi mereka keunggulan di pasar kerja global.</p>
+<p>Pelatihan Internasional ini juga dibuka untuk <b>Masyarakat Umum</b> yang benar-benar ingin meningkatkan kompetensi mereka terkait Teknologi dan Informasi.</p>
+
+  
+    <h3>Sertifikat Pelatihan dan Hak Paten Bertaraf Internasional</h3>
+    <p>Setiap peserta pelatihan <b>Lombok IT Academy</b> tidak hanya akan menerima <b>Sertifikat Pelatihan Internasional,</b> tetapi juga akan mendapatkan <b>Sertifikat Hak Paten Internasional</b> secara <b>GRATIS</b>. <b>Sertifikat</b> ini diberikan oleh <b>Developer Lombok IT</b> nantinya melalui <b>IARC (International Age Rating Coalition/Pemeringkatan Internasional Produk Digital Berdasarkan Rentang Usia Penggunanya).</b><br><br><b>Khusus untuk Sertifikat Hak Paten Internasional</b> ini akan diperoleh oleh semua peserta setelah output pelatihan dipublikasikan ke <b>Google PlayStore</b> yang mana nantinya semua mekanismenya akan <b>DITANGGUNG</b> oleh <b>Developer Lombok IT</b>.
+    
+    <p>Bisa dikatakan, Konsep inilah yang nantinya akan menjadikan semua agenda-agenda <b>Developer Lombok IT</b> melalui <b>Lombok IT Academy</b> berbeda dari yang lainnya. Dikarenakan para peserta untuk <b>Pertama Kalinya (dan seterusnya)</b> akan langsung mendapati sebuah pengakuan bertaraf Internasional dalam bentuk <b>Sertifikat Hak Paten Internasional</b> pula tanpa harus dibebani oleh biaya yang terkadang lumayan jika dilakukan secara pribadi.</p>
+    
+    <p>Ini memberikan nilai tambah yang luar biasa bagi peserta, karena selain meningkatkan keterampilan mereka, mereka juga memperoleh pengakuan resmi yang dapat memperkuat kredibilitas profesional mereka di industri teknologi.</p>
+    
+    <p><b>"Atas Nama CEO Developer Lombok IT sebagai salah satu Developer Resmi Internasional dibawah Payung Hukum Google Developer Play Console</b>, semua ini kami <b>Lakukan/Berikan</b> dengan <b>Tujuan Utama</b> kami yakni <b>Untuk mendorong mereka (para peserta) berinovasi dan mengembangkan solusi baru.</b>
+    <br>Dengan <b>Hak Paten Internasional</b> ini nantinya, mereka dapat melindungi ide atau karya mereka secara hukum, memberikan rasa aman, dan memperoleh hak eksklusif untuk pengembangan lebih lanjut."<br><b>(Abdul Kadir Bagis, M.Pd)</b></p>
+    <p><b>Video Singkat Deskripsi IARC Sebagai Hak Paten Internasional Produk Digital:</b></p>  
+    <iframe 
+    src="https://www.youtube.com/embed/JsZglTP03ng?loop=1&modestbranding=1&playlist=JsZglTP03ng&rel=0" 
+    style="width: 100%; height: 22vh; border: none;" 
+    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+    title="Video YouTube tentang [isi video]">
+</iframe>
+  
+  </div>
+    <div id="sejarah" class="content"> <img src="images/Lombok IT/Lombokit1.png" alt="Sejarah">
+        <p><b>Developer Lombok IT</b> didirikan oleh <b>Bapak Abdul Kadir Bagis, M.Pd</b> dan berdiri sejak <b>2018</b> secara resmi. Dulunya dinamai <b>Lombok Academy</b>. <b>Developer Lombok IT</b> mulai mempublish aplikasinya kepublik sejak <b>2020</b> silam. <b>Mr. Bagis (sapaan beliau)</b> adalah <b>alumni S2 dari UNS (Universitas Sebelas Maret Surakarta)</b> pada tahun 2012. Semua kemampuan koding yang dikuasainya secara umum, didapatnya ketika studi Program Pasca Sarjananya dijurusan Pendidikan Bahasa Inggris melalui relasinya dengan beberapa Gamers yang dulunya sempat tumbuh besar dengannya.</p>
+        <p>Dimasa kuliah beliau dulunya (<b>2010-2012</b>) digitalisasi <b>HYBRID</b> baru mulai tumbuh pesat khususnya di Indonesia. Namun belum banyak yang memanfaatkannya untuk level <b>Personal Use (keperluan pribadi)</b>. Pada saat itu semua teknologi ini mayoritas dimanfaatkan untuk instansi-instansi kepemerintahan. Teknologinya masih dianggap baru dan sulit bagi kebanyakan orang apalagi jika mau diajarkan. Kalaupun digunakan pada level pendidikan, maka bisa dipastikan pulau <b>Jawa</b> adalah basis utamanya yang lalu merambah kebeberapa pulau lainnya.</p>
+        <p>Berdasarkan hobi personal beliau didunia hiburan (<b>lebih tepatnya dunia gaming</b>), beliau melihat ilmu dari dunia gaming ini memiliki konsep yang sama dengan konsep sistem operasi Android dimana mayoritas kodingnya adalah <b>JAVA</b>. Tanpa pernah mengikuti pendidikan formal terkait dunia IT (<b> khususnya terkait HYBRID Engine Systems</b>), beliau mendudukkan konsep <b>Android</b> ini untuk beberapa waktu yang terbilang cukup singkat. <b>"Mudah"</b>. Itulah jawaban singkat beliau jika ditanya terkait konsep Android itu seperti apa.</p>
+        <p>Sebelum diwisuda di <b>UNS (2012)</b>, beliau membuat aplikasi khusus untuk berkomunikasi dengan sesama komunitas gamernya agar bisa terus berkomunikasi secara online. Aplikasinya diberi nama "<b>WAGs (We Are Gamers)</b>". Aplikasi ini dulunya memiliki konsep yang sama dengan <b>SOSMED</b> yang ada sekarang. Khususnya <b>WhatsApp</b>.</p>
+        <p>Pada dasarnya, konsep serupa dengan <b>WhatsApp</b> ini sudah ada sejak lama, khususnya diera 90an. Dimana, <b>Diera 90an</b>, <b>ICQ instant messaging service</b> adalah konsep ternama untuk berkomunikasi secara live/langsung bagi kaula muda. Jadi, beliau mengingat kembali bagaimana <b>ICQ</b> digunakan dulunya dan hanya melakukan <b>tweaks/modifikasi kecil</b> agar konsep <b>ICQ</b> bisa diterapkan pada platform Android tadi (<b>WAGs</b>).</p>
+        <p>Salah satu <b>sahabat karibnya (<b>adiknya sendiri</b>)</b> yang tergabung didalam Group <b>WAGs</b> memberikan masukan agar mengusung konsep <b>SOSMED gamingnya (kodingnya)</b> tadi kedalam dunia pendidikan yang lambat laun hal inilah yang memberinya ide Mendirikan <b>Developer Lombok IT</b>.</p>
+        <p>Adapun inti dari didirikannya <b>Developer Lombok IT</b> ini adalah: <b>Untuk memudahkan dunia Pendidikan (khususnya) mengusung konsep kependidikannya melalui pemanfaatan fitur HYBRID yang sudah menjadi bagian dari kehidupan masyarakat secara umum, serta memudahkan warga untuk memenuhi kebutuhan Digitalisasi mereka.</b></p>
+        <p>Sebagai ucapan terima kasihnya atas usulan Adik sendiri, maka dalam salah satu "<b>Theme (tema)</b>" gamingnya muncullah karakter animasi yang diberi nama <b>"The Guy (that always beats us)".</b> Ini adalah memori mereka berdua sesama gamers. Dimana, Siadik masih mengalahkannya didalam bermain games sampai sekarang, dan itu adalah hal yang membuat hubungan mereka selalu harmonis.</p>
+        <p><b>Developer Lombok IT</b> resmi telah mempublish puluhan aplikasi pada portal Developer resminya di <b>Google Developer Play Console</b> dan bisa diakses dunia dengan nama akun developernya "<b>Developer Lombok IT</b>". <b>Salah satu aplikasinya</b>, sejak bulan Desember 2023 telah digunakan oleh <b>Pemerintah Daerah dibawah Kementerian Lingkungan Hidup dan Kehutanan Republik Indonesia, bekerjasama dengan Balai Laboratorium Lingkungan Dinas Lingkungan Hidup dan Kehutanan Provinsi NTB</b>. Nama aplikasinya adalah "<b>LABLING DLHK NTB"</b>.
+        <p>Adapun aplikasi terbarunya terkait program <b>Smart City (Desa Cerdas)</b> dari <b>KEMENDES (Kementerian Desa)</b> diberi nama <b>E-KARYA (Elektronik-Kecepatan Administrasi Rakyat)</b> yang mana aplikasi ini digunakan oleh <b>Kelurahan Pejarakan Karya Ampenan</b> sejak bulan Agustus 2024.</p>
+        <p><b>"Bersama Kita Pasti Bisa, Jadikan Semua Lebih Mudah"</b>
+        <br> adalah <b>Tagline</b> yang diusungnya untuk <b>Developer Lombok IT</b>.</p>
+    </div>
+    <div id="visi" class="content"> <img src="images/Lombok IT/Lombokit1.png" alt="Visi">
+        <p><b>"Membangun Nusa Tenggara Barat (Indonesia) Yang Cemerlang Dengan Cara Memudahkan Semua Orang Menguasai Teknologi"</b></p>
+    </div>
+    <div id="misi" class="content">
+    <img src="images/Lombok IT/Lombokit1.png" alt="Misi">
+        <p>1. Mewujudkan tercapainya kesamarataan penguasaan IT kepada muda-mudi se-Indonesia (khususnya bagi warga NTB).</p>
+        <p>2. Mewujudkan NTB MANDIRI melalui penguasaan dunia IT.</p>
+        <p>3. Memperkuat integrasi teknologi dalam sistem pendidikan Sekolah Negeri dan Swasta untuk meningkatkan kualitas pembelajaran.</p>
+        <p>4. Memberdayakan Pondok Pesantren dengan teknologi modern untuk mendukung pendidikan berbasis digital tanpa meninggalkan nilai-nilai keislaman.</p>
+        <p>5. Meningkatkan kapasitas guru dan siswa dalam pemanfaatan IT guna menciptakan lingkungan belajar yang inovatif dan interaktif.</p>
+        <p>6. Mendorong Perguruan Tinggi Negeri dan Swasta untuk mengembangkan riset berbasis teknologi demi kemajuan pendidikan di Indonesia.</p>
+        <p>7. Memfasilitasi dosen dan mahasiswa dengan keterampilan digital agar siap bersaing di era global.</p>
+        <p>8. Mengedukasi masyarakat umum mengenai pentingnya literasi digital untuk meningkatkan kesejahteraan sosial dan ekonomi.</p>
+        <p>9. Berkontribusi dalam perkembangan dunia pendidikan secara global dengan memperkenalkan inovasi IT yang dapat diterapkan secara luas.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer"> &copy; 2025 Developer Lombok IT. All Rights Reserved. </div>
+    <script>
+        // Tampilkan tombol setelah logo selesai animasi
+        setTimeout(() => {
+            document.getElementById("buttonsContainer").style.display = "flex";
+        }, 2000);
+        let activeButton = null;
+
+        function showContent(id, button) {
+            // Sembunyikan semua konten
+            document.querySelectorAll('.content').forEach(el => el.style.display = 'none');
+            // Tampilkan konten yang dipilih
+            let content = document.getElementById(id);
+            content.style.display = 'block';
+            // Animasi teks muncul satu per satu
+            let paragraphs = content.querySelectorAll("p");
+            paragraphs.forEach((p, index) => {
+                p.style.opacity = "0"; // Reset opacity
+                p.style.transform = "translateY(10px)"; // Reset posisi
+                setTimeout(() => {
+                    p.style.opacity = "1";
+                    p.style.transform = "translateY(0)";
+                }, index * 1000); // Delay per paragraf
+            });
+            // Ubah warna tombol aktif
+            if (activeButton) {
+                activeButton.classList.remove("active");
+            }
+            button.classList.add("active");
+            activeButton = button;
+        }
+    </script>
+</body>
+
+</html>

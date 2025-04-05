@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Formulir Pesan Aplikasi</title>
+    <style>
+        /* Background dengan gambar Play Store */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            background: url('background/bgorder.jpg') no-repeat center center/cover;
+            font-family: Arial, sans-serif;
+            color: white;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Overlay agar teks lebih terbaca */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        /* Formulir responsif */
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(8px);
+            width: 90%;
+            max-width: 320px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            text-align: left;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Efek teks animasi */
+        @keyframes pulsatingText {
+            0% { color: red; transform: scale(1); }
+            50% { color: white; transform: scale(1.1); }
+            100% { color: red; transform: scale(1); }
+        }
+
+        .pulsating-text {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            animation: pulsatingText 3s infinite ease-in-out;
+        }
+
+        /* Input dan select lebih nyaman di HP */
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        textarea[readonly] {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        /* Tombol */
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            color: white;
+            background-color: red;
+            cursor: not-allowed;
+        }
+        button.active {
+            background-color: green;
+            cursor: pointer;
+        }
+        button.active:hover {
+            background-color: darkgreen;
+        }
+
+        /* Media Query untuk layar HP 480px */
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .form-container {
+                width: 95%;
+                max-width: 300px;
+                padding: 10px;
+            }
+            .pulsating-text {
+                font-size: 16px;
+            }
+            button {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Formulir dengan Background Transparan -->
+    <div class="form-container">
+        <form id="orderForm">
+            <h2 class="pulsating-text">PESAN APLIKASI</h2>
+
+            <label for="nama">Nama Lengkap:</label>
+            <input type="text" id="nama" oninput="cekForm()" required>
+
+            <label for="profesi">Profesi:</label>
+            <input type="text" id="profesi" oninput="cekForm()" required>
+
+            <label for="alamat">Alamat Lengkap:</label>
+            <textarea id="alamat" rows="2" oninput="cekForm()" required></textarea>
+
+            <label for="jenisAplikasi">Jenis Aplikasi:</label>
+            <select id="jenisAplikasi" onchange="tampilkanDeskripsi()" required>
+                <option value="" disabled selected>Pilih Jenis Aplikasi</option>
+                <option value="Edu-Preneurship">Edu-Preneurship</option>
+                <option value="Online Shop">Online Shop</option>
+                <option value="Digital Library">Digital Library</option>
+                <option value="3D Digital Flip Book">3D Digital Flip Book</option>
+                <option value="Aplikasi Kelurahan">Aplikasi Kelurahan</option>
+            </select>
+
+            <label for="deskripsi">Deskripsi Singkat Aplikasi:</label>
+            <textarea id="deskripsi" rows="3" readonly required></textarea>
+
+            <button type="button" id="kirimBtn" onclick="kirimPesanan()" disabled>Kirim Pesanan</button>
+        </form>
+    </div>
+
+    <script>
+        function tampilkanDeskripsi() {
+            var pilihan = document.getElementById("jenisAplikasi").value;
+            var deskripsiInput = document.getElementById("deskripsi");
+
+            var deskripsi = {
+                "Edu-Preneurship": "Aplikasi edukasi bisnis untuk membantu pengguna mengembangkan keterampilan usaha.",
+                "Online Shop": "Aplikasi jual beli online dengan katalog digital, sistem pembayaran, dan pelacakan pesanan.",
+                "Digital Library": "Perpustakaan digital yang menyediakan akses ke berbagai buku dan jurnal elektronik.",
+                "3D Digital Flip Book": "Aplikasi untuk membaca buku digital dalam format 3D dengan efek halaman realistis.",
+                "Aplikasi Kelurahan": "Sistem digital untuk mengelola data penduduk dan pelayanan publik."
+            };
+
+            deskripsiInput.value = deskripsi[pilihan];
+            cekForm();
+        }
+
+        function cekForm() {
+            var nama = document.getElementById("nama").value.trim();
+            var profesi = document.getElementById("profesi").value.trim();
+            var alamat = document.getElementById("alamat").value.trim();
+            var jenisAplikasi = document.getElementById("jenisAplikasi").value;
+            var deskripsi = document.getElementById("deskripsi").value.trim();
+            var kirimBtn = document.getElementById("kirimBtn");
+
+            if (nama && profesi && alamat && jenisAplikasi && deskripsi) {
+                kirimBtn.classList.add("active");
+                kirimBtn.removeAttribute("disabled");
+            } else {
+                kirimBtn.classList.remove("active");
+                kirimBtn.setAttribute("disabled", "true");
+            }
+        }
+
+        function kirimPesanan() {
+            var nama = document.getElementById("nama").value;
+            var profesi = document.getElementById("profesi").value;
+            var alamat = document.getElementById("alamat").value;
+            var jenisAplikasi = document.getElementById("jenisAplikasi").value;
+            var deskripsi = document.getElementById("deskripsi").value;
+
+            var pesan = `*Pesanan Aplikasi*\n\n` +
+                `*Nama:* ${nama}\n` +
+                `*Profesi:* ${profesi}\n` +
+                `*Alamat:* ${alamat}\n` +
+                `*Jenis Aplikasi:* ${jenisAplikasi}\n` +
+                `*Deskripsi:* ${deskripsi}`;
+
+            var whatsappURL = `https://wa.me/6287803582510?text=${encodeURIComponent(pesan)}`;
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+</html>

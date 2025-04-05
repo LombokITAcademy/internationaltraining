@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+body::before {
+    content: "";
+    position: fixed; /* Tetap menutupi seluruh layar, tidak hanya dalam elemen */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Pastikan gambar selalu selebar layar */
+    height: 100vh; /* Pastikan gambar selalu setinggi layar */
+
+    /* Pastikan urutan background benar: Gambar dulu, lalu gradasi */
+    background: 
+        url('background/bgmateri.jpg') no-repeat center center, 
+        linear-gradient(120deg, #0033cc, #0088ff, #00aaff, #0066ff);
+
+    background-size: 100% 100%; /* Pastikan gambar mengisi seluruh area tanpa terpotong */
+    background-attachment: fixed; /* Agar gambar tetap diam saat scrolling */
+
+    z-index: -1; /* Pastikan ada di belakang semua elemen */
+    filter: blur(1px); /* Blur ringan */
+}
+
+        body {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                max-width: 480px;
+                margin: auto;
+                overflow-x: hidden;
+            }
+        
+        /* Efek blur pada judul */
+        .title-container {
+            background: rgba(242, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 10px 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animasi Shiver */
+@keyframes shiverEffect {
+    0% {
+        background-position: -200% 0;
+    }
+    50% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Efek Shiver pada Teks Judul */
+.title-container h1 {
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(50deg, 
+    transparent, 
+    #FFFFFF,    /* Bright Orange Red */
+    #ff0000,   /* Red */
+    Orange,   /* Orange */
+    rgb(255, 39, 0),   /* Tomato */
+    Orange,  /* Deep Pink */
+    Blue,  /* Blue Violet */
+    Orange,    /* Indigo */
+    rgba(0, 191, 255, 0.8),   /* Deep Sky Blue */
+    rgba(0, 0, 0, 0.3),   /* Blackish */
+    transparent
+);    background-size: 200% 100%;
+    animation: shiverEffect 10s infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* Agar teks tidak terlihat tanpa efek shiver */
+    font-weight: bold;
+    z-index: 2;
+}
+
+/* Bagian Background Judul */
+.title-container {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    padding: 10px 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 125px; /* Tambahkan jarak atas */
+}
+/* Background Blur pada Teks */
+p {
+    background: rgba(0, 0, 0, 0.3); /* Background blur transparan */
+    backdrop-filter: blur(5px);
+    padding: 5px 15px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+/* Animasi Pulsating pada Teks Saja */
+@keyframes pulsateText {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Terapkan Efek Pulsating pada Teks */
+p span {
+    display: inline-block;
+    animation: pulsateText 2s infinite;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+
+        h1 {
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            margin: 0;
+        }
+
+        p {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Container tombol dengan efek blur lebih elegan */
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 20px;
+            justify-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+        }
+        /* Animasi Shiver */
+@keyframes shiverEffect {
+    0% {
+        background-position: -200% 0;
+    }
+    50% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Efek Shiver pada Tombol */
+.menu-container button {
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-container button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    transition: all 0.5s;
+    z-index: 1;
+    pointer-events: none;
+    transform: skewX(-50deg);
+    background-size: 200% 100%;
+    animation: shiverEffect 7s infinite;
+}
+
+        /* Animasi tombol */
+        .menu-container button {
+            width: 100%;
+            height: 50px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.7s ease-in-out;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+
+        /* Warna dan Teks Khusus untuk Setiap Tombol */
+        .menu-container button:nth-child(1) {
+            background: linear-gradient(90deg, #FF5733, #FF8D1A); /* Orange */
+            color: #FFFFFF; /* Putih */
+        }
+        .menu-container button:nth-child(2) {
+            background: linear-gradient(90deg, #2F4F4F, #001F3F); /* Dark Blueish */
+            color: #FFFFFF; /* Hijau Tua */
+        }
+        .menu-container button:nth-child(3) {
+            background: linear-gradient(90deg, #3357FF, #1A8DFF); /* Biru */
+            color: #FFFFFF; /* Putih */
+        }
+        .menu-container button:nth-child(4) {
+            background: linear-gradient(90deg, #800080, #4B0082); /* Ungu */
+            color: #FFFFFF; /* Putih */
+        }
+        .menu-container button:nth-child(5) {
+        background: linear-gradient(90deg, #B8860B, #8B6508); /* Kuning Gelap */
+            color: #ffffff; /* Coklat Tua */
+        }
+        .menu-container button:nth-child(6) {
+            background: linear-gradient(90deg, #8D33FF, #1A33FF); /* Ungu */
+            color: #FFFFFF; /* Putih */
+        }
+        .menu-container button:nth-child(7) {
+            background: linear-gradient(90deg, #B22222, #8B0000); /* Merah Gelap */
+            color: #ffffff; /* Hijau Tua */
+        }
+
+        /* Efek Hover dan Animasi */
+        .menu-container button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Efek ketika tombol ditekan */
+        .menu-container button:active {
+            transform: scale(0.95);
+        }
+        /* Animasi Pulsating pada Tombol */
+@keyframes pulsateButton {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* Terapkan Efek Pulsating pada Semua Tombol */
+.menu-container button {
+    animation: pulsateButton 2s infinite;
+}
+        /* Atur Grid dengan 3 Kolom */
+.menu-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 10px;
+    margin-bottom: 100px;
+    justify-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+}
+
+/* Posisi Khusus untuk Tombol Grammar */
+.menu-container button:nth-child(7) {
+    grid-column: 2 / 3;  /* Kolom Tengah */
+    grid-row: 3;        /* Baris Ketiga */
+}
+
+</style>
+</head>
+<body>
+
+    <!-- Container dengan efek blur untuk judul -->
+    <div class="title-container">
+        <h1>Welcome <br>Language Learners</h1>
+    </div>
+    <p><span>Select a topic to continue:</span></p>
+
+
+    <!-- Container dengan background blur -->
+    <div class="menu-container">
+        <button onclick="navigateTo('1.listening')">إِستِمَاع<br>Listening</button>
+        <button onclick="navigateTo('2.speaking')">كلام<br>Speaking</button>
+        <button onclick="navigateTo('3.reading')">قراءة<br>Reading</button>
+        <button onclick="navigateTo('4.writing')">كتابة<br>Writing</button>
+        <button onclick="navigateTo('5.vocabulary')">مفردات<br>Vocabulary</button>
+        <button onclick="navigateTo('6.pronunciation')">النُّطْقُ<br>Pronunciation</button>
+        <button onclick="navigateTo('7.grammar')">النَّحْوُ وَالصَّرْفُ<br>Grammar</button>
+    </div>
+
+    <script>
+        function navigateTo(topic) {
+            window.location.href = topic + ".html";
+        }
+    </script>
+
+</body>
+</html>

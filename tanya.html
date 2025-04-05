@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kebijakan Privasi - My Edu-Preneurship</title>
+    <style>
+        /* Reset dan Pengaturan Dasar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: url('background/bgtanya.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.6);
+            z-index: -1;
+        }
+
+        /* Logo */
+        #logo {
+            width: 150px;
+            margin: 50px auto 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards, pulse 1.5s 1s infinite;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 1.5s;
+        }
+
+        .header {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* Accordion */
+       .accordion {
+           background: linear-gradient(90deg,  
+             #8b0000 0%,  
+             #e01010 40%,  
+             #ff4747 50%,  /* Titik tengah lebih cerah */
+             #e01010 60%,  
+             #8b0000 100%
+        );  
+            background-color: #e01010;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 14px;
+            transition: 0.4s;
+            margin-top: 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+
+        .accordion:hover {
+            background: linear-gradient(90deg, #2ecc71, #16a085);
+        }
+
+        .panel {
+            padding: 15px;
+            display: none;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: justify;
+        }
+
+        .panel ul {
+            padding-left: 20px;
+        }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            position: relative;
+            margin-top: 30px;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards 6s;
+        }
+
+        footer p {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        /* Animasi */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <img id="logo" src="background/logo.png" alt="Logo My Edu-Preneurship">
+
+   <div class="container">
+    <div class="header">TENTANG APLIKASI</div>
+
+    <button class="accordion">1. Apa itu program Edu-Preneurship?</button>
+    <div class="panel">
+        <p>Program <strong>Edu-Preneurship</strong> adalah inisiatif yang menggabungkan <strong>kewirausahaan</strong> dengan <strong>teknologi pendidikan</strong>. 
+        Program ini bertujuan membekali siswa dengan keterampilan bisnis serta inovasi digital untuk mendukung pembelajaran di sekolah.</p>
+    </div>
+
+    <button class="accordion">2. Apa manfaat dari program ini?</button>
+    <div class="panel">
+        <p>Program ini memberikan berbagai manfaat bagi siswa dan sekolah, di antaranya:</p>
+        <ul>
+            <li>Menumbuhkan jiwa <strong>wirausaha dan kepemimpinan</strong> sejak dini.</li>
+            <li>Mengasah <strong>kreativitas dan inovasi dalam teknologi pendidikan</strong>.</li>
+            <li>Belajar membangun <strong>platform digital berbasis pendidikan</strong>.</li>
+            <li>Mengembangkan aplikasi atau sistem berbasis teknologi untuk sekolah.</li>
+            <li>Menyiapkan siswa menghadapi <strong>era industri digital</strong>.</li>
+        </ul>
+    </div>
+
+    <button class="accordion">3. Siapa saja yang bisa mengikuti program ini?</button>
+    <div class="panel">
+        <p>Program ini terbuka untuk berbagai kalangan yang ingin mengembangkan keterampilan digital dan kewirausahaan, seperti:</p>
+        <ul>
+            <li><strong>Siswa</strong> yang tertarik dengan dunia bisnis dan teknologi.</li>
+            <li><strong>Guru</strong> yang ingin menerapkan pembelajaran berbasis teknologi di kelas.</li>
+            <li><strong>Sekolah</strong> yang ingin mengadopsi metode pembelajaran digital.</li>
+        </ul>
+    </div>
+
+    <button class="accordion">4. Inovasi berbasis teknologi apa yang dapat dikembangkan?</button>
+    <div class="panel">
+        <p>Berbagai inovasi digital dapat dikembangkan dalam program ini, seperti:</p>
+        <ul>
+            <li>Membangun <strong>website interaktif</strong> untuk pembelajaran.</li>
+            <li>Mengembangkan <strong>aplikasi edukasi berbasis Android/iOS</strong>.</li>
+            <li>Membuat <strong>platform e-learning</strong> yang dapat digunakan oleh sekolah.</li>
+            <li>Menggunakan <strong>Artificial Intelligence (AI)</strong> dalam media pembelajaran.</li>
+            <li>Mengelola <strong>channel edukasi di YouTube atau podcast pembelajaran</strong>.</li>
+        </ul>
+    </div>
+
+    <button class="accordion">5. Bagaimana cara sekolah menerapkan program ini?</button>
+    <div class="panel">
+        <p>Sekolah dapat mengintegrasikan program ini dengan cara:</p>
+        <ul>
+            <li>Menyediakan pelatihan dasar tentang <strong>wirausaha dan teknologi</strong> bagi siswa dan guru.</li>
+            <li>Menggabungkan <strong>pembelajaran digital</strong> dalam kurikulum sekolah.</li>
+            <li>Mendorong <strong>proyek berbasis teknologi</strong> dalam aktivitas belajar-mengajar.</li>
+            <li>Bekerja sama dengan <strong>mentor atau startup teknologi pendidikan</strong> untuk membimbing siswa.</li>
+        </ul>
+    </div>
+
+    <button class="accordion">6. Apakah program ini berbayar?</button>
+    <div class="panel">
+        <p>Program <strong>Edu-Preneurship</strong> <strong>tersedia secara gratis</strong> untuk sekolah dan siswa yang ingin berpartisipasi.</p>
+        <p>Namun, beberapa pelatihan lanjutan dan kelas eksklusif mungkin <strong>memerlukan biaya tambahan</strong> tergantung pada jenis materi yang dipilih.</p>
+    </div>
+
+   <button class="accordion">7. Apakah peserta mendapatkan sertifikat?</button>
+<div class="panel">
+    <p><strong>Ya!</strong> Peserta yang menyelesaikan program ini akan mendapatkan <strong>dua jenis sertifikat resmi</strong> sebagai bukti kompetensi dalam kewirausahaan berbasis teknologi, yaitu:</p><br>
+    <ul>
+        <li><strong>Sertifikat Nasional:</strong> Diakui secara nasional dan dapat digunakan untuk menambah nilai dalam dunia pendidikan dan pekerjaan di dalam negeri. Sertifikat akan diberikan oleh <strong>PT. Lombok International Training Center Academy.</strong><br></li>
+        <li><strong>Sertifikat Internasional:</strong> Dikeluarkan dengan standar global, memberikan peluang lebih luas bagi peserta dalam dunia profesional dan pendidikan internasional.Sertifikat akan diberikan oleh <strong>CEO Developer Lombok IT.</strong></li>
+    </ul><br>
+    <p>Kedua sertifikat ini ditandatangani langsung oleh <strong>CEO Developer Lombok IT</strong> sekaligus <strong>Direktur PT. Lombok International Training Center Academy</strong>, yang menjamin keabsahan dan kredibilitasnya.</p>
+    <p>Sertifikat ini dapat digunakan sebagai nilai tambah dalam <strong>portofolio akademik maupun karier</strong> di masa depan.</p>
+</div>
+
+    <button class="accordion">8. Bagaimana cara mendaftar?</button>
+    <div class="panel">
+        <p>Untuk mendaftar program <strong>Edu-Preneurship</strong>, ikuti langkah-langkah berikut:</p>
+        <ul>
+            <li>Kunjungi <strong>situs resmi</strong> program ini.</li>
+            <li>Pilih menu <strong>Pendaftaran</strong> dan isi formulir yang tersedia.</li>
+            <li>Ikuti proses verifikasi dan tunggu konfirmasi dari tim kami.</li>
+            <li>Mulai belajar dan <strong>jadilah bagian dari revolusi pendidikan digital!</strong></li>
+        </ul>
+    </div>
+</div>
+
+
+
+    <footer>
+        <p>© 2025 My Edu-Preneurship | Semua Hak Dilindungi.</p>
+    </footer>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        for (let i = 0; i < acc.length; i++) {
+            setTimeout(() => {
+                acc[i].style.opacity = "1";
+                acc[i].style.transform = "translateY(0)";
+            }, (i + 1) * 500 + 2000);
+        }
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                }
+                else {
+                    var panels = document.getElementsByClassName("panel");
+                    for (var j = 0; j < panels.length; j++) {
+                        panels[j].style.display = "none";
+                    }
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Edu-Preneurship</title>
+    <style>
+    /* Tombol Menu */
+    .drawer-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        font-size: 12px;
+        border-radius: 5px;
+        z-index: 100;
+    }
+
+    /* Drawer Sidebar */
+    .drawer {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        width: 250px;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        transition: left 0.3s;
+        z-index: 101;
+    }
+
+    /* Konten Drawer */
+    .drawer-content {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .drawer-logo {
+        width: 100px;
+        margin-bottom: 10px;
+    }
+
+    .drawer-slogan {
+        color: white;
+        font-style: italic;
+        margin-bottom: 15px;
+    }
+
+   .drawer button {
+    display: flex;
+    align-items: center; /* Sejajarkan gambar dan teks secara vertikal */
+    justify-content: flex-start;
+    width: 85%;
+    margin: 10px 0;
+    padding: 10px;
+    background: #fff;
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+    cursor: pointer;
+    gap: 10px; /* Jarak antara ikon dan teks */
+}
+
+.drawer button img {
+    width: 30px;
+    height: 30px;
+}
+
+
+    .drawer button:hover {
+        background: #0056b3;
+    }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #00c6ff, #0072ff);
+            color: #fff;
+            text-align: center;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            width: 100%;
+            height: 250px;
+        }
+        
+        header iframe {
+            width: 100%;
+            height: 100%;
+        }
+        /* Header dengan Autoslider */
+        
+        .header-slider {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            z-index: 10;
+            /* Pastikan slider ada di atas */
+        }
+        
+        .header-slider img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            opacity: 0;
+            transition: all 1s ease-in-out;
+        }
+        
+        .header-slider img.active {
+            left: 0;
+            opacity: 1;
+        }
+        /* Tombol Navigasi */
+        
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 25px;
+            height: 25px;
+            background: rgba(0, 26, 144, 0.7);
+            color: white;
+            border: none;
+            font-size: 15px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            border-radius: 50%;
+        }
+        
+        .nav-arrow:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .prev {
+            left: 10px;
+        }
+        
+        .next {
+            right: 10px;
+        }
+        
+        .logo {
+            width: 100px;
+            /* Lebar 50% dari elemen induknya */
+            height: 100px;
+            /* Tinggi 50% dari elemen induknya */
+            max-width: 275px;
+            /* Maksimum lebar tetap */
+            margin: 10px auto;
+            /* Perkecil margin atas dan bawah */
+            display: block;
+            /* Pastikan logo tidak berpengaruh pada elemen lain */
+        }
+        
+        @keyframes pulsate {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            /* Membesar sedikit */
+        }
+        
+        @keyframes colorMain {
+            0% {
+                color: #ff0000;
+                transform: scale(1);
+            }
+            /* Merah */
+            25% {
+                color: #ffffff;
+                transform: scale(1.1);
+            }
+            /* Putih */
+            50% {
+                color: #00ba08;
+                transform: scale(1);
+            }
+            /* Hijau */
+            75% {
+                color: #ffffff;
+                transform: scale(1.1);
+            }
+            /* Putih */
+            100% {
+                color: #ff0000;
+                transform: scale(1);
+            }
+            /* Kembali ke Merah */
+        }
+        
+        @keyframes colorMenu {
+            0% {
+                color: #ffffff;
+                transform: scale(1);
+            }
+            /* Putih */
+            25% {
+                color: #ff0000;
+                transform: scale(1.1);
+            }
+            /* Merah */
+            50% {
+                color: #eaff00;
+                transform: scale(1);
+            }
+            /* Kuning */
+            75% {
+                color: #ff0000;
+                transform: scale(1.1);
+            }
+            /* Merah */
+            100% {
+                color: #ffffff;
+                transform: scale(1);
+            }
+            /* Kembali ke Putih */
+        }
+        
+        @keyframes waveLetter {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+            /* Huruf naik turun */
+        }
+        
+        @keyframes glowEffect {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+            }
+            100% {
+                text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+            }
+        }
+        
+        .main-menu-title {
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            /* Beri jarak antar huruf */
+            margin-top: 10px;
+            /* Pastikan jaraknya cukup dari logo */
+            position: relative;
+            /* Jangan absolute agar mengikuti flow normal */
+            z-index: 3;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+        
+        .main-menu-title span {
+            display: inline-block;
+        }
+        /* Terapkan efek warna, wave, dan glow per huruf dengan delay berbeda */
+        
+        .main-menu-title .m {
+            animation: colorMain 3s infinite linear, waveLetter 1.5s infinite ease-in-out, glowEffect 1.5s infinite ease-in-out;
+        }
+        
+        .main-menu-title .a {
+            animation: colorMain 3s infinite linear, waveLetter 1.5s infinite ease-in-out 0.2s, glowEffect 1.5s infinite ease-in-out 0.2s;
+        }
+        
+        .main-menu-title .i {
+            animation: colorMain 3s infinite linear, waveLetter 1.5s infinite ease-in-out 0.4s, glowEffect 1.5s infinite ease-in-out 0.4s;
+        }
+        
+        .main-menu-title .n {
+            animation: colorMain 3s infinite linear, waveLetter 1.5s infinite ease-in-out 0.6s, glowEffect 1.5s infinite ease-in-out 0.6s;
+        }
+        
+        .main-menu-title .m2 {
+            animation: colorMenu 3s infinite linear, waveLetter 1.5s infinite ease-in-out 0.8s, glowEffect 1.5s infinite ease-in-out 0.8s;
+        }
+        
+        .main-menu-title .e {
+            animation: colorMenu 3s infinite linear, waveLetter 1.5s infinite ease-in-out 1s, glowEffect 1.5s infinite ease-in-out 1s;
+        }
+        
+        .main-menu-title .n2 {
+            animation: colorMenu 3s infinite linear, waveLetter 1.5s infinite ease-in-out 1.2s, glowEffect 1.5s infinite ease-in-out 1.2s;
+        }
+        
+        .main-menu-title .u {
+            animation: colorMenu 3s infinite linear, waveLetter 1.5s infinite ease-in-out 1.4s, glowEffect 1.5s infinite ease-in-out 1.4s;
+        }
+        
+        .refresh-icon {
+            width: 25px;
+            /* Sesuaikan ukuran */
+            height: auto;
+            cursor: pointer;
+            /* Tanda bisa diklik */
+            vertical-align: middle;
+            /* Posisikan sejajar dengan teks */
+            transition: transform 0.3s;
+        }
+        
+        .refresh-icon:hover {
+            transform: scale(1.2);
+            /* Efek membesar saat di-hover */
+        }
+        
+        #pull-to-refresh {
+            position: fixed;
+            top: -80px;
+            /* Awalnya tersembunyi di atas layar */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            /* Ubah ukuran lebar ikon */
+            height: 50px;
+            /* Ubah ukuran tinggi ikon */
+            transition: top 0.2s ease-out;
+            /* Animasi pergerakan */
+            z-index: 9999;
+        }
+        
+        #pull-to-refresh img {
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 900px;
+            margin: 10px auto;
+            /* Perkecil jarak antara logo dan tombol */
+            padding: 10px;
+            /* Perkecil padding juga jika diperlukan */
+        }
+        
+        .nav-buttons button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 65px;
+            background: linear-gradient(to right, #ffffff 70%, rgba(255, 255, 255, 0.7));
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #1e90ff;
+            transition: box-shadow 0.3s;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .nav-buttons button img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-buttons button:hover {
+            box-shadow: 0 0 15px #ffff00;
+        }
+        
+        footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 0px;
+            position: sticky;
+            /* Ganti fixed dengan sticky */
+            width: 100%;
+            bottom: 0;
+            /* Tetap di bawah */
+            left: 0;
+            z-index: 100;
+            /* Pastikan footer di atas elemen lainnya */
+            font-size: 12px;
+            /* Ukuran font footer yang lebih kecil */
+        }
+        
+        .animated-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            filter: brightness(50%); /* Sesuaikan nilai 0%-100% */
+        }
+
+
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .animated-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Media Query untuk layar yang lebih besar */
+        
+        @media (min-width: 768px) {
+            .animated-background video {
+                object-fit: cover;
+                /* Gunakan cover untuk layar desktop */
+            }
+            .nav-buttons button img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+       
+    <!-- Tombol untuk membuka drawer -->
+<button class="drawer-button" onclick="openDrawer()">☰ Menu</button>
+
+<!-- Drawer Sidebar -->
+<div id="drawer" class="drawer">
+    <div class="drawer-content">
+        <!-- Logo -->
+        <img src="images/Lombok IT/Lombokit1.png" alt="Logo" class="drawer-logo">
+        <!-- Slogan -->
+        <p class="drawer-slogan">"Jadikan Semua Lebih Mudah"</p>
+        
+       <!-- Menu -->
+<button onclick="location.href='tentang.html'">
+    <img src="images/Animated Icons/Info.gif" alt="Tentang Developer" width="25" height="25"/>
+    <span>Tentang<br>Developer Lombok IT</span>
+</button>
+<button onclick="location.href='playstore.html'">
+    <img src="images/Animated Icons/Playstore.gif" alt="Aplikasi Lombok IT" width="25" height="25"/>
+    <span>Aplikasi Lombok IT</span>
+</button>
+<button onclick="location.href='order.html'">
+    <img src="images/Animated Icons/Order.gif" alt="Pesan Aplikasi" width="25" height="25"/>
+    <span>Pesan Aplikasi</span>
+</button>
+<button onclick="location.href='channel.html'">
+    <img src="images/Animated Icons/YouTube.gif" alt="Channel YouTube" width="25" height="25"/>
+    <span>Channel YouTube</span>
+</button>
+
+    </div>
+</div>
+   
+    
+    <div id="pull-to-refresh"> <img src="images/Animated Icons/Refresh.gif" alt="Pull to Refresh"> </div>
+    
+<div class="animated-background">
+    <img src="background/background.jpg" alt="Background Image">
+</div>
+
+<!--
+    <div class="animated-background">
+        <video autoplay loop muted playsinline>
+            <source src="background/background.mp4" type="video/mp4"> Your browser does not support the video tag. </video>
+    </div>
+-->
+    
+    <div class="header-slider">
+        <button class="nav-arrow prev">&#10094;</button>
+        <button class="nav-arrow next">&#10095;</button> 
+        <img src="images/Banner/banner1.jpg" alt="Banner 1" class="active"> 
+        <img src="images/Banner/banner2.jpg" alt="Banner 2"> 
+        <img src="images/Banner/banner3.jpg" alt="Banner 3">
+        <img src="images/Banner/banner4.jpg" alt="Banner 4">
+        <img src="images/Banner/banner5.jpg" alt="Banner 5">
+        <img src="images/Banner/banner6.jpg" alt="Banner 6">
+        <img src="images/Banner/banner7.jpg" alt="Banner 7">
+        <img src="images/Banner/banner8.jpg" alt="Banner 8">
+        <img src="images/Banner/banner9.jpg" alt="Banner 9">
+        <img src="images/Banner/banner10.jpg" alt="Banner 10">
+        <img src="images/Banner/banner11.jpg" alt="Banner 11">
+        <img src="images/Banner/banner12.jpg" alt="Banner 12">
+        <img src="images/Banner/banner13.jpg" alt="Banner 13">
+        <img src="images/Banner/banner14.jpg" alt="Banner 14">
+   </div>
+    <iframe src="https://www.youtube.com/embed/kPaLdYFE1nQ?autoplay=1&loop=1&modestbranding=1&playlist=kPaLdYFE1nQ&rel=0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen title="Video Promosi" style="border: none;"> </iframe>
+    <!-- Logo di atas tombol menu --><img src="background/logo.png" alt="Logo My Edu-Preneurship" class="logo">
+    <!-- Judul di atas tombol menu -->
+    <div class="main-menu-title"> <span class="m">M</span> <span class="a">A</span> <span class="i">I</span> <span class="n">N</span> <img src="images/Animated Icons/Refresh.gif" alt="Refresh" class="refresh-icon" onclick="window.location.reload();"> <span class="m2">M</span> <span class="e">E</span> <span class="n2">N</span> <span class="u">U</span> </div>
+    <div class="nav-buttons">
+        <button onclick="location.href='profil.html'"> <img src="images/Animated Icons/Me.gif" alt="Academy" /> <span>My Profile</span> </button>
+        <button onclick="location.href='materi.html'"> <img src="images/Animated Icons/Materi.gif" alt="Academy" /> <span>English Classes</span> </button>
+        <button onclick="location.href='digilib.html'"> <img src="images/Animated Icons/PDF.gif" alt="Academy" /> <span>Perpustakaan Digital</span> </button>
+        <button onclick="location.href='presensi.html'"> <img src="images/Animated Icons/Presensi.gif" alt="Academy" /> <span>Presensi Online</span> </button>
+        <button onclick="location.href='onlineshop.html'"> <img src="images/Animated Icons/Online.gif" alt="Academy" /> <span>Online Shoping</span> </button>
+        <button onclick="location.href='tanya.html'"> <img src="images/Animated Icons/About.gif" alt="Academy" /> <span>Tentang Aplikasi</span> </button>
+        <button onclick="location.href='lisensi.html'"> <img src="images/Animated Icons/Patent.gif" alt="Academy" /> <span>Lisensi & Atribusi Aplikasi</span> </button>
+        <button onclick="location.href='policy.html'"> <img src="images/Animated Icons/Policy.gif" alt="Academy" /> <span>Kebijakan Privasi</span> </button>
+        <button class="center-button" onclick="location.href='tentang.html'"> <img src="images/Lombok IT/LOGO Lombok IT.gif" alt="Tentang" /><span>Tentang Lombok IT</span></button>
+    </div>
+    <!-- Footer -->
+    <footer> &copy; 2025 My Edu-Preneurship
+        <br /> Licensed By <b>Developer Lombok IT</b>
+        <br /> Coded With <b>SQAI</b> (Squirrel Artificial Intelligence) 
+        </footer>
+    
+    <script>
+        function hideSplash() {
+    localStorage.setItem("splashShown", "true");
+    document.getElementById("splashScreen").classList.add("hidden");
+}
+
+        function enterWebsite() {
+            document.getElementById("splashScreen").classList.add("hidden");
+            setTimeout(() => {
+                document.getElementById("splashScreen").style.display = "none";
+                document.getElementById("mainContent").style.display = "block";
+            }, 1000);
+        }
+        
+        function openDrawer() {
+        const drawer = document.getElementById("drawer");
+        if (drawer.style.left === "0px") {
+            drawer.style.left = "-250px";
+        } else {
+            drawer.style.left = "0px";
+        }
+    }
+
+    // Tutup drawer saat klik di luar area
+    document.addEventListener("click", function(event) {
+        const drawer = document.getElementById("drawer");
+        const button = document.querySelector(".drawer-button");
+        if (!drawer.contains(event.target) && !button.contains(event.target)) {
+            drawer.style.left = "-250px";
+        }
+    });
+        
+        let startY = 0;
+        let isRefreshing = false;
+        const refreshIcon = document.getElementById("pull-to-refresh");
+        document.addEventListener("touchstart", (e) => {
+            if (window.scrollY === 0) { // Pastikan hanya bekerja di atas halaman
+                startY = e.touches[0].clientY;
+            }
+        });
+        document.addEventListener("touchmove", (e) => {
+            if (window.scrollY !== 0) return; // Hanya aktif saat di atas halaman
+            let currentY = e.touches[0].clientY;
+            let distance = currentY - startY;
+            if (distance > 30) { // Jika tarik lebih dari 30px, mulai muncul
+                refreshIcon.style.top = Math.min(distance - 50, 150) + "px";
+            }
+            if (distance > 120) { // Jika tarik lebih dari 120px, ubah warna jadi siap refresh
+                refreshIcon.style.opacity = "1";
+            }
+        });
+        document.addEventListener("touchend", () => {
+            if (parseInt(refreshIcon.style.top) > 100 && !isRefreshing) {
+                isRefreshing = true;
+                refreshIcon.style.top = "100px"; // Biarkan di tengah sebentar
+                setTimeout(() => {
+                    window.location.reload(); // Refresh setelah jeda
+                }, 500);
+            }
+            else {
+                refreshIcon.style.top = "-100px"; // Sembunyikan kembali jika tidak cukup jauh
+            }
+        });
+        const images = document.querySelectorAll(".header-slider img");
+        const prevButton = document.querySelector(".prev");
+        const nextButton = document.querySelector(".next");
+        let currentIndex = 0;
+        let autoSlide;
+
+        function changeBanner(next = true) {
+            images[currentIndex].classList.remove("active");
+            if (next) {
+                currentIndex = (currentIndex + 1) % images.length; // Geser ke kanan
+            }
+            else {
+                currentIndex = (currentIndex - 1 + images.length) % images.length; // Geser ke kiri
+            }
+            images[currentIndex].classList.add("active");
+        }
+
+        function startAutoSlide() {
+            autoSlide = setInterval(() => changeBanner(true), 3000); // Ubah otomatis setiap 2 detik
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlide);
+            startAutoSlide();
+        }
+        // Event listener untuk tombol navigasi
+        prevButton.addEventListener("click", () => {
+            changeBanner(false);
+            resetAutoSlide();
+        });
+        nextButton.addEventListener("click", () => {
+            changeBanner(true);
+            resetAutoSlide();
+        });
+        // Swipe gesture support untuk perangkat touchscreen
+        let touchStartX = 0;
+        let touchEndX = 0;
+        document.querySelector(".header-slider").addEventListener("touchstart", (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+        document.querySelector(".header-slider").addEventListener("touchend", (e) => {
+            touchEndX = e.changedTouches[0].clientX;
+            if (touchStartX > touchEndX + 50) {
+                changeBanner(true); // Swipe kiri ke kanan
+            }
+            else if (touchStartX < touchEndX - 50) {
+                changeBanner(false); // Swipe kanan ke kiri
+            }
+            resetAutoSlide();
+        });
+        images[currentIndex].classList.add("active");
+        startAutoSlide();
+        
+        window.addEventListener("DOMContentLoaded", () => {
+    const splashShown = localStorage.getItem("splashShown");
+
+    if (splashShown === "true") {
+        document.getElementById("splashScreen").classList.add("hidden");
+    } else {
+        document.getElementById("splashScreen").classList.remove("hidden");
+    }
+});
+
+    </script>
+</body>
+
+</html>

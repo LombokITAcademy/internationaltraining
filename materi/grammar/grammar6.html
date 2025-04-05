@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Quiz</title>
+  <style>
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+	
+/* Gunakan border-box pada semua elemen */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/* Atur ulang lebar body agar tidak menambah lebar total */
+body {
+    padding: 20px;
+	}
+.input-container {
+    margin-bottom: 20px;
+    }
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+
+.input-container input {
+     width: 100%;
+     padding: 8px;
+     margin-bottom: 10px;
+    }
+
+.question-container {
+     margin-bottom: 20px;
+    }
+
+.question {
+    font-weight: bold;
+    }
+
+    .options {
+    display: flex;
+    flex-direction: column; /* Pastikan setiap opsi tetap dalam barisnya sendiri */
+    gap: 5px; /* Beri sedikit jarak antar opsi */
+}
+    
+/* Pastikan opsi jawaban sejajar */
+.options label {
+    display: flex;
+    align-items: center; /* Pastikan radio button sejajar dengan teks */
+    gap: 10px;
+    width: 100%;
+}
+
+..options input[type="radio"] {
+    margin: 0;
+    flex-shrink: 0; /* Pastikan ukuran radio button tidak berubah */
+}
+
+/* Pastikan opsi jawaban turun ke baris baru dengan titik sejajar */
+.option-text {
+    display: grid;
+    grid-template-columns: 25px auto; /* Kolom pertama untuk "A.", kedua untuk teks */
+}
+
+.option-text span:first-child {
+    font-weight: bold;
+    width: 25px;
+}
+
+.option-text span:last-child {
+    text-indent: -25px;
+    padding-left: 25px;
+    word-wrap: break-word;
+}
+    
+/* Passage tetap terlihat, hanya teksnya yang disembunyikan */
+.passage-container {
+    text-align: justify;
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9; /* Background tetap ada */
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    z-index: 10;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* MODIFIKASI FONT UNTUK PASSAGENYA (Ubah Sesuai Kebutuhan)*/
+.passage-text {
+    display: none;
+    font-size: 14px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+}
+
+/* Style tombol */
+.toggle-btn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    bottom: 10px;
+    z-index: 20;
+    }
+
+/* Tombol Baca & Tutup Teksnya */
+.toggle-btn button {
+     padding: 10px 15px;
+     border: none;
+     border-radius: 5px;
+     font-size: 13px;
+     cursor: pointer;
+     font-weight: bold;
+    }
+
+/* MODIFIKASI WARNA TOMBOL BACA TEKSNYA */
+.read-btn {
+    background-color: green;
+    color: white;
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL BACA TEKSNYA  */
+.read-btn:hover {
+     background-color: darkgreen;
+    }
+
+/* MODIFIKASI WARNA TOMBOL TUTUP TEKSNYA */
+.close-btn {
+     background-color: red;
+     color: white;
+     display: none; /* Disembunyikan saat awal */
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL TUTUP TEKSNYA */
+.close-btn:hover {
+    background-color: darkred;
+    }
+	
+/* MODIFIKASI FONT UNTUK PASSAGENYA */
+#passage {
+	font-family: Arial, sans-serif;
+	font-size: 13px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+	color: #333;         /* Warna teks lebih lembut untuk mata */
+	}
+
+.quiz-wrapper {
+    background: rgba(255, 255, 255, 0.85); /* Warna solid putih dengan transparansi */
+    padding: 20px 10px; /* Padding atas-bawah 20px, kiri-kanan 10px */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: calc(100% - 10px); /* Lebar penuh dikurangi padding kiri-kanan */
+    margin: 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+	}
+	
+/* MODIFIKASI FONT UNTUK SOAL QUIZNYA (Ubah Sesuai Kebutuhunan)*/
+.quiz-wrapper {
+	font-family: Arial, sans-serif;
+	font-size: 12px;     /* Ukuran font lebih kecil dan rapi */
+	line-height: 1;
+	color: #444;         /* Sedikit lebih gelap dari passage untuk kontras */
+	}
+
+/* MODIFIKASI TOMBOL NON-AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn {
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 14px;
+	cursor: not-allowed;
+	display: block;
+	margin: 20px auto;  /* Posisikan di tengah dengan margin atas-bawah */
+	}
+    
+/* MODIFIKASI TOMBOL AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn.active {
+	background-color: green;
+	cursor: pointer;
+    }
+    
+:root {
+	--bg-transparency: 0.5;  /* Transparansi background (0 - 1) */
+	--border-radius: 5px;     /* Round corner */
+	}
+
+.transparent-bg {
+    background-color: rgba(255, 255, 255, var(--bg-transparency));
+    display: flex;
+    justify-content: center; /* Pusatkan horizontal */
+    align-items: center; /* Pusatkan vertikal jika diperlukan */
+    text-align: center;
+    padding: 2px 10px; /* Persempit padding atas dan bawah */
+    border-radius: var(--border-radius);
+    margin-top: 0px;  /* Atur jarak atas */
+    margin-bottom: 0px; /* Atur jarak bawah */
+    }
+    
+.centered-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.5); /* Transparansi */
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	max-width: 500px; /* Atur lebar agar tidak terlalu besar */
+	margin: 20px auto; /* Tengah dengan jarak atas & bawah */
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+	}
+    
+#user-info {
+	padding: 0 5px; /* Padding kiri dan kanan 5px, atas-bawah 0 */
+	box-sizing: border-box;
+	}
+
+#user-info input {
+	width: 100%;
+	padding: 8px; /* Padding sama dengan input lainnya */
+	box-sizing: border-box;
+	}
+
+/* MODIFIKASI KOLOM ISIAN DATA SISWA (Ubah Sesuai Kebutuhunan)*/
+.user-info-wrapper {
+	background: rgba(255, 255, 255, 0.6); /* Background putih transparan */
+	border-radius: 10px;  /* Sudut melengkung */
+	padding: 15px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan lembut */
+	max-width: 400px;
+	margin: 0 auto 20px;  /* Tengah dan jarak bawah */
+	box-sizing: border-box;
+	}
+   </style>
+</head>
+
+<body>
+  <div class="centered-container">
+    <h1 class="transparent-bg">English Quiz</h1>
+    <h2 class="transparent-bg">By Mr. Alfan</h2>
+    <p class="transparent-bg">Fill in your details and answer the questions:</p>
+  </div>
+
+  <form id="quiz-form">
+  <div class="user-info-wrapper">
+    <div id="user-info" class="input-container">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name">
+      <label for="class">Class:</label>
+      <input type="text" id="class" placeholder="Enter your class">
+      <label for="student-id">Student Number:</label>
+      <input type="text" id="student-id" placeholder="Enter your student number">
+      <label for="school">School Name:</label>
+      <input type="text" id="school" placeholder="Enter your school name">
+    </div>
+  </div>
+
+<!-- Container for Passage & Quiz: Future Perfect Tense in English -->
+<div id="container-grammar16" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-grammar16">
+        <h4 class="transparent-bg">Grammar 16: Future Perfect Tense in English</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('grammar16', true)">Read Text (for questions 1-10)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('grammar16', false)" style="display: none;">Close Text (for questions 1-10)</button>
+        </div>
+        <p id="passage-grammar16" class="passage-text" style="display: none;">
+            The **Future Perfect Tense** is used to describe an action that will be completed before a certain point in the future.  
+            It is formed using **will have + past participle**.  
+            Example: "By next year, she **will have graduated** from university." / "They **will have finished** the project by tomorrow evening."  
+            The negative form is made using **will not (won’t) have + past participle**.  
+            Example: "He **won’t have completed** the book by then."  
+            Questions are formed using **Will + subject + have + past participle?**  
+            Example: "Will you have finished your work by 5 PM?"
+        </p>
+    </div>
+
+    <!-- Quiz: Future Perfect Tense -->
+    <div id="quiz-grammar16" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Future Perfect Tense in English</h3><br>
+
+        <!-- Question 1 -->
+        <div class="question-container">
+            <div class="question">1. Which sentence is in the Future Perfect Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A. She is studying now."> A. She is studying now.</label>
+                <label><input type="radio" name="q1" value="B. They will have finished their work by noon."> B. They will have finished their work by noon.</label>
+                <label><input type="radio" name="q1" value="C. He ate dinner already."> C. He ate dinner already.</label>
+                <label><input type="radio" name="q1" value="D. We go to the gym every day."> D. We go to the gym every day.</label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-container">
+            <div class="question">2. How is the Future Perfect Tense formed?</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A. Will be + verb-ing"> A. Will be + verb-ing</label>
+                <label><input type="radio" name="q2" value="B. Will have + past participle"> B. Will have + past participle</label>
+                <label><input type="radio" name="q2" value="C. Had + past participle"> C. Had + past participle</label>
+                <label><input type="radio" name="q2" value="D. Has/Have + past participle"> D. Has/Have + past participle</label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-container">
+            <div class="question">3. Choose the correct negative form of Future Perfect Tense:</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A. She won’t have finished the report by noon."> A. She won’t have finished the report by noon.</label>
+                <label><input type="radio" name="q3" value="B. She don’t have finished the report by noon."> B. She don’t have finished the report by noon.</label>
+                <label><input type="radio" name="q3" value="C. She didn’t have finished the report by noon."> C. She didn’t have finished the report by noon.</label>
+                <label><input type="radio" name="q3" value="D. She not will have finished the report by noon."> D. She not will have finished the report by noon.</label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-container">
+            <div class="question">4. Which sentence correctly forms a question in Future Perfect Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A. Will they have completed the assignment by tomorrow?"> A. Will they have completed the assignment by tomorrow?</label>
+                <label><input type="radio" name="q4" value="B. Does they will have completed the assignment by tomorrow?"> B. Does they will have completed the assignment by tomorrow?</label>
+                <label><input type="radio" name="q4" value="C. They will have completed the assignment by tomorrow?"> C. They will have completed the assignment by tomorrow?</label>
+                <label><input type="radio" name="q4" value="D. Will they completes the assignment by tomorrow?"> D. Will they completes the assignment by tomorrow?</label>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-container">
+            <div class="question">5. What is the correct Future Perfect form of "She (finish) her homework by 8 PM"?</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A. She will have finished."> A. She will have finished.</label>
+                <label><input type="radio" name="q5" value="B. She will has finished."> B. She will has finished.</label>
+                <label><input type="radio" name="q5" value="C. She will finished."> C. She will finished.</label>
+                <label><input type="radio" name="q5" value="D. She will be finished."> D. She will be finished.</label>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-container">
+            <div class="question">6. What is the function of Future Perfect Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="A. To describe an action that will be completed before a specific time in the future."> A. To describe an action that will be completed before a specific time in the future.</label>
+                <label><input type="radio" name="q6" value="B. To talk about a past habit."> B. To talk about a past habit.</label>
+                <label><input type="radio" name="q6" value="C. To describe an ongoing action in the future."> C. To describe an ongoing action in the future.</label>
+                <label><input type="radio" name="q6" value="D. To express past activities."> D. To express past activities.</label>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-container">
+            <div class="question">7. By the time you arrive, we ______ (leave) the station.</div>
+            <div class="options">
+                <label><input type="radio" name="q7" value="A. will have left"> A. will have left</label>
+                <label><input type="radio" name="q7" value="B. will left"> B. will left</label>
+            </div>
+        </div>
+        
+               <!-- Question 8 -->
+        <div class="question-container">
+            <div class="question">8. By 2025, they ______ (build) a new shopping mall in this area.</div>
+            <div class="options">
+                <label><input type="radio" name="q8" value="A. will have built"> A. will have built</label>
+                <label><input type="radio" name="q8" value="B. will has built"> B. will has built</label>
+                <label><input type="radio" name="q8" value="C. will be building"> C. will be building</label>
+                <label><input type="radio" name="q8" value="D. will built"> D. will built</label>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-container">
+            <div class="question">9. Choose the correct sentence in Future Perfect Tense.</div>
+            <div class="options">
+                <label><input type="radio" name="q9" value="A. She will have wrote the report by then."> A. She will have wrote the report by then.</label>
+                <label><input type="radio" name="q9" value="B. She will have written the report by then."> B. She will have written the report by then.</label>
+                <label><input type="radio" name="q9" value="C. She will written the report by then."> C. She will written the report by then.</label>
+                <label><input type="radio" name="q9" value="D. She have written the report by then."> D. She have written the report by then.</label>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-container">
+            <div class="question">10. What is the negative form of this sentence: "By next summer, they will have moved to a new house."?</div>
+            <div class="options">
+                <label><input type="radio" name="q10" value="A. By next summer, they will haven’t moved to a new house."> A. By next summer, they will haven’t moved to a new house.</label>
+                <label><input type="radio" name="q10" value="B. By next summer, they won’t have moved to a new house."> B. By next summer, they won’t have moved to a new house.</label>
+                <label><input type="radio" name="q10" value="C. By next summer, they not will have moved to a new house."> C. By next summer, they not will have moved to a new house.</label>
+                <label><input type="radio" name="q10" value="D. By next summer, they haven’t will moved to a new house."> D. By next summer, they haven’t will moved to a new house.</label>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<!-- Container for Passage & Quiz: Future Perfect Continuous Tense in English -->
+<div id="container-grammar17" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-grammar17">
+        <h4 class="transparent-bg">Grammar 17: Future Perfect Continuous Tense in English</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('grammar17', true)">Read Text (for questions 11-20)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('grammar17', false)" style="display: none;">Close Text (for questions 11-20)</button>
+        </div>
+        <p id="passage-grammar17" class="passage-text" style="display: none;">
+            The **Future Perfect Continuous Tense** is used to describe an action that will have been happening for a period of time before a specific point in the future.  
+            It is formed using **will have been + verb-ing**.  
+            Example: "By next month, she **will have been working** at the company for five years." / "They **will have been traveling** for 10 hours by midnight."  
+            The negative form is made using **will not (won’t) have been + verb-ing**.  
+            Example: "He **won’t have been studying** long enough to take the test."  
+            Questions are formed using **Will + subject + have been + verb-ing?**  
+            Example: "Will you have been living in this city for 10 years by next year?"
+        </p>
+    </div>
+
+    <!-- Quiz: Future Perfect Continuous Tense -->
+    <div id="quiz-grammar17" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Future Perfect Continuous Tense in English</h3><br>
+
+        <!-- Question 11 -->
+        <div class="question-container">
+            <div class="question">11. Which sentence is in the Future Perfect Continuous Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q11" value="A. She will have finished her homework."> A. She will have finished her homework.</label>
+                <label><input type="radio" name="q11" value="B. They will have been studying for three hours."> B. They will have been studying for three hours.</label>
+                <label><input type="radio" name="q11" value="C. He is working right now."> C. He is working right now.</label>
+                <label><input type="radio" name="q11" value="D. We go to school every day."> D. We go to school every day.</label>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-container">
+            <div class="question">12. How is the Future Perfect Continuous Tense formed?</div>
+            <div class="options">
+                <label><input type="radio" name="q12" value="A. Will have + past participle"> A. Will have + past participle</label>
+                <label><input type="radio" name="q12" value="B. Will be + verb-ing"> B. Will be + verb-ing</label>
+                <label><input type="radio" name="q12" value="C. Will have been + verb-ing"> C. Will have been + verb-ing</label>
+                <label><input type="radio" name="q12" value="D. Has been + verb-ing"> D. Has been + verb-ing</label>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-container">
+            <div class="question">13. Choose the correct negative form of Future Perfect Continuous Tense:</div>
+            <div class="options">
+                <label><input type="radio" name="q13" value="A. He won’t have been waiting for too long."> A. He won’t have been waiting for too long.</label>
+                <label><input type="radio" name="q13" value="B. He don’t have been waiting for too long."> B. He don’t have been waiting for too long.</label>
+                <label><input type="radio" name="q13" value="C. He didn’t have been waiting for too long."> C. He didn’t have been waiting for too long.</label>
+                <label><input type="radio" name="q13" value="D. He not will have been waiting for too long."> D. He not will have been waiting for too long.</label>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-container">
+            <div class="question">14. Which sentence correctly forms a question in Future Perfect Continuous Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q14" value="A. Will she have been studying for three hours?"> A. Will she have been studying for three hours?</label>
+                <label><input type="radio" name="q14" value="B. Does she will have been studying for three hours?"> B. Does she will have been studying for three hours?</label>
+                <label><input type="radio" name="q14" value="C. She will have been studying for three hours?"> C. She will have been studying for three hours?</label>
+                <label><input type="radio" name="q14" value="D. Will she has been studying for three hours?"> D. Will she has been studying for three hours?</label>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-container">
+            <div class="question">15. What is the correct Future Perfect Continuous form of "They (work) on the project for five hours by noon"?</div>
+            <div class="options">
+                <label><input type="radio" name="q15" value="A. They will have been working."> A. They will have been working.</label>
+                <label><input type="radio" name="q15" value="B. They will has been working."> B. They will has been working.</label>
+                <label><input type="radio" name="q15" value="C. They will have working."> C. They will have working.</label>
+                <label><input type="radio" name="q15" value="D. They have been working."> D. They have been working.</label>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-container">
+            <div class="question">16. By next year, he ______ (study) in this university for four years.</div>
+            <div class="options">
+                <label><input type="radio" name="q16" value="A. will have been studying"> A. will have been studying</label>
+                <label><input type="radio" name="q16" value="B. will be studying"> B. will be studying</label>
+                <label><input type="radio" name="q16" value="C. has been studying"> C. has been studying</label>
+                <label><input type="radio" name="q16" value="D. will has been studying"> D. will has been studying</label>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-container">
+            <div class="question">17. Choose the correct sentence in Future Perfect Continuous Tense.</div>
+            <div class="options">
+                <label><input type="radio" name="q17" value="A. She will have been writing the book for six months."> A. She will have been writing the book for six months.</label>
+                <label><input type="radio" name="q17" value="B. She will has been writing the book for six months."> B. She will has been writing the book for six months.</label>
+            </div>
+        </div>
+        
+        <!-- Question 18 -->
+        <div class="question-container">
+            <div class="question">18. By the time you arrive, we ______ (wait) for two hours.</div>
+            <div class="options">
+                <label><input type="radio" name="q18" value="A. will have been waiting"> A. will have been waiting</label>
+                <label><input type="radio" name="q18" value="B. will be waiting"> B. will be waiting</label>
+                <label><input type="radio" name="q18" value="C. will have waited"> C. will have waited</label>
+                <label><input type="radio" name="q18" value="D. have been waiting"> D. have been waiting</label>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-container">
+            <div class="question">19. Choose the correct sentence in Future Perfect Continuous Tense.</div>
+            <div class="options">
+                <label><input type="radio" name="q19" value="A. They will have been playing soccer for three hours."> A. They will have been playing soccer for three hours.</label>
+                <label><input type="radio" name="q19" value="B. They will been playing soccer for three hours."> B. They will been playing soccer for three hours.</label>
+                <label><input type="radio" name="q19" value="C. They have been playing soccer for three hours."> C. They have been playing soccer for three hours.</label>
+                <label><input type="radio" name="q19" value="D. They will has been playing soccer for three hours."> D. They will has been playing soccer for three hours.</label>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question-container">
+            <div class="question">20. What is the negative form of this sentence: "By next year, she will have been teaching for 10 years."?</div>
+            <div class="options">
+                <label><input type="radio" name="q20" value="A. By next year, she won’t have been teaching for 10 years."> A. By next year, she won’t have been teaching for 10 years.</label>
+                <label><input type="radio" name="q20" value="B. By next year, she will not has been teaching for 10 years."> B. By next year, she will not has been teaching for 10 years.</label>
+                <label><input type="radio" name="q20" value="C. By next year, she haven’t will been teaching for 10 years."> C. By next year, she haven’t will been teaching for 10 years.</label>
+                <label><input type="radio" name="q20" value="D. By next year, she will been not teaching for 10 years."> D. By next year, she will been not teaching for 10 years.</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container for Passage & Quiz: Simple Past Future Tense in English -->
+<div id="container-grammar18" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-grammar18">
+        <h4 class="transparent-bg">Grammar 18: Simple Past Future Tense in English</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('grammar18', true)">Read Text (for questions 21-30)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('grammar18', false)" style="display: none;">Close Text (for questions 21-30)</button>
+        </div>
+        <p id="passage-grammar18" class="passage-text" style="display: none;">
+            The **Simple Past Future Tense** is used to describe an action that was intended or planned to happen in the future from a past perspective.  
+            It is commonly used in indirect speech, reported speech, or conditional sentences.  
+            It is formed using **would + base verb** or **was/were going to + base verb**.  
+            Example: "She said she **would visit** her grandmother the next day." / "They **were going to travel** to Paris, but they changed their minds."  
+            The negative form is made using **would not (wouldn’t) + base verb** or **was/were not going to + base verb**.  
+            Example: "He said he **wouldn’t buy** a new car." / "She **wasn’t going to attend** the meeting."  
+            Questions are formed using **Would + subject + base verb?**  
+            Example: "Would he call you later?" / "Was she going to join the event?"
+        </p>
+    </div>
+
+    <!-- Quiz: Simple Past Future Tense -->
+    <div id="quiz-grammar18" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Simple Past Future Tense in English</h3><br>
+
+        <!-- Question 21 -->
+        <div class="question-container">
+            <div class="question">21. Which sentence is in the Simple Past Future Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q21" value="A. She will travel next week."> A. She will travel next week.</label>
+                <label><input type="radio" name="q21" value="B. He said he would call me."> B. He said he would call me.</label>
+                <label><input type="radio" name="q21" value="C. They are going to the mall."> C. They are going to the mall.</label>
+                <label><input type="radio" name="q21" value="D. We went to the park."> D. We went to the park.</label>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question-container">
+            <div class="question">22. How is the Simple Past Future Tense formed?</div>
+            <div class="options">
+                <label><input type="radio" name="q22" value="A. Would + base verb / Was/Were going to + base verb"> A. Would + base verb / Was/Were going to + base verb</label>
+                <label><input type="radio" name="q22" value="B. Will be + verb-ing"> B. Will be + verb-ing</label>
+                <label><input type="radio" name="q22" value="C. Has/Have + past participle"> C. Has/Have + past participle</label>
+                <label><input type="radio" name="q22" value="D. Had + past participle"> D. Had + past participle</label>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question-container">
+            <div class="question">23. Choose the correct negative form of Simple Past Future Tense:</div>
+            <div class="options">
+                <label><input type="radio" name="q23" value="A. He wouldn’t join the meeting."> A. He wouldn’t join the meeting.</label>
+                <label><input type="radio" name="q23" value="B. He don’t join the meeting."> B. He don’t join the meeting.</label>
+                <label><input type="radio" name="q23" value="C. He didn’t will join the meeting."> C. He didn’t will join the meeting.</label>
+                <label><input type="radio" name="q23" value="D. He not would join the meeting."> D. He not would join the meeting.</label>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question-container">
+            <div class="question">24. Which sentence correctly forms a question in Simple Past Future Tense?</div>
+            <div class="options">
+                <label><input type="radio" name="q24" value="A. Would she attend the party?"> A. Would she attend the party?</label>
+                <label><input type="radio" name="q24" value="B. Did she would attend the party?"> B. Did she would attend the party?</label>
+                <label><input type="radio" name="q24" value="C. She would attend the party?"> C. She would attend the party?</label>
+                <label><input type="radio" name="q24" value="D. Will she attended the party?"> D. Will she attended the party?</label>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question-container">
+            <div class="question">25. What is the correct Simple Past Future form of "They (buy) a new house next year" in reported speech?</div>
+            <div class="options">
+                <label><input type="radio" name="q25" value="A. They would buy a new house."> A. They would buy a new house.</label>
+                <label><input type="radio" name="q25" value="B. They will buy a new house."> B. They will buy a new house.</label>
+                <label><input type="radio" name="q25" value="C. They would bought a new house."> C. They would bought a new house.</label>
+                <label><input type="radio" name="q25" value="D. They were going to buying a new house."> D. They were going to buying a new house.</label>
+            </div>
+        </div>
+
+        <!-- Question 26-30 -->
+        <div class="question-container">
+            <div class="question">26. By that time, they ______ (move) to a new apartment.</div>
+            <div class="options">
+                <label><input type="radio" name="q26" value="A. would move"> A. would move</label>
+                <label><input type="radio" name="q26" value="B. would moved"> B. would moved</label>
+            </div>
+        </div>
+
+        <div class="question-container">
+            <div class="question">27. He said he ______ (help) me with my assignment.</div>
+            <div class="options">
+                <label><input type="radio" name="q27" value="A. would help"> A. would help</label>
+                <label><input type="radio" name="q27" value="B. will help"> B. will help</label>
+            </div>
+        </div>
+        
+         <!-- Question 28 -->
+        <div class="question-container">
+            <div class="question">28. She said she ______ (call) me later.</div>
+            <div class="options">
+                <label><input type="radio" name="q28" value="A. would call"> A. would call</label>
+                <label><input type="radio" name="q28" value="B. will call"> B. will call</label>
+                <label><input type="radio" name="q28" value="C. was call"> C. was call</label>
+                <label><input type="radio" name="q28" value="D. would called"> D. would called</label>
+            </div>
+        </div>
+
+        <!-- Question 29 -->
+        <div class="question-container">
+            <div class="question">29. Choose the correct sentence in Simple Past Future Tense.</div>
+            <div class="options">
+                <label><input type="radio" name="q29" value="A. He would finish the project by Monday."> A. He would finish the project by Monday.</label>
+                <label><input type="radio" name="q29" value="B. He will finish the project by Monday."> B. He will finish the project by Monday.</label>
+                <label><input type="radio" name="q29" value="C. He has finished the project by Monday."> C. He has finished the project by Monday.</label>
+                <label><input type="radio" name="q29" value="D. He would finished the project by Monday."> D. He would finished the project by Monday.</label>
+            </div>
+        </div>
+
+        <!-- Question 30 -->
+        <div class="question-container">
+            <div class="question">30. What is the negative form of this sentence: "She said she would meet us at the café."?</div>
+            <div class="options">
+                <label><input type="radio" name="q30" value="A. She said she wouldn’t meet us at the café."> A. She said she wouldn’t meet us at the café.</label>
+                <label><input type="radio" name="q30" value="B. She said she not would meet us at the café."> B. She said she not would meet us at the café.</label>
+                <label><input type="radio" name="q30" value="C. She said she don’t meet us at the café."> C. She said she don’t meet us at the café.</label>
+                <label><input type="radio" name="q30" value="D. She said she didn’t would meet us at the café."> D. She said she didn’t would meet us at the café.</label>
+            </div>
+        </div>
+    </div>
+</div>
+	
+		<!-- Submit Button -->
+    <button id="submit-btn" type="button" onclick="submitQuiz()" disabled>Submit Answers</button>
+  </form>
+
+  <script>
+   function togglePassage(passage, show) {
+    const container = document.getElementById(`container-${passage}`);
+    const passageText = document.getElementById(`passage-${passage}`);
+    const quizSection = document.getElementById(`quiz-${passage}`);
+    const readBtn = document.querySelector(`#passage-container-${passage} .read-btn`);
+    const closeBtn = document.querySelector(`#passage-container-${passage} .close-btn`);
+
+    if (show) {
+        passageText.style.display = "block";  // Tampilkan teks passage
+        quizSection.style.display = "block";  // Tampilkan soal
+        readBtn.style.display = "none";       // Sembunyikan tombol Read Text
+        closeBtn.style.display = "inline-block"; // Tampilkan tombol Close Text
+
+// Pastikan passage tetap sticky saat dibuka
+        document.getElementById(`passage-container-${passage}`).style.position = "sticky";
+        document.getElementById(`passage-container-${passage}`).style.top = "0";
+    } else {
+        passageText.style.display = "none";  // Sembunyikan teks passage
+        quizSection.style.display = "none";  // Sembunyikan soal
+        readBtn.style.display = "inline-block";  // Munculkan kembali tombol Read Text
+        closeBtn.style.display = "none";    // Sembunyikan tombol Close Text
+
+// Kembalikan ke posisi normal
+        document.getElementById(`passage-container-${passage}`).style.position = "relative";
+    }
+}
+
+// MODIFIKASI BAGIAN VALIDASI FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+  function validateForm() {
+  const totalQuestions = 30;
+  const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+
+  const name = document.getElementById("name").value.trim();
+  const classValue = document.getElementById("class").value.trim();
+  const studentId = document.getElementById("student-id").value.trim();
+  const school = document.getElementById("school").value.trim();
+  const submitBtn = document.getElementById("submit-btn");
+
+  if (answeredQuestions === totalQuestions && name && classValue && studentId && school) {
+    submitBtn.removeAttribute("disabled");  // Aktifkan tombol
+    submitBtn.classList.add("active");      // Tambahkan warna hijau
+  } else {
+    submitBtn.setAttribute("disabled", "true");  // Nonaktifkan tombol
+    submitBtn.classList.remove("active");        // Kembalikan warna ke merah
+  }
+}
+
+// Tambahkan event listener ke form
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+   function submitQuiz() {
+    if (document.getElementById("submit-btn").hasAttribute("disabled")) return;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+    const userAnswers = {};
+    for (let i = 1; i <= 30; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        userAnswers[`q${i}`] = selected ? selected.value : "Not answered";
+    }
+
+    const name = document.getElementById("name").value.trim();
+    const classValue = document.getElementById("class").value.trim();
+    const studentId = document.getElementById("student-id").value.trim();
+    const school = document.getElementById("school").value.trim();
+
+    let message = `Name: ${name}\nClass: ${classValue}\nStudent Number: ${studentId}\nSchool: ${school}\n\n`;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL PER-PASSAGENYA YANG DIGUNAKAN 
+    message += `📘 *Future Perfect Tense in English*\n`;
+    for (let i = 1; i <= 10; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 1
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎵 *Future Perfect Continuous Tense*\n`;
+    for (let i = 11; i <= 20; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 2
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎨 *Simple Past Future Tense in English*\n`;
+    for (let i = 21; i <= 30; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 3
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+// GUNAKAN NOMOR WHATSAPP MASING-MASING NANTINYA YANG AKAN MENERIMA OUTPUT DARI FORMULIR INI
+    const phoneNumber = "6287803582510";
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+}
+    
+/* 
+  Developer Lombok IT Mengucapkan Selamat, Anda Kini Telah Memiliki Aplikasi Buatan Sendiri.
+  Dengan semangat inovasi dan teknologi, Developer Lombok IT berkomitmen
+  untuk terus mempermudah proses pembelajaran melalui pengembangan aplikasi 
+  yang efisien dan berkualitas. Kepada para peserta pelatihan internasional 
+  Koding Aplikasi Pembelajaran, ini adalah langkah besar menuju masa depan yang lebih cerdas!
+  Mari bersama mengubah tantangan menjadi solusi dan mewujudkan pembelajaran yang lebih mudah, 
+  efektif, dan inovatif. 
+  Bersama Kita Pasti Bisa Jadikan Semua Lebih Mudah.
+  Developer Lombok IT "Jadikan Semua Lebih Mudah!"  
+
+  Abdul Kadir Bagis, M.Pd - CEO LOMBOK IT  
+*/
+
+  </script>
+</body>
+
+</html>

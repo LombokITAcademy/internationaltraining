@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher's CV</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      overflow-x: hidden;
+      text-align: center;
+    }
+
+   /* Background Animation */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, 
+    #ff4d4d, /* Merah lebih soft */
+    #ff9999, /* Merah lebih terang */
+    #ffffff, /* Putih */
+    #b3ffb3, /* Hijau lebih terang */
+    #075507, /* Hijau utama */
+    #ff4d4d, /* Kembali ke merah */
+    #ffffff, /* Putih */
+    rgb(2, 79, 2)  /* Hijau */
+  );
+  background-size: 400% 400%;
+  animation: gradientAnimation 12s ease infinite;
+  z-index: -1;
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 100%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 0%; }
+  100% { background-position: 0% 50%; }
+}
+
+	
+	/* Deskripsi Aplikasi */
+    .description-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: justify;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    .show-description {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      overflow: hidden;
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    .show {
+      display: block !important;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Sembunyikan tombol awalnya */
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+/* Efek fade-in setelah deskripsi selesai */
+.show-buttons {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+    .profile-pic {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-pic img {
+      border-radius: 50%;
+      border: 5px solid #fff;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    .show img {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Animasi Pulsating */
+    .pulse {
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Animasi Fade-in untuk deskripsi satu per satu */
+    .info p {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    .fade-in {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    /* WhatsApp Icon */
+    .whatsapp-button {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .whatsapp-button img {
+    width: 100%;  /* Lebar penuh sesuai container */
+    max-width: 150px; /* Maksimal ukuran agar tidak terlalu besar */
+    height: auto; /* Biarkan tinggi menyesuaikan proporsi */
+    cursor: pointer;
+    transition: transform 0.2s;
+	}
+
+
+    .whatsapp-button img:hover {
+      transform: scale(1.1);
+    }
+
+    /* Container Tombol */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Jarak antar tombol */
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+/* Efek fade-in setelah deskripsi selesai */
+.show-buttons {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Tombol dengan Ukuran Sama */
+/* Tombol dengan Ukuran Sama & Teks Tengah */
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Pusatkan teks dalam tombol */
+    flex: 1;
+    max-width: 160px; /* Ukuran maksimal tombol */
+    height: 50px; /* Tinggi tombol tetap */
+    background: linear-gradient(50deg, #ff0000, #ffffff, #008000);
+    background-size: 200% 200%;
+    color: #000000;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+    animation: waterFlow 3s infinite linear;
+}
+
+/* Efek Animasi Air Mengalir */
+@keyframes waterFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Efek Hover */
+.button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #000000;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Deskripsi Aplikasi -->
+<div class="description-container" id="description">
+  <h2>Profil Pengembang Aplikasi Ini:</h2>
+  
+  <p>
+    Aplikasi ini merupakan bagian dari inovasi <strong>Edu-Preneurship</strong> (Pendidikan dan Kewirausahaan), 
+    yang bertujuan untuk menggabungkan pembelajaran akademik dengan keterampilan kewirausahaan. 
+    Melalui aplikasi ini, pengguna dapat mengakses informasi guru dan mahasiswa, serta 
+    mengembangkan kemampuan mereka di bidang pendidikan dan bisnis berbasis digital.
+  </p>
+  <p>
+    Aplikasi ini dikembangkan di bawah <strong>Lisensi Koding Resmi Developer Lombok IT</strong>, yang menjamin 
+    keaslian dan kualitas pengembangan perangkat lunak sesuai dengan standar industri.
+  </p>
+  <p>
+    Menariknya, kedua perancang utama aplikasi ini adalah <strong>mantan mahasiswa dari CEO Developer Lombok IT, 
+    Bapak Abdul Kadir Bagis, M.Pd.</strong> Mereka merupakan bagian dari generasi muda yang dibimbing 
+    langsung oleh beliau dalam dunia pengembangan teknologi dan inovasi digital.
+  </p>
+  <p>
+    Sebagai bentuk penghormatan dan rasa terima kasih, kedua perancang aplikasi ini ingin menyampaikan 
+    apresiasi yang mendalam kepada <strong>Bapak Abdul Kadir Bagis, M.Pd.</strong> atas dedikasi, ilmu, dan bimbingannya. 
+    Berkat arahan beliau, mereka dapat berkembang menjadi pengembang profesional yang siap berkontribusi 
+    dalam dunia Edu-Preneurship dan teknologi pendidikan.
+  </p>
+  <p>
+    <em>
+      "You were, are, and always will be the best lecturer for us in our lives Sir (Mr. Bagis). We cannot thank you enough for everything you have taught us—things that no one else did.
+      <br><br>
+      May Allah grant you the best, Sir. May you always be blessed with prosperity and good health, Ameen. So that more people can experience how easy language and technology truly are, just as you have always taught us. Your timeless tagline, 'Together, We Can Surely Make Everything Easier,' is indeed true, as it continues to inspire us all. We thank you, Sir... Thank you. (Alfan & Satria)."
+    </em>
+  </p>
+</div>
+
+<!-- Tombol untuk Menampilkan Profil -->
+  <div class="button-container">
+    <button class="button" onclick="showProfile('profile1')">Pengembang 1 (Mahasiswa)</button>
+    <button class="button" onclick="showProfile('profile2')">Pengembang 2<br>(Guru Pendamping)</button>
+  </div>
+
+  <!-- Profil Pertama -->
+  <div id="profile1" class="container">
+    <div class="profile-pic">
+      <img id="image1" src="images/Alfan.png" alt="Teacher Photo">
+    </div>
+    <h2>M. Juzi Alfan</h2>
+    <h3>Pre-Service English Teacher</h3>
+    <div class="info">
+      <p id="phone1"><strong>Phone:</strong> +62 853-3844-6299</p>
+      <p id="experience1"><strong>Experience:</strong> UNDIKMA FBMB Students.</p>
+      <p id="skills1"><strong>Skills:</strong> Reading, Listening, Educational Technology</p>
+      <p id="hobbies1"><strong>Hobbies:</strong> Reading, Traveling, and Blogging about Education.</p>
+    </div>
+    <div class="whatsapp-button" id="whatsapp1">
+      <a href="https://wa.me/6285338446299" target="_blank">
+        <img src="images/Animated Icons/WhatsApp.gif" alt="Contact via WhatsApp">
+      </a>
+    </div>
+  </div>
+
+  <!-- Profil Kedua -->
+  <div id="profile2" class="container">
+    <div class="profile-pic">
+      <img id="image2" src="images/Satria.jpg" alt="Teacher Photo">
+    </div>
+    <h2>Achmad Satria Adiyatma, S.Pd</h2>
+    <h3>English Teacher</h3>
+    <div class="info">
+      <p id="phone2"><strong>Phone:</strong> +62 812-3456-7890</p>
+      <p id="experience2"><strong>Experience:</strong> 10 Years Teaching English.</p>
+      <p id="skills2"><strong>Skills:</strong> English, Graphic Design, App Development</p>
+      <p id="hobbies2"><strong>Hobbies:</strong> Travelling, Gaming, Coding.</p>
+    </div>
+    <div class="whatsapp-button" id="whatsapp2">
+      <a href="https://wa.me/6281234567890" target="_blank">
+        <img src="images/Animated%20Icons/WhatsApp.gif" alt="Contact via WhatsApp">
+      </a>
+    </div>
+  </div>
+
+
+
+
+  
+  <footer>
+    © 2025 My Edu-Preneurship. All Rights Reserved.
+  </footer>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Menampilkan deskripsi dengan fade-in
+    setTimeout(() => {
+      document.getElementById("description").classList.add("show-description");
+
+      // Setelah deskripsi selesai animasi, munculkan tombol profil
+      setTimeout(() => {
+        document.querySelector(".button-container").classList.add("show-buttons");
+      }, 1000); // Delay 1 detik setelah deskripsi muncul
+    }, 500);
+  });
+
+  function showProfile(profileId) {
+    let selectedProfile = document.getElementById(profileId);
+
+    // Jika profil sudah terbuka, tutup
+    if (selectedProfile.classList.contains("show")) {
+      selectedProfile.classList.remove("show");
+      return;
+    }
+
+    // Tutup semua profil sebelum membuka yang baru
+    document.querySelectorAll(".container").forEach(profile => {
+      profile.classList.remove("show");
+    });
+
+    // Buka profil yang diklik
+    selectedProfile.classList.add("show");
+
+    // Efek animasi untuk gambar profil
+    let img = selectedProfile.querySelector("img");
+    setTimeout(() => { img.classList.add("pulse"); }, 1000);
+
+    // Efek animasi fade-in untuk setiap info dalam profil
+    let infoElements = selectedProfile.querySelectorAll(".info p");
+    infoElements.forEach((element, index) => {
+      setTimeout(() => { element.classList.add("fade-in"); }, 500 * index);
+    });
+
+    // Menampilkan tombol WhatsApp dengan delay
+    setTimeout(() => { 
+      document.getElementById(`whatsapp${profileId.slice(-1)}`).style.display = "block"; 
+    }, 500 * infoElements.length);
+  }
+</script>
+
+
+</body>
+</html>

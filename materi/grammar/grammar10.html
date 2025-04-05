@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Quiz</title>
+  <style>
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+	
+/* Gunakan border-box pada semua elemen */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/* Atur ulang lebar body agar tidak menambah lebar total */
+body {
+    padding: 20px;
+	}
+.input-container {
+    margin-bottom: 20px;
+    }
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+
+.input-container input {
+     width: 100%;
+     padding: 8px;
+     margin-bottom: 10px;
+    }
+
+.question-container {
+     margin-bottom: 20px;
+    }
+
+.question {
+    font-weight: bold;
+    }
+
+    .options {
+    display: flex;
+    flex-direction: column; /* Pastikan setiap opsi tetap dalam barisnya sendiri */
+    gap: 5px; /* Beri sedikit jarak antar opsi */
+}
+    
+/* Pastikan opsi jawaban sejajar */
+.options label {
+    display: flex;
+    align-items: center; /* Pastikan radio button sejajar dengan teks */
+    gap: 10px;
+    width: 100%;
+}
+
+..options input[type="radio"] {
+    margin: 0;
+    flex-shrink: 0; /* Pastikan ukuran radio button tidak berubah */
+}
+
+/* Pastikan opsi jawaban turun ke baris baru dengan titik sejajar */
+.option-text {
+    display: grid;
+    grid-template-columns: 25px auto; /* Kolom pertama untuk "A.", kedua untuk teks */
+}
+
+.option-text span:first-child {
+    font-weight: bold;
+    width: 25px;
+}
+
+.option-text span:last-child {
+    text-indent: -25px;
+    padding-left: 25px;
+    word-wrap: break-word;
+}
+    
+/* Passage tetap terlihat, hanya teksnya yang disembunyikan */
+.passage-container {
+    text-align: justify;
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9; /* Background tetap ada */
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    z-index: 10;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* MODIFIKASI FONT UNTUK PASSAGENYA (Ubah Sesuai Kebutuhan)*/
+.passage-text {
+    display: none;
+    font-size: 14px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+}
+
+/* Style tombol */
+.toggle-btn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    bottom: 10px;
+    z-index: 20;
+    }
+
+/* Tombol Baca & Tutup Teksnya */
+.toggle-btn button {
+     padding: 10px 15px;
+     border: none;
+     border-radius: 5px;
+     font-size: 13px;
+     cursor: pointer;
+     font-weight: bold;
+    }
+
+/* MODIFIKASI WARNA TOMBOL BACA TEKSNYA */
+.read-btn {
+    background-color: green;
+    color: white;
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL BACA TEKSNYA  */
+.read-btn:hover {
+     background-color: darkgreen;
+    }
+
+/* MODIFIKASI WARNA TOMBOL TUTUP TEKSNYA */
+.close-btn {
+     background-color: red;
+     color: white;
+     display: none; /* Disembunyikan saat awal */
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL TUTUP TEKSNYA */
+.close-btn:hover {
+    background-color: darkred;
+    }
+	
+/* MODIFIKASI FONT UNTUK PASSAGENYA */
+#passage {
+	font-family: Arial, sans-serif;
+	font-size: 13px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+	color: #333;         /* Warna teks lebih lembut untuk mata */
+	}
+
+.quiz-wrapper {
+    background: rgba(255, 255, 255, 0.85); /* Warna solid putih dengan transparansi */
+    padding: 20px 10px; /* Padding atas-bawah 20px, kiri-kanan 10px */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: calc(100% - 10px); /* Lebar penuh dikurangi padding kiri-kanan */
+    margin: 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+	}
+	
+/* MODIFIKASI FONT UNTUK SOAL QUIZNYA (Ubah Sesuai Kebutuhunan)*/
+.quiz-wrapper {
+	font-family: Arial, sans-serif;
+	font-size: 12px;     /* Ukuran font lebih kecil dan rapi */
+	line-height: 1;
+	color: #444;         /* Sedikit lebih gelap dari passage untuk kontras */
+	}
+
+/* MODIFIKASI TOMBOL NON-AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn {
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 14px;
+	cursor: not-allowed;
+	display: block;
+	margin: 20px auto;  /* Posisikan di tengah dengan margin atas-bawah */
+	}
+    
+/* MODIFIKASI TOMBOL AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn.active {
+	background-color: green;
+	cursor: pointer;
+    }
+    
+:root {
+	--bg-transparency: 0.5;  /* Transparansi background (0 - 1) */
+	--border-radius: 5px;     /* Round corner */
+	}
+
+.transparent-bg {
+    background-color: rgba(255, 255, 255, var(--bg-transparency));
+    display: flex;
+    justify-content: center; /* Pusatkan horizontal */
+    align-items: center; /* Pusatkan vertikal jika diperlukan */
+    text-align: center;
+    padding: 2px 10px; /* Persempit padding atas dan bawah */
+    border-radius: var(--border-radius);
+    margin-top: 0px;  /* Atur jarak atas */
+    margin-bottom: 0px; /* Atur jarak bawah */
+    }
+    
+.centered-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.5); /* Transparansi */
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	max-width: 500px; /* Atur lebar agar tidak terlalu besar */
+	margin: 20px auto; /* Tengah dengan jarak atas & bawah */
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+	}
+    
+#user-info {
+	padding: 0 5px; /* Padding kiri dan kanan 5px, atas-bawah 0 */
+	box-sizing: border-box;
+	}
+
+#user-info input {
+	width: 100%;
+	padding: 8px; /* Padding sama dengan input lainnya */
+	box-sizing: border-box;
+	}
+
+/* MODIFIKASI KOLOM ISIAN DATA SISWA (Ubah Sesuai Kebutuhunan)*/
+.user-info-wrapper {
+	background: rgba(255, 255, 255, 0.6); /* Background putih transparan */
+	border-radius: 10px;  /* Sudut melengkung */
+	padding: 15px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan lembut */
+	max-width: 400px;
+	margin: 0 auto 20px;  /* Tengah dan jarak bawah */
+	box-sizing: border-box;
+	}
+   </style>
+</head>
+
+<body>
+  <div class="centered-container">
+    <h1 class="transparent-bg">English Quiz</h1>
+    <h2 class="transparent-bg">By Mr. Alfan</h2>
+    <p class="transparent-bg">Fill in your details and answer the questions:</p>
+  </div>
+
+  <form id="quiz-form">
+  <div class="user-info-wrapper">
+    <div id="user-info" class="input-container">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name">
+      <label for="class">Class:</label>
+      <input type="text" id="class" placeholder="Enter your class">
+      <label for="student-id">Student Number:</label>
+      <input type="text" id="student-id" placeholder="Enter your student number">
+      <label for="school">School Name:</label>
+      <input type="text" id="school" placeholder="Enter your school name">
+    </div>
+  </div>
+    
+<!-- Container for Passage & Quiz: Conditional Sentences -->
+<div id="container-grammar24" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-grammar24">
+        <h4 class="transparent-bg">Grammar 24: Conditional Sentences</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('grammar24', true)">Read Text (for questions 1-10)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('grammar24', false)" style="display: none;">Close Text (for questions 1-10)</button>
+        </div>
+        <p id="passage-grammar24" class="passage-text" style="display: none;">
+            **Conditional Sentences** are used to express possibilities, hypothetical situations, and their consequences.  
+            There are **four types** of conditional sentences:
+            - **Zero Conditional**: Used for facts and general truths.  
+              Example: "If you heat water to 100°C, it **boils**."
+            - **First Conditional**: Used for real and possible future situations.  
+              Example: "If it **rains**, we **will stay** at home."
+            - **Second Conditional**: Used for hypothetical or unlikely present situations.  
+              Example: "If I **were** rich, I **would travel** the world."
+            - **Third Conditional**: Used for past hypotheticals (things that didn't happen).  
+              Example: "If she **had studied**, she **would have passed** the exam."
+        </p>
+    </div>
+
+    <!-- Quiz: Conditional Sentences -->
+    <div id="quiz-grammar24" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Conditional Sentences</h3><br>
+
+        <!-- Question 1 -->
+        <div class="question-container">
+            <div class="question">1. What type of conditional sentence is this? "If you mix blue and yellow, you get green."</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A. Zero Conditional"> A. Zero Conditional</label>
+                <label><input type="radio" name="q1" value="B. First Conditional"> B. First Conditional</label>
+                <label><input type="radio" name="q1" value="C. Second Conditional"> C. Second Conditional</label>
+                <label><input type="radio" name="q1" value="D. Third Conditional"> D. Third Conditional</label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-container">
+            <div class="question">2. Choose the correct verb form: "If she ___ harder, she will pass the test."</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A. study"> A. study</label>
+                <label><input type="radio" name="q2" value="B. studies"> B. studies</label>
+                <label><input type="radio" name="q2" value="C. studied"> C. studied</label>
+                <label><input type="radio" name="q2" value="D. had studied"> D. had studied</label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-container">
+            <div class="question">3. Which sentence is an example of the **Second Conditional**?</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A. If it rains, we will stay home."> A. If it rains, we will stay home.</label>
+                <label><input type="radio" name="q3" value="B. If you freeze water, it turns into ice."> B. If you freeze water, it turns into ice.</label>
+                <label><input type="radio" name="q3" value="C. If I were a bird, I would fly."> C. If I were a bird, I would fly.</label>
+                <label><input type="radio" name="q3" value="D. If she had studied, she would have passed."> D. If she had studied, she would have passed.</label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-container">
+            <div class="question">4. What is the correct **Third Conditional** sentence?</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A. If he eats too much, he gets sick."> A. If he eats too much, he gets sick.</label>
+                <label><input type="radio" name="q4" value="B. If he had left earlier, he wouldn’t have missed the train."> B. If he had left earlier, he wouldn’t have missed the train.</label>
+                <label><input type="radio" name="q4" value="C. If she works hard, she will succeed."> C. If she works hard, she will succeed.</label>
+                <label><input type="radio" name="q4" value="D. If I have time, I will help you."> D. If I have time, I will help you.</label>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-container">
+            <div class="question">5. Complete the sentence: "If she had called me, I ___ to the party."</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A. go"> A. go</label>
+                <label><input type="radio" name="q5" value="B. went"> B. went</label>
+                <label><input type="radio" name="q5" value="C. would go"> C. would go</label>
+                <label><input type="radio" name="q5" value="D. would have gone"> D. would have gone</label>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-container">
+            <div class="question">6. Which sentence is a **First Conditional**?</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="A. If you tell me, I would believe you."> A. If you tell me, I would believe you.</label>
+                <label><input type="radio" name="q6" value="B. If she had money, she would travel."> B. If she had money, she would travel.</label>
+                <label><input type="radio" name="q6" value="C. If she works hard, she will get promoted."> C. If she works hard, she will get promoted.</label>
+                <label><input type="radio" name="q6" value="D. If I had known, I would have helped."> D. If I had known, I would have helped.</label>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-container">
+            <div class="question">7. "If you ___ too much, you will feel sick."</div>
+            <div class="options">
+                <label><input type="radio" name="q7" value="A. eat"> A. eat</label>
+                <label><input type="radio" name="q7" value="B. ate"> B. ate</label>
+                <label><input type="radio" name="q7" value="C. eats"> C. eats</label>
+                <label><input type="radio" name="q7" value="D. eating"> D. eating</label>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-container">
+            <div class="question">8. What type of conditional is this? "If he had studied harder, he would have passed the exam."</div>
+            <div class="options">
+                <label><input type="radio" name="q8" value="A. Zero Conditional"> A. Zero Conditional</label>
+                <label><input type="radio" name="q8" value="B. First Conditional"> B. First Conditional</label>
+                <label><input type="radio" name="q8" value="C. Second Conditional"> C. Second Conditional</label>
+                <label><input type="radio" name="q8" value="D. Third Conditional"> D. Third Conditional</label>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-container">
+            <div class="question">9. Which sentence is an example of a **Zero Conditional**?</div>
+            <div class="options">
+                <label><input type="radio" name="q9" value="A. If you heat ice, it melts."> A. If you heat ice, it melts.</label>
+                <label><input type="radio" name="q9" value="B. If I won the lottery, I would travel."> B. If I won the lottery, I would travel.</label>
+                <label><input type="radio" name="q9" value="C. If it rains, I will stay inside."> C. If it rains, I will stay inside.</label>
+                <label><input type="radio" name="q9" value="D. If he had called, I would have answered."> D. If he had called, I would have answered.</label>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-container">
+            <div class="question">10. Complete the sentence: "If I ___ you, I would take that job."</div>
+            <div class="options">
+                <label><input type="radio" name="q10" value="A. am"> A. am</label>
+                <label><input type="radio" name="q10" value="B. was"> B. was</label>
+                <label><input type="radio" name="q10" value="C. were"> C. were</label>
+                <label><input type="radio" name="q10" value="D. be"> D. be</label>
+            </div>
+        </div>
+    </div>
+</div>
+	
+<!-- Submit Button -->
+    <button id="submit-btn" type="button" onclick="submitQuiz()" disabled>Submit Answers</button>
+  </form>
+
+  <script>
+   function togglePassage(passage, show) {
+    const container = document.getElementById(`container-${passage}`);
+    const passageText = document.getElementById(`passage-${passage}`);
+    const quizSection = document.getElementById(`quiz-${passage}`);
+    const readBtn = document.querySelector(`#passage-container-${passage} .read-btn`);
+    const closeBtn = document.querySelector(`#passage-container-${passage} .close-btn`);
+
+    if (show) {
+        passageText.style.display = "block";  // Tampilkan teks passage
+        quizSection.style.display = "block";  // Tampilkan soal
+        readBtn.style.display = "none";       // Sembunyikan tombol Read Text
+        closeBtn.style.display = "inline-block"; // Tampilkan tombol Close Text
+
+// Pastikan passage tetap sticky saat dibuka
+        document.getElementById(`passage-container-${passage}`).style.position = "sticky";
+        document.getElementById(`passage-container-${passage}`).style.top = "0";
+    } else {
+        passageText.style.display = "none";  // Sembunyikan teks passage
+        quizSection.style.display = "none";  // Sembunyikan soal
+        readBtn.style.display = "inline-block";  // Munculkan kembali tombol Read Text
+        closeBtn.style.display = "none";    // Sembunyikan tombol Close Text
+
+// Kembalikan ke posisi normal
+        document.getElementById(`passage-container-${passage}`).style.position = "relative";
+    }
+}
+
+// MODIFIKASI BAGIAN VALIDASI FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+  function validateForm() {
+  const totalQuestions = 10;
+  const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+
+  const name = document.getElementById("name").value.trim();
+  const classValue = document.getElementById("class").value.trim();
+  const studentId = document.getElementById("student-id").value.trim();
+  const school = document.getElementById("school").value.trim();
+  const submitBtn = document.getElementById("submit-btn");
+
+  if (answeredQuestions === totalQuestions && name && classValue && studentId && school) {
+    submitBtn.removeAttribute("disabled");  // Aktifkan tombol
+    submitBtn.classList.add("active");      // Tambahkan warna hijau
+  } else {
+    submitBtn.setAttribute("disabled", "true");  // Nonaktifkan tombol
+    submitBtn.classList.remove("active");        // Kembalikan warna ke merah
+  }
+}
+
+// Tambahkan event listener ke form
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+   function submitQuiz() {
+    if (document.getElementById("submit-btn").hasAttribute("disabled")) return;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+    const userAnswers = {};
+    for (let i = 1; i <= 10; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        userAnswers[`q${i}`] = selected ? selected.value : "Not answered";
+    }
+
+    const name = document.getElementById("name").value.trim();
+    const classValue = document.getElementById("class").value.trim();
+    const studentId = document.getElementById("student-id").value.trim();
+    const school = document.getElementById("school").value.trim();
+
+    let message = `Name: ${name}\nClass: ${classValue}\nStudent Number: ${studentId}\nSchool: ${school}\n\n`;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL PER-PASSAGENYA YANG DIGUNAKAN 
+    message += `📘 *Conditional Sentences in English*\n`;
+    for (let i = 1; i <= 10; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 1
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    /* 
+// Jika ingin menampilkan soal 11-20, hapus komentar blok ini
+message += `\n🎵 *XxX*\n`;
+for (let i = 11; i <= 20; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 2
+    message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+}
+
+// Jika ingin menampilkan soal 21-30, hapus komentar blok ini
+message += `\n🎨 *XxX*\n`;
+for (let i = 21; i <= 30; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 3
+    message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+}
+*/
+
+// GUNAKAN NOMOR WHATSAPP MASING-MASING NANTINYA YANG AKAN MENERIMA OUTPUT DARI FORMULIR INI
+    const phoneNumber = "6287803582510";
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+}
+    
+/* 
+  Developer Lombok IT Mengucapkan Selamat, Anda Kini Telah Memiliki Aplikasi Buatan Sendiri.
+  Dengan semangat inovasi dan teknologi, Developer Lombok IT berkomitmen
+  untuk terus mempermudah proses pembelajaran melalui pengembangan aplikasi 
+  yang efisien dan berkualitas. Kepada para peserta pelatihan internasional 
+  Koding Aplikasi Pembelajaran, ini adalah langkah besar menuju masa depan yang lebih cerdas!
+  Mari bersama mengubah tantangan menjadi solusi dan mewujudkan pembelajaran yang lebih mudah, 
+  efektif, dan inovatif. 
+  Bersama Kita Pasti Bisa Jadikan Semua Lebih Mudah.
+  Developer Lombok IT "Jadikan Semua Lebih Mudah!"  
+
+  Abdul Kadir Bagis, M.Pd - CEO LOMBOK IT  
+*/
+
+  </script>
+</body>
+
+</html>

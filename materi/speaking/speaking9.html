@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Quiz</title>
+  <style>
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+	
+/* Gunakan border-box pada semua elemen */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/* Atur ulang lebar body agar tidak menambah lebar total */
+body {
+    padding: 20px;
+	}
+.input-container {
+    margin-bottom: 20px;
+    }
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+
+.input-container input {
+     width: 100%;
+     padding: 8px;
+     margin-bottom: 10px;
+    }
+
+.question-container {
+     margin-bottom: 20px;
+    }
+
+.question {
+    font-weight: bold;
+    }
+
+    .options {
+    display: flex;
+    flex-direction: column; /* Pastikan setiap opsi tetap dalam barisnya sendiri */
+    gap: 5px; /* Beri sedikit jarak antar opsi */
+}
+    
+/* Pastikan opsi jawaban sejajar */
+.options label {
+    display: flex;
+    align-items: center; /* Pastikan radio button sejajar dengan teks */
+    gap: 10px;
+    width: 100%;
+}
+
+..options input[type="radio"] {
+    margin: 0;
+    flex-shrink: 0; /* Pastikan ukuran radio button tidak berubah */
+}
+
+/* Pastikan opsi jawaban turun ke baris baru dengan titik sejajar */
+.option-text {
+    display: grid;
+    grid-template-columns: 25px auto; /* Kolom pertama untuk "A.", kedua untuk teks */
+}
+
+.option-text span:first-child {
+    font-weight: bold;
+    width: 25px;
+}
+
+.option-text span:last-child {
+    text-indent: -25px;
+    padding-left: 25px;
+    word-wrap: break-word;
+}
+    
+/* Passage tetap terlihat, hanya teksnya yang disembunyikan */
+.passage-container {
+    text-align: justify;
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9; /* Background tetap ada */
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    z-index: 10;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* MODIFIKASI FONT UNTUK PASSAGENYA (Ubah Sesuai Kebutuhan)*/
+.passage-text {
+    display: none;
+    font-size: 14px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+}
+
+/* Style tombol */
+.toggle-btn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    bottom: 10px;
+    z-index: 20;
+    }
+
+/* Tombol Baca & Tutup Teksnya */
+.toggle-btn button {
+     padding: 10px 15px;
+     border: none;
+     border-radius: 5px;
+     font-size: 13px;
+     cursor: pointer;
+     font-weight: bold;
+    }
+
+/* MODIFIKASI WARNA TOMBOL BACA TEKSNYA */
+.read-btn {
+    background-color: green;
+    color: white;
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL BACA TEKSNYA  */
+.read-btn:hover {
+     background-color: darkgreen;
+    }
+
+/* MODIFIKASI WARNA TOMBOL TUTUP TEKSNYA */
+.close-btn {
+     background-color: red;
+     color: white;
+     display: none; /* Disembunyikan saat awal */
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL TUTUP TEKSNYA */
+.close-btn:hover {
+    background-color: darkred;
+    }
+	
+/* MODIFIKASI FONT UNTUK PASSAGENYA */
+#passage {
+	font-family: Arial, sans-serif;
+	font-size: 13px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+	color: #333;         /* Warna teks lebih lembut untuk mata */
+	}
+
+.quiz-wrapper {
+    background: rgba(255, 255, 255, 0.85); /* Warna solid putih dengan transparansi */
+    padding: 20px 10px; /* Padding atas-bawah 20px, kiri-kanan 10px */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: calc(100% - 10px); /* Lebar penuh dikurangi padding kiri-kanan */
+    margin: 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+	}
+	
+/* MODIFIKASI FONT UNTUK SOAL QUIZNYA (Ubah Sesuai Kebutuhunan)*/
+.quiz-wrapper {
+	font-family: Arial, sans-serif;
+	font-size: 12px;     /* Ukuran font lebih kecil dan rapi */
+	line-height: 1;
+	color: #444;         /* Sedikit lebih gelap dari passage untuk kontras */
+	}
+
+/* MODIFIKASI TOMBOL NON-AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn {
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 14px;
+	cursor: not-allowed;
+	display: block;
+	margin: 20px auto;  /* Posisikan di tengah dengan margin atas-bawah */
+	}
+    
+/* MODIFIKASI TOMBOL AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn.active {
+	background-color: green;
+	cursor: pointer;
+    }
+    
+:root {
+	--bg-transparency: 0.5;  /* Transparansi background (0 - 1) */
+	--border-radius: 5px;     /* Round corner */
+	}
+
+.transparent-bg {
+    background-color: rgba(255, 255, 255, var(--bg-transparency));
+    display: flex;
+    justify-content: center; /* Pusatkan horizontal */
+    align-items: center; /* Pusatkan vertikal jika diperlukan */
+    text-align: center;
+    padding: 2px 10px; /* Persempit padding atas dan bawah */
+    border-radius: var(--border-radius);
+    margin-top: 0px;  /* Atur jarak atas */
+    margin-bottom: 0px; /* Atur jarak bawah */
+    }
+    
+.centered-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.5); /* Transparansi */
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	max-width: 500px; /* Atur lebar agar tidak terlalu besar */
+	margin: 20px auto; /* Tengah dengan jarak atas & bawah */
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+	}
+    
+#user-info {
+	padding: 0 5px; /* Padding kiri dan kanan 5px, atas-bawah 0 */
+	box-sizing: border-box;
+	}
+
+#user-info input {
+	width: 100%;
+	padding: 8px; /* Padding sama dengan input lainnya */
+	box-sizing: border-box;
+	}
+
+/* MODIFIKASI KOLOM ISIAN DATA SISWA (Ubah Sesuai Kebutuhunan)*/
+.user-info-wrapper {
+	background: rgba(255, 255, 255, 0.6); /* Background putih transparan */
+	border-radius: 10px;  /* Sudut melengkung */
+	padding: 15px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan lembut */
+	max-width: 400px;
+	margin: 0 auto 20px;  /* Tengah dan jarak bawah */
+	box-sizing: border-box;
+	}
+   </style>
+</head>
+
+<body>
+  <div class="centered-container">
+    <h1 class="transparent-bg">English Quiz</h1>
+    <h2 class="transparent-bg">By Mr. Alfan</h2>
+    <p class="transparent-bg">Fill in your details and answer the questions:</p>
+  </div>
+
+  <form id="quiz-form">
+  <div class="user-info-wrapper">
+    <div id="user-info" class="input-container">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name">
+      <label for="class">Class:</label>
+      <input type="text" id="class" placeholder="Enter your class">
+      <label for="student-id">Student Number:</label>
+      <input type="text" id="student-id" placeholder="Enter your student number">
+      <label for="school">School Name:</label>
+      <input type="text" id="school" placeholder="Enter your school name">
+    </div>
+  </div>
+ 
+<!-- Container for Passage & Quiz: English Speaking Basics -->
+<div id="container-speaking9" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-speaking1">
+        <h4 class="transparent-bg">Speaking 9: Asking for Permission, Giving Permission, Refusing Permission Politely, and Making Excuses</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('speaking9', true)">Read Text (for questions 1-10)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('speaking9', false)" style="display: none;">Close Text (for questions 1-10)</button>
+        </div>
+		
+		<p id="passage-speaking9" class="passage-text" style="display: none;">
+			Ryan is at his friend’s house to study together.  
+			He realizes he forgot his notebook and asks if he can borrow one from his friend.  
+			His friend agrees and hands him an extra notebook.  
+			Later, Ryan asks if he can use his friend’s laptop to check his homework.  
+			His friend politely refuses, explaining that the laptop is not working properly.  
+			Ryan understands and thanks him for the explanation.  
+			Before leaving, Ryan asks if he can borrow a book, but his friend needs it for an assignment.  
+			Ryan makes an excuse, saying it’s okay because he can find the same book at the library.
+		</p>
+		</div>
+
+<!-- MODIFIKASI JUDUL QUIZ PASSAGE 1 NYA -->
+    <div id="quiz-speaking9" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Asking for Permission, Giving Permission, Refusing Permission Politely, and Making Excuses</h3><br>
+		
+ <!-- Question 1 -->
+  <div class="question-container">
+    <div class="question">1. What is the most polite way for Ryan to ask for permission to borrow a notebook?</div>
+    <div class="options">
+      <label><input type="radio" name="q1" value="A. Give me your notebook."> A. Give me your notebook.</label>
+      <label><input type="radio" name="q1" value="B. Can I please borrow your notebook?"> B. Can I please borrow your notebook?</label>
+      <label><input type="radio" name="q1" value="C. I need your notebook now."> C. I need your notebook now.</label>
+      <label><input type="radio" name="q1" value="D. Why don’t you give me your notebook?"> D. Why don’t you give me your notebook?</label>
+    </div>
+  </div>
+
+  <!-- Question 2 -->
+  <div class="question-container">
+    <div class="question">2. Which is the best way for his friend to give permission?</div>
+    <div class="options">
+      <label><input type="radio" name="q2" value="A. No, I don’t trust you."> A. No, I don’t trust you.</label>
+      <label><input type="radio" name="q2" value="B. Sure, go ahead and use it."> B. Sure, go ahead and use it.</label>
+      <label><input type="radio" name="q2" value="C. Why do you need it?"> C. Why do you need it?</label>
+      <label><input type="radio" name="q2" value="D. Do whatever you want."> D. Do whatever you want.</label>
+    </div>
+  </div>
+
+  <!-- Question 3 -->
+  <div class="question-container">
+    <div class="question">3. How should his friend politely refuse permission to use the laptop?</div>
+    <div class="options">
+      <label><input type="radio" name="q3" value="A. No, you can’t."> A. No, you can’t.</label>
+      <label><input type="radio" name="q3" value="B. I’m sorry, but the laptop isn’t working properly right now."> B. I’m sorry, but the laptop isn’t working properly right now.</label>
+      <label><input type="radio" name="q3" value="C. I don’t want you to use it."> C. I don’t want you to use it.</label>
+      <label><input type="radio" name="q3" value="D. Find another way."> D. Find another way.</label>
+    </div>
+  </div>
+
+  <!-- Question 4 -->
+  <div class="question-container">
+    <div class="question">4. What is the best way for Ryan to respond when his request is refused?</div>
+    <div class="options">
+      <label><input type="radio" name="q4" value="A. Why not?"> A. Why not?</label>
+      <label><input type="radio" name="q4" value="B. That’s unfair."> B. That’s unfair.</label>
+      <label><input type="radio" name="q4" value="C. I understand. Thanks for letting me know."> C. I understand. Thanks for letting me know.</label>
+      <label><input type="radio" name="q4" value="D. I don’t like your answer."> D. I don’t like your answer.</label>
+    </div>
+  </div>
+
+  <!-- Question 5 -->
+  <div class="question-container">
+    <div class="question">5. Which sentence is the best way for Ryan to make an excuse for not borrowing the book?</div>
+    <div class="options">
+      <label><input type="radio" name="q5" value="A. It’s fine, I can get it at the library."> A. It’s fine, I can get it at the library.</label>
+      <label><input type="radio" name="q5" value="B. You never help me."> B. You never help me.</label>
+      <label><input type="radio" name="q5" value="C. I don’t need your book anyway."> C. I don’t need your book anyway.</label>
+      <label><input type="radio" name="q5" value="D. I’m not interested in reading."> D. I’m not interested in reading.</label>
+    </div>
+  </div>
+  
+  <!-- Question 6 -->
+  <div class="question-container">
+    <div class="question">6. Why does Ryan ask to borrow his friend’s notebook?</div>
+    <div class="options">
+      <label><input type="radio" name="q6" value="A. He forgot his own notebook."> A. He forgot his own notebook.</label>
+      <label><input type="radio" name="q6" value="B. He lost his notebook."> B. He lost his notebook.</label>
+      <label><input type="radio" name="q6" value="C. He didn’t bring any study materials."> C. He didn’t bring any study materials.</label>
+      <label><input type="radio" name="q6" value="D. He wants to copy his friend’s notes."> D. He wants to copy his friend’s notes.</label>
+    </div>
+  </div>
+
+  <!-- Question 7 -->
+  <div class="question-container">
+    <div class="question">7. What does Ryan’s friend say about the laptop?</div>
+    <div class="options">
+      <label><input type="radio" name="q7" value="A. He doesn’t want Ryan to use it."> A. He doesn’t want Ryan to use it.</label>
+      <label><input type="radio" name="q7" value="B. The laptop is not working properly."> B. The laptop is not working properly.</label>
+      <label><input type="radio" name="q7" value="C. Ryan can use it anytime."> C. Ryan can use it anytime.</label>
+      <label><input type="radio" name="q7" value="D. He doesn’t know how to use it."> D. He doesn’t know how to use it.</label>
+    </div>
+  </div>
+
+  <!-- Question 8 -->
+  <div class="question-container">
+    <div class="question">8. How does Ryan react when his friend refuses to lend him the book?</div>
+    <div class="options">
+      <label><input type="radio" name="q8" value="A. He argues with his friend."> A. He argues with his friend.</label>
+      <label><input type="radio" name="q8" value="B. He gets upset and leaves."> B. He gets upset and leaves.</label>
+      <label><input type="radio" name="q8" value="C. He says it’s okay and mentions he can find the book at the library."> C. He says it’s okay and mentions he can find the book at the library.</label>
+      <label><input type="radio" name="q8" value="D. He insists on borrowing the book."> D. He insists on borrowing the book.</label>
+    </div>
+  </div>
+
+  <!-- Question 9 -->
+  <div class="question-container">
+    <div class="question">9. What is the most polite way for Ryan’s friend to refuse lending the book?</div>
+    <div class="options">
+      <label><input type="radio" name="q9" value="A. No, I need it for an assignment."> A. No, I need it for an assignment.</label>
+      <label><input type="radio" name="q9" value="B. You always ask for things."> B. You always ask for things.</label>
+      <label><input type="radio" name="q9" value="C. Just get your own."> C. Just get your own.</label>
+      <label><input type="radio" name="q9" value="D. I don’t want to share my book with you."> D. I don’t want to share my book with you.</label>
+    </div>
+  </div>
+
+  <!-- Question 10 -->
+  <div class="question-container">
+    <div class="question">10. What is the main theme of the passage?</div>
+    <div class="options">
+      <label><input type="radio" name="q10" value="A. Asking for and refusing permission politely"> A. Asking for and refusing permission politely</label>
+      <label><input type="radio" name="q10" value="B. How to borrow things without asking"> B. How to borrow things without asking</label>
+      <label><input type="radio" name="q10" value="C. The importance of owning study materials"> C. The importance of owning study materials</label>
+      <label><input type="radio" name="q10" value="D. How to say no to a friend"> D. How to say no to a friend</label>
+    </div>
+  </div>
+</div>
+</div>
+	
+<!-- Submit Button -->
+    <button id="submit-btn" type="button" onclick="submitQuiz()" disabled>Submit Answers</button>
+  </form>
+
+  <script>
+   function togglePassage(passage, show) {
+    const container = document.getElementById(`container-${passage}`);
+    const passageText = document.getElementById(`passage-${passage}`);
+    const quizSection = document.getElementById(`quiz-${passage}`);
+    const readBtn = document.querySelector(`#passage-container-${passage} .read-btn`);
+    const closeBtn = document.querySelector(`#passage-container-${passage} .close-btn`);
+
+    if (show) {
+        passageText.style.display = "block";  // Tampilkan teks passage
+        quizSection.style.display = "block";  // Tampilkan soal
+        readBtn.style.display = "none";       // Sembunyikan tombol Read Text
+        closeBtn.style.display = "inline-block"; // Tampilkan tombol Close Text
+
+// Pastikan passage tetap sticky saat dibuka
+        document.getElementById(`passage-container-${passage}`).style.position = "sticky";
+        document.getElementById(`passage-container-${passage}`).style.top = "0";
+    } else {
+        passageText.style.display = "none";  // Sembunyikan teks passage
+        quizSection.style.display = "none";  // Sembunyikan soal
+        readBtn.style.display = "inline-block";  // Munculkan kembali tombol Read Text
+        closeBtn.style.display = "none";    // Sembunyikan tombol Close Text
+
+// Kembalikan ke posisi normal
+        document.getElementById(`passage-container-${passage}`).style.position = "relative";
+    }
+}
+
+// MODIFIKASI BAGIAN VALIDASI FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+  function validateForm() {
+  const totalQuestions = 10;
+  const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+
+  const name = document.getElementById("name").value.trim();
+  const classValue = document.getElementById("class").value.trim();
+  const studentId = document.getElementById("student-id").value.trim();
+  const school = document.getElementById("school").value.trim();
+  const submitBtn = document.getElementById("submit-btn");
+
+  if (answeredQuestions === totalQuestions && name && classValue && studentId && school) {
+    submitBtn.removeAttribute("disabled");  // Aktifkan tombol
+    submitBtn.classList.add("active");      // Tambahkan warna hijau
+  } else {
+    submitBtn.setAttribute("disabled", "true");  // Nonaktifkan tombol
+    submitBtn.classList.remove("active");        // Kembalikan warna ke merah
+  }
+}
+
+// Tambahkan event listener ke form
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+   function submitQuiz() {
+    if (document.getElementById("submit-btn").hasAttribute("disabled")) return;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+    const userAnswers = {};
+    for (let i = 1; i <= 10; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        userAnswers[`q${i}`] = selected ? selected.value : "Not answered";
+    }
+
+    const name = document.getElementById("name").value.trim();
+    const classValue = document.getElementById("class").value.trim();
+    const studentId = document.getElementById("student-id").value.trim();
+    const school = document.getElementById("school").value.trim();
+
+    let message = `Name: ${name}\nClass: ${classValue}\nStudent Number: ${studentId}\nSchool: ${school}\n\n`;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL PER-PASSAGENYA YANG DIGUNAKAN 
+    message += `📘 *Speaking 9 (Quiz): Asking for Permission, Giving Permission, Refusing Permission Politely, and Making Excuses*\n`;
+    for (let i = 1; i <= 10; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 1
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    /* 
+// Jika ingin menampilkan soal 11-20, hapus komentar blok ini
+message += `\n🎵 *XxX*\n`;
+for (let i = 11; i <= 20; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 2
+    message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+}
+
+// Jika ingin menampilkan soal 21-30, hapus komentar blok ini
+message += `\n🎨 *XxX*\n`;
+for (let i = 21; i <= 30; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 3
+    message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+}
+*/
+
+// GUNAKAN NOMOR WHATSAPP MASING-MASING NANTINYA YANG AKAN MENERIMA OUTPUT DARI FORMULIR INI
+    const phoneNumber = "6287803582510";
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+}
+    
+/* 
+  Developer Lombok IT Mengucapkan Selamat, Anda Kini Telah Memiliki Aplikasi Buatan Sendiri.
+  Dengan semangat inovasi dan teknologi, Developer Lombok IT berkomitmen
+  untuk terus mempermudah proses pembelajaran melalui pengembangan aplikasi 
+  yang efisien dan berkualitas. Kepada para peserta pelatihan internasional 
+  Koding Aplikasi Pembelajaran, ini adalah langkah besar menuju masa depan yang lebih cerdas!
+  Mari bersama mengubah tantangan menjadi solusi dan mewujudkan pembelajaran yang lebih mudah, 
+  efektif, dan inovatif. 
+  Bersama Kita Pasti Bisa Jadikan Semua Lebih Mudah.
+  Developer Lombok IT "Jadikan Semua Lebih Mudah!"  
+
+  Abdul Kadir Bagis, M.Pd - CEO LOMBOK IT  
+*/
+
+  </script>
+</body>
+
+</html>

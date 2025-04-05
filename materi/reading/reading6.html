@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Quiz</title>
+  <style>
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+	
+/* Gunakan border-box pada semua elemen */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/* Atur ulang lebar body agar tidak menambah lebar total */
+body {
+    padding: 20px;
+	}
+.input-container {
+    margin-bottom: 20px;
+    }
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+
+.input-container input {
+     width: 100%;
+     padding: 8px;
+     margin-bottom: 10px;
+    }
+
+.question-container {
+     margin-bottom: 20px;
+    }
+
+.question {
+    font-weight: bold;
+    }
+
+    .options {
+    display: flex;
+    flex-direction: column; /* Pastikan setiap opsi tetap dalam barisnya sendiri */
+    gap: 5px; /* Beri sedikit jarak antar opsi */
+}
+    
+/* Pastikan opsi jawaban sejajar */
+.options label {
+    display: flex;
+    align-items: center; /* Pastikan radio button sejajar dengan teks */
+    gap: 10px;
+    width: 100%;
+}
+
+..options input[type="radio"] {
+    margin: 0;
+    flex-shrink: 0; /* Pastikan ukuran radio button tidak berubah */
+}
+
+/* Pastikan opsi jawaban turun ke baris baru dengan titik sejajar */
+.option-text {
+    display: grid;
+    grid-template-columns: 25px auto; /* Kolom pertama untuk "A.", kedua untuk teks */
+}
+
+.option-text span:first-child {
+    font-weight: bold;
+    width: 25px;
+}
+
+.option-text span:last-child {
+    text-indent: -25px;
+    padding-left: 25px;
+    word-wrap: break-word;
+}
+    
+/* Passage tetap terlihat, hanya teksnya yang disembunyikan */
+.passage-container {
+    text-align: justify;
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9; /* Background tetap ada */
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    z-index: 10;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* MODIFIKASI FONT UNTUK PASSAGENYA (Ubah Sesuai Kebutuhan)*/
+.passage-text {
+    display: none;
+    font-size: 14px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+}
+
+/* Style tombol */
+.toggle-btn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    bottom: 10px;
+    z-index: 20;
+    }
+
+/* Tombol Baca & Tutup Teksnya */
+.toggle-btn button {
+     padding: 10px 15px;
+     border: none;
+     border-radius: 5px;
+     font-size: 13px;
+     cursor: pointer;
+     font-weight: bold;
+    }
+
+/* MODIFIKASI WARNA TOMBOL BACA TEKSNYA */
+.read-btn {
+    background-color: green;
+    color: white;
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL BACA TEKSNYA  */
+.read-btn:hover {
+     background-color: darkgreen;
+    }
+
+/* MODIFIKASI WARNA TOMBOL TUTUP TEKSNYA */
+.close-btn {
+     background-color: red;
+     color: white;
+     display: none; /* Disembunyikan saat awal */
+    }
+
+/* MODIFIKASI WARNA HOVER TOMBOL TUTUP TEKSNYA */
+.close-btn:hover {
+    background-color: darkred;
+    }
+	
+/* MODIFIKASI FONT UNTUK PASSAGENYA */
+#passage {
+	font-family: Arial, sans-serif;
+	font-size: 13px;     /* Ukuran font lebih besar untuk kenyamanan membaca */
+	line-height: 1.5;    /* Spasi baris lebih lega */
+	color: #333;         /* Warna teks lebih lembut untuk mata */
+	}
+
+.quiz-wrapper {
+    background: rgba(255, 255, 255, 0.85); /* Warna solid putih dengan transparansi */
+    padding: 20px 10px; /* Padding atas-bawah 20px, kiri-kanan 10px */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: calc(100% - 10px); /* Lebar penuh dikurangi padding kiri-kanan */
+    margin: 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+	}
+	
+/* MODIFIKASI FONT UNTUK SOAL QUIZNYA (Ubah Sesuai Kebutuhunan)*/
+.quiz-wrapper {
+	font-family: Arial, sans-serif;
+	font-size: 12px;     /* Ukuran font lebih kecil dan rapi */
+	line-height: 1;
+	color: #444;         /* Sedikit lebih gelap dari passage untuk kontras */
+	}
+
+/* MODIFIKASI TOMBOL NON-AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn {
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 14px;
+	cursor: not-allowed;
+	display: block;
+	margin: 20px auto;  /* Posisikan di tengah dengan margin atas-bawah */
+	}
+    
+/* MODIFIKASI TOMBOL AKTIF SUBMIT ANSWERNYA (Ubah Sesuai Kebutuhunan)*/
+#submit-btn.active {
+	background-color: green;
+	cursor: pointer;
+    }
+    
+:root {
+	--bg-transparency: 0.5;  /* Transparansi background (0 - 1) */
+	--border-radius: 5px;     /* Round corner */
+	}
+
+.transparent-bg {
+    background-color: rgba(255, 255, 255, var(--bg-transparency));
+    display: flex;
+    justify-content: center; /* Pusatkan horizontal */
+    align-items: center; /* Pusatkan vertikal jika diperlukan */
+    text-align: center;
+    padding: 2px 10px; /* Persempit padding atas dan bawah */
+    border-radius: var(--border-radius);
+    margin-top: 0px;  /* Atur jarak atas */
+    margin-bottom: 0px; /* Atur jarak bawah */
+    }
+    
+.centered-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.5); /* Transparansi */
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	max-width: 500px; /* Atur lebar agar tidak terlalu besar */
+	margin: 20px auto; /* Tengah dengan jarak atas & bawah */
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+	}
+    
+#user-info {
+	padding: 0 5px; /* Padding kiri dan kanan 5px, atas-bawah 0 */
+	box-sizing: border-box;
+	}
+
+#user-info input {
+	width: 100%;
+	padding: 8px; /* Padding sama dengan input lainnya */
+	box-sizing: border-box;
+	}
+
+/* MODIFIKASI KOLOM ISIAN DATA SISWA (Ubah Sesuai Kebutuhunan)*/
+.user-info-wrapper {
+	background: rgba(255, 255, 255, 0.6); /* Background putih transparan */
+	border-radius: 10px;  /* Sudut melengkung */
+	padding: 15px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan lembut */
+	max-width: 400px;
+	margin: 0 auto 20px;  /* Tengah dan jarak bawah */
+	box-sizing: border-box;
+	}
+   </style>
+</head>
+
+<body>
+  <div class="centered-container">
+    <h1 class="transparent-bg">English Quiz</h1>
+    <h2 class="transparent-bg">By Mr. Alfan</h2>
+    <p class="transparent-bg">Fill in your details and answer the questions:</p>
+  </div>
+
+  <form id="quiz-form">
+  <div class="user-info-wrapper">
+    <div id="user-info" class="input-container">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name">
+      <label for="class">Class:</label>
+      <input type="text" id="class" placeholder="Enter your class">
+      <label for="student-id">Student Number:</label>
+      <input type="text" id="student-id" placeholder="Enter your student number">
+      <label for="school">School Name:</label>
+      <input type="text" id="school" placeholder="Enter your school name">
+    </div>
+  </div>
+
+<!-- Container for Passage & Quiz: Jake the Young Inventor -->
+<div id="container-jake" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-jake">
+        <h4 class="transparent-bg">Reading 1: Jake the Young Inventor</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('jake', true)">Read Text (for questions 1-10)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('jake', false)" style="display: none;">Close Text (for questions 1-10)</button>
+        </div>
+        <p id="passage-jake" class="passage-text" style="display: none;">
+            Jake loves inventing new things. Every afternoon, he spends hours in his garage, building machines and gadgets.  
+            One day, his school announced an invention fair. Jake was excited and decided to create a robot that could help clean the house.  
+            He worked on his invention for weeks, testing and improving it.  
+            On the day of the fair, his robot worked perfectly, and the judges were amazed.  
+            Jake won first place and felt proud of his hard work.
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 1 NYA -->
+    <div id="quiz-jake" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Jake the Young Inventor</h3><br>
+
+        <!-- Question 1 -->
+        <div class="question-container">
+            <div class="question">1. What does Jake love to do?</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A. Playing soccer"> A. Playing soccer</label>
+                <label><input type="radio" name="q1" value="B. Inventing new things"> B. Inventing new things</label>
+                <label><input type="radio" name="q1" value="C. Cooking"> C. Cooking</label>
+                <label><input type="radio" name="q1" value="D. Painting"> D. Painting</label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-container">
+            <div class="question">2. Where does Jake work on his inventions?</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A. In his bedroom"> A. In his bedroom</label>
+                <label><input type="radio" name="q2" value="B. In his garage"> B. In his garage</label>
+                <label><input type="radio" name="q2" value="C. In the school lab"> C. In the school lab</label>
+                <label><input type="radio" name="q2" value="D. In the park"> D. In the park</label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-container">
+            <div class="question">3. What event did Jake’s school announce?</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A. A singing competition"> A. A singing competition</label>
+                <label><input type="radio" name="q3" value="B. A science experiment"> B. A science experiment</label>
+                <label><input type="radio" name="q3" value="C. An invention fair"> C. An invention fair</label>
+                <label><input type="radio" name="q3" value="D. A sports tournament"> D. A sports tournament</label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-container">
+            <div class="question">4. What did Jake decide to create?</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A. A flying car"> A. A flying car</label>
+                <label><input type="radio" name="q4" value="B. A cleaning robot"> B. A cleaning robot</label>
+                <label><input type="radio" name="q4" value="C. A talking computer"> C. A talking computer</label>
+                <label><input type="radio" name="q4" value="D. A smart watch"> D. A smart watch</label>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-container">
+            <div class="question">5. How long did Jake work on his invention?</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A. A few hours"> A. A few hours</label>
+                <label><input type="radio" name="q5" value="B. A few days"> B. A few days</label>
+                <label><input type="radio" name="q5" value="C. A few weeks"> C. A few weeks</label>
+                <label><input type="radio" name="q5" value="D. A year"> D. A year</label>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-container">
+            <div class="question">6. What did Jake do before the invention fair?</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="A. He tested and improved his robot"> A. He tested and improved his robot</label>
+                <label><input type="radio" name="q6" value="B. He played video games"> B. He played video games</label>
+                <label><input type="radio" name="q6" value="C. He went on vacation"> C. He went on vacation</label>
+                <label><input type="radio" name="q6" value="D. He forgot about it"> D. He forgot about it</label>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-container">
+            <div class="question">7. How did Jake’s robot perform at the fair?</div>
+            <div class="options">
+                <label><input type="radio" name="q7" value="A. It didn’t work"> A. It didn’t work</label>
+                <label><input type="radio" name="q7" value="B. It worked perfectly"> B. It worked perfectly</label>
+                <label><input type="radio" name="q7" value="C. It broke down"> C. It broke down</label>
+                <label><input type="radio" name="q7" value="D. It got lost"> D. It got lost</label>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-container">
+            <div class="question">8. How did the judges react to Jake’s invention?</div>
+            <div class="options">
+                <label><input type="radio" name="q8" value="A. They were amazed"> A. They were amazed</label>
+                <label><input type="radio" name="q8" value="B. They were disappointed"> B. They were disappointed</label>
+                <label><input type="radio" name="q8" value="C. They ignored it"> C. They ignored it</label>
+                <label><input type="radio" name="q8" value="D. They laughed at it"> D. They laughed at it</label>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-container">
+            <div class="question">9. What prize did Jake win?</div>
+            <div class="options">
+                <label><input type="radio" name="q9" value="A. First place"> A. First place</label>
+                <label><input type="radio" name="q9" value="B. Second place"> B. Second place</label>
+                <label><input type="radio" name="q9" value="C. Third place"> C. Third place</label>
+                <label><input type="radio" name="q9" value="D. He didn’t win"> D. He didn’t win</label>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-container">
+            <div class="question">10. How did Jake feel after winning?</div>
+            <div class="options">
+                <label><input type="radio" name="q10" value="A. Proud"> A. Proud</label>
+                <label><input type="radio" name="q10" value="B. Angry"> B. Angry</label>
+                <label><input type="radio" name="q10" value="C. Sad"> C. Sad</label>
+                <label><input type="radio" name="q10" value="D. Bored"> D. Bored</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Container for Passage & Quiz: Carol the Musician -->
+<div id="container-carol" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-carol">
+        <h4 class="transparent-bg">Reading 2: Carol the Musician</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('carol', true)">Read Text (for questions 11-20)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('carol', false)" style="display: none;">Close Text (for questions 11-20)</button>
+        </div>
+        <p id="passage-carol" class="passage-text" style="display: none;">
+            Carol loves playing the violin. She practices every evening after school.  
+            One day, her school announced a talent show. Carol was excited and decided to perform a beautiful song.  
+            She practiced hard every day. On the night of the show, she played her violin with confidence.  
+            The audience applauded loudly, and Carol felt very happy.
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 2 NYA -->
+    <div id="quiz-carol" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Carol the Musician</h3><br>
+
+        <!-- Question 11 -->
+        <div class="question-container">
+            <div class="question">11. What instrument does Carol play?</div>
+            <div class="options">
+                <label><input type="radio" name="q11" value="A. Guitar"> A. Guitar</label>
+                <label><input type="radio" name="q11" value="B. Piano"> B. Piano</label>
+                <label><input type="radio" name="q11" value="C. Violin"> C. Violin</label>
+                <label><input type="radio" name="q11" value="D. Drums"> D. Drums</label>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-container">
+            <div class="question">12. When does Carol usually practice?</div>
+            <div class="options">
+                <label><input type="radio" name="q12" value="A. In the morning"> A. In the morning</label>
+                <label><input type="radio" name="q12" value="B. In the afternoon"> B. In the afternoon</label>
+                <label><input type="radio" name="q12" value="C. In the evening"> C. In the evening</label>
+                <label><input type="radio" name="q12" value="D. At midnight"> D. At midnight</label>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-container">
+            <div class="question">13. What event did Carol’s school announce?</div>
+            <div class="options">
+                <label><input type="radio" name="q13" value="A. A sports day"> A. A sports day</label>
+                <label><input type="radio" name="q13" value="B. A talent show"> B. A talent show</label>
+                <label><input type="radio" name="q13" value="C. A science fair"> C. A science fair</label>
+                <label><input type="radio" name="q13" value="D. A cooking contest"> D. A cooking contest</label>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-container">
+            <div class="question">14. What song did Carol decide to perform?</div>
+            <div class="options">
+                <label><input type="radio" name="q14" value="A. A rock song"> A. A rock song</label>
+                <label><input type="radio" name="q14" value="B. A beautiful song"> B. A beautiful song</label>
+                <label><input type="radio" name="q14" value="C. A loud song"> C. A loud song</label>
+                <label><input type="radio" name="q14" value="D. A sad song"> D. A sad song</label>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-container">
+            <div class="question">15. How did Carol prepare for the show?</div>
+            <div class="options">
+                <label><input type="radio" name="q15" value="A. She practiced hard every day"> A. She practiced hard every day</label>
+                <label><input type="radio" name="q15" value="B. She did nothing"> B. She did nothing</label>
+                <label><input type="radio" name="q15" value="C. She read books"> C. She read books</label>
+                <label><input type="radio" name="q15" value="D. She watched TV"> D. She watched TV</label>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-container">
+            <div class="question">16. How did Carol feel on the night of the show?</div>
+            <div class="options">
+                <label><input type="radio" name="q16" value="A. Nervous"> A. Nervous</label>
+                <label><input type="radio" name="q16" value="B. Confident"> B. Confident</label>
+                <label><input type="radio" name="q16" value="C. Sad"> C. Sad</label>
+                <label><input type="radio" name="q16" value="D. Bored"> D. Bored</label>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-container">
+            <div class="question">17. What did the audience do after Carol played her violin?</div>
+            <div class="options">
+                <label><input type="radio" name="q17" value="A. They clapped loudly"> A. They clapped loudly</label>
+                <label><input type="radio" name="q17" value="B. They walked away"> B. They walked away</label>
+                <label><input type="radio" name="q17" value="C. They booed"> C. They booed</label>
+                <label><input type="radio" name="q17" value="D. They stayed silent"> D. They stayed silent</label>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-container">
+            <div class="question">18. How did Carol feel after the performance?</div>
+            <div class="options">
+                <label><input type="radio" name="q18" value="A. Happy"> A. Happy</label>
+                <label><input type="radio" name="q18" value="B. Angry"> B. Angry</label>
+                <label><input type="radio" name="q18" value="C. Disappointed"> C. Disappointed</label>
+                <label><input type="radio" name="q18" value="D. Tired"> D. Tired</label>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-container">
+            <div class="question">19. What is the main lesson from Carol’s story?</div>
+            <div class="options">
+                <label><input type="radio" name="q19" value="A. Practice makes perfect"> A. Practice makes perfect</label>
+                <label><input type="radio" name="q19" value="B. Music is not fun"> B. Music is not fun</label>
+                <label><input type="radio" name="q19" value="C. Playing violin is easy"> C. Playing violin is easy</label>
+                <label><input type="radio" name="q19" value="D. Hard work is useless"> D. Hard work is useless</label>
+            </div>
+        </div>
+		
+		 <!-- Question 20 -->
+        <div class="question-container">
+            <div class="question">20. What will Carol most likely do after the talent show?</div>
+            <div class="options">
+                <label><input type="radio" name="q20" value="A. Stop playing the violin"> A. Stop playing the violin</label>
+                <label><input type="radio" name="q20" value="B. Keep practicing and improving"> B. Keep practicing and improving</label>
+                <label><input type="radio" name="q20" value="C. Sell her violin"> C. Sell her violin</label>
+                <label><input type="radio" name="q20" value="D. Start learning to cook"> D. Start learning to cook</label>
+            </div>
+        </div>
+    </div>
+</div>
+  
+  <!-- Container for Passage & Quiz: Liam the Football Star -->
+<div id="container-liam" class="passage-quiz-container">
+    <div class="passage-container" id="passage-container-liam">
+        <h4 class="transparent-bg">Reading 3: Liam the Football Star</h4>
+        <div class="toggle-btn">
+            <button type="button" class="read-btn" onclick="togglePassage('liam', true)">Read Text (for questions 21-30)</button>
+            <button type="button" class="close-btn" onclick="togglePassage('liam', false)" style="display: none;">Close Text (for questions 21-30)</button>
+        </div>
+        <p id="passage-liam" class="passage-text" style="display: none;">
+            Liam loves playing football. Every afternoon, he practices at the field with his teammates.  
+            One day, his coach announced a big tournament. Liam was excited and trained harder than ever.  
+            He worked on his speed, passing, and shooting skills.  
+            On the day of the tournament, he played his best and scored the winning goal.  
+            His team won the championship, and everyone cheered for them.  
+            Liam felt proud and dreamed of becoming a professional football player.
+        </p>
+    </div>
+
+    <!-- MODIFIKASI JUDUL QUIZ PASSAGE 3 NYA -->
+    <div id="quiz-liam" class="quiz-wrapper" style="display: none;">
+        <h3 class="transparent-bg">Quiz: Liam the Football Star</h3><br>
+
+        <!-- Question 21 -->
+        <div class="question-container">
+            <div class="question">21. What is Liam’s favorite sport?</div>
+            <div class="options">
+                <label><input type="radio" name="q21" value="A. Basketball"> A. Basketball</label>
+                <label><input type="radio" name="q21" value="B. Swimming"> B. Swimming</label>
+                <label><input type="radio" name="q21" value="C. Football"> C. Football</label>
+                <label><input type="radio" name="q21" value="D. Tennis"> D. Tennis</label>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question-container">
+            <div class="question">22. Where does Liam practice football?</div>
+            <div class="options">
+                <label><input type="radio" name="q22" value="A. In the gym"> A. In the gym</label>
+                <label><input type="radio" name="q22" value="B. At the beach"> B. At the beach</label>
+                <label><input type="radio" name="q22" value="C. On the football field"> C. On the football field</label>
+                <label><input type="radio" name="q22" value="D. In his backyard"> D. In his backyard</label>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question-container">
+            <div class="question">23. Who announced the football tournament?</div>
+            <div class="options">
+                <label><input type="radio" name="q23" value="A. Liam’s father"> A. Liam’s father</label>
+                <label><input type="radio" name="q23" value="B. His coach"> B. His coach</label>
+                <label><input type="radio" name="q23" value="C. His teacher"> C. His teacher</label>
+                <label><input type="radio" name="q23" value="D. His friend"> D. His friend</label>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question-container">
+            <div class="question">24. How did Liam feel about the tournament?</div>
+            <div class="options">
+                <label><input type="radio" name="q24" value="A. Nervous"> A. Nervous</label>
+                <label><input type="radio" name="q24" value="B. Excited"> B. Excited</label>
+                <label><input type="radio" name="q24" value="C. Uninterested"> C. Uninterested</label>
+                <label><input type="radio" name="q24" value="D. Scared"> D. Scared</label>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question-container">
+            <div class="question">25. What did Liam train to improve?</div>
+            <div class="options">
+                <label><input type="radio" name="q25" value="A. His dancing skills"> A. His dancing skills</label>
+                <label><input type="radio" name="q25" value="B. His swimming techniques"> B. His swimming techniques</label>
+                <label><input type="radio" name="q25" value="C. His speed, passing, and shooting"> C. His speed, passing, and shooting</label>
+                <label><input type="radio" name="q25" value="D. His cooking abilities"> D. His cooking abilities</label>
+            </div>
+        </div>
+
+        <!-- Question 26 -->
+        <div class="question-container">
+            <div class="question">26. What happened on the day of the tournament?</div>
+            <div class="options">
+                <label><input type="radio" name="q26" value="A. Liam scored the winning goal"> A. Liam scored the winning goal</label>
+                <label><input type="radio" name="q26" value="B. The match was canceled"> B. The match was canceled</label>
+                <label><input type="radio" name="q26" value="C. Liam got injured"> C. Liam got injured</label>
+                <label><input type="radio" name="q26" value="D. His team lost the match"> D. His team lost the match</label>
+            </div>
+        </div>
+
+        <!-- Question 27 -->
+        <div class="question-container">
+            <div class="question">27. What did Liam’s team achieve?</div>
+            <div class="options">
+                <label><input type="radio" name="q27" value="A. They won the championship"> A. They won the championship</label>
+                <label><input type="radio" name="q27" value="B. They lost in the final"> B. They lost in the final</label>
+                <label><input type="radio" name="q27" value="C. They tied the game"> C. They tied the game</label>
+                <label><input type="radio" name="q27" value="D. They were disqualified"> D. They were disqualified</label>
+            </div>
+        </div>
+
+        <!-- Question 28 -->
+        <div class="question-container">
+            <div class="question">28. How did the crowd react?</div>
+            <div class="options">
+                <label><input type="radio" name="q28" value="A. They stayed silent"> A. They stayed silent</label>
+                <label><input type="radio" name="q28" value="B. They cheered for Liam’s team"> B. They cheered for Liam’s team</label>
+                <label><input type="radio" name="q28" value="C. They booed"> C. They booed</label>
+                <label><input type="radio" name="q28" value="D. They left early"> D. They left early</label>
+            </div>
+        </div>
+
+        <!-- Question 29 -->
+        <div class="question-container">
+            <div class="question">29. How did Liam feel after the tournament?</div>
+            <div class="options">
+                <label><input type="radio" name="q29" value="A. Proud"> A. Proud</label>
+                <label><input type="radio" name="q29" value="B. Sad"> B. Sad</label>
+                <label><input type="radio" name="q29" value="C. Disappointed"> C. Disappointed</label>
+                <label><input type="radio" name="q29" value="D. Angry"> D. Angry</label>
+            </div>
+        </div>
+		
+		 <!-- Question 30 -->
+        <div class="question-container">
+            <div class="question">30. What is Liam’s dream?</div>
+            <div class="options">
+                <label><input type="radio" name="q30" value="A. To become a professional football player"> A. To become a professional football player</label>
+                <label><input type="radio" name="q30" value="B. To be a scientist"> B. To be a scientist</label>
+                <label><input type="radio" name="q30" value="C. To be a musician"> C. To be a musician</label>
+                <label><input type="radio" name="q30" value="D. To open a restaurant"> D. To open a restaurant</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+  
+    <!-- Submit Button -->
+    <button id="submit-btn" type="button" onclick="submitQuiz()">Submit Answers</button>
+  </form>
+
+  <script>
+   function togglePassage(passage, show) {
+    const container = document.getElementById(`container-${passage}`);
+    const passageText = document.getElementById(`passage-${passage}`);
+    const quizSection = document.getElementById(`quiz-${passage}`);
+    const readBtn = document.querySelector(`#passage-container-${passage} .read-btn`);
+    const closeBtn = document.querySelector(`#passage-container-${passage} .close-btn`);
+
+    if (show) {
+        passageText.style.display = "block";  // Tampilkan teks passage
+        quizSection.style.display = "block";  // Tampilkan soal
+        readBtn.style.display = "none";       // Sembunyikan tombol Read Text
+        closeBtn.style.display = "inline-block"; // Tampilkan tombol Close Text
+
+// Pastikan passage tetap sticky saat dibuka
+        document.getElementById(`passage-container-${passage}`).style.position = "sticky";
+        document.getElementById(`passage-container-${passage}`).style.top = "0";
+    } else {
+        passageText.style.display = "none";  // Sembunyikan teks passage
+        quizSection.style.display = "none";  // Sembunyikan soal
+        readBtn.style.display = "inline-block";  // Munculkan kembali tombol Read Text
+        closeBtn.style.display = "none";    // Sembunyikan tombol Close Text
+
+// Kembalikan ke posisi normal
+        document.getElementById(`passage-container-${passage}`).style.position = "relative";
+    }
+}
+
+// MODIFIKASI BAGIAN VALIDASI FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+  function validateForm() {
+  const totalQuestions = 30;
+  const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+
+  const name = document.getElementById("name").value.trim();
+  const classValue = document.getElementById("class").value.trim();
+  const studentId = document.getElementById("student-id").value.trim();
+  const school = document.getElementById("school").value.trim();
+  const submitBtn = document.getElementById("submit-btn");
+
+  if (answeredQuestions === totalQuestions && name && classValue && studentId && school) {
+    submitBtn.removeAttribute("disabled");  // Aktifkan tombol
+    submitBtn.classList.add("active");      // Tambahkan warna hijau
+  } else {
+    submitBtn.setAttribute("disabled", "true");  // Nonaktifkan tombol
+    submitBtn.classList.remove("active");        // Kembalikan warna ke merah
+  }
+}
+
+// Tambahkan event listener ke form
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+
+    document.getElementById("quiz-form").addEventListener("change", validateForm);
+    document.getElementById("quiz-form").addEventListener("input", validateForm);
+
+   function submitQuiz() {
+    if (document.getElementById("submit-btn").hasAttribute("disabled")) return;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL YANG DIGUNAKAN (Ubah Angka 30 Menjadi Total Soal Yang Digunakan Nantinya) 
+    const userAnswers = {};
+    for (let i = 1; i <= 30; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        userAnswers[`q${i}`] = selected ? selected.value : "Not answered";
+    }
+
+    const name = document.getElementById("name").value.trim();
+    const classValue = document.getElementById("class").value.trim();
+    const studentId = document.getElementById("student-id").value.trim();
+    const school = document.getElementById("school").value.trim();
+
+    let message = `Name: ${name}\nClass: ${classValue}\nStudent Number: ${studentId}\nSchool: ${school}\n\n`;
+
+// MODIFIKASI BAGIAN VALIDASI WHATSAPP FORMULIR BERDASARKAN TOTAL SOAL PER-PASSAGENYA YANG DIGUNAKAN 
+    message += `📘 *Jake the Young Inventor*\n`;
+    for (let i = 1; i <= 10; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 1
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎵 *Carol the Musician*\n`;
+    for (let i = 11; i <= 20; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 2
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+    message += `\n🎨 *Liam the Football Star*\n`;
+    for (let i = 21; i <= 30; i++) { // MODIFIKASI BAGIAN INI SESUAIKAN JUMLAH SOAL YANG DIGUNAKAN UNTUK PASSAGE 3
+        message += `Q${i}: ${userAnswers[`q${i}`]}\n`;
+    }
+
+// GUNAKAN NOMOR WHATSAPP MASING-MASING NANTINYA YANG AKAN MENERIMA OUTPUT DARI FORMULIR INI
+    const phoneNumber = "6287803582510";
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+}
+    
+/* 
+  Developer Lombok IT Mengucapkan Selamat, Anda Kini Telah Memiliki Aplikasi Buatan Sendiri.
+  Dengan semangat inovasi dan teknologi, Developer Lombok IT berkomitmen
+  untuk terus mempermudah proses pembelajaran melalui pengembangan aplikasi 
+  yang efisien dan berkualitas. Kepada para peserta pelatihan internasional 
+  Koding Aplikasi Pembelajaran, ini adalah langkah besar menuju masa depan yang lebih cerdas!
+  Mari bersama mengubah tantangan menjadi solusi dan mewujudkan pembelajaran yang lebih mudah, 
+  efektif, dan inovatif. 
+  Bersama Kita Pasti Bisa Jadikan Semua Lebih Mudah.
+  Developer Lombok IT "Jadikan Semua Lebih Mudah!"  
+
+  Abdul Kadir Bagis, M.Pd - CEO LOMBOK IT  
+*/
+
+  </script>
+</body>
+
+</html>
